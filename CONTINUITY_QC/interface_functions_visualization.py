@@ -1102,7 +1102,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         # Create the actor for brains surfaces:
         actor = vtk.vtkActor()
         actor.SetMapper(mapper)
-        actor.GetProperty().SetOpacity(0.8)
+        actor.GetProperty().SetOpacity(0.2)
 
         # Create the renderer: 
         self.ren = vtk.vtkRenderer()
@@ -1606,6 +1606,8 @@ class Ui_visu(QtWidgets.QTabWidget):
     # ***************************************** 
 
     def update_lines_size(self):
+        print('to do ')
+        '''
         # Update actor:
         actors = vtk.vtkPropCollection() 
         actors = self.ren.GetViewProps()
@@ -1625,6 +1627,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.iren.Initialize()
 
         print("end size line update")
+        '''
 
 
 
