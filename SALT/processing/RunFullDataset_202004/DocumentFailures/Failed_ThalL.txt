@@ -1,0 +1,5 @@
+/Human2/CONTE2/BRIC_Project2/MultiSeg/neo-0012-2/Multiseg_v1.0/SALT/ROI0_fusion_output_ThalL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_ThalL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_ThalL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_ThalL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_ThalL_pp_surf.vtk

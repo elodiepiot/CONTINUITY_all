@@ -1,0 +1,10 @@
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0385-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0385-1-2year-T1_SkullStripped_scaled_label_CaudL_pp_surf.vtk
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0385-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0385-1-2year-T1_SkullStripped_scaled_label_CaudL_pp_surfSPHARM.vtk
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0385-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0385-1-2year-T1_SkullStripped_scaled_label_CaudL_pp_surf.vtk
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0385-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0385-1-2year-T1_SkullStripped_scaled_label_CaudL_pp_surfSPHARM.vtk
+/Human/twin-gilmore/AUTOSEG_4-6year_T1andMultiAtlas/Data/neo-0385-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0385-1-2year-T1_SkullStripped_scaled_label_CaudL_pp_surf.vtk
+/Human/twin-gilmore/AUTOSEG_4-6year_T1andMultiAtlas/Data/neo-0385-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0385-1-2year-T1_SkullStripped_scaled_label_CaudL_pp_surfSPHARM.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_CaudL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_CaudL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_CaudL_pp_surf.vtk
+/work/maria5/Neonate_SubcorticalSurfaces_Gilmore/neo-0012-2/neo-0012-2_CaudL_pp_surf.vtk

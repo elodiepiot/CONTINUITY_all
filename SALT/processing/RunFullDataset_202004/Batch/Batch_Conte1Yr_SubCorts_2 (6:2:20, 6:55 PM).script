@@ -1,0 +1,27 @@
+#!/bin/bash
+
+
+#RunSPHARM-PDM_CheckIfRun.script '/NIRAL/work/maria5/EBDS_CIVILITY/#LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/#RunFullDataset_202004/RunFiles/Conte1Yr/RunList_Conte1Yr.txt' 0 &
+
+
+
+#echo Submitted Check SubCorticals 
+
+count=0  
+batches=(4 5)
+for i in "${batches[@]}"; do 
+echo $i
+runfile="/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Conte1Yr/RunList_Conte1YrBatch_${i}.txt"
+
+#if [ $count==3 ]
+#then
+#RunSPHARM-PDM_Put_and_GP_EBDS_final.script $runfile 0 
+#count=0
+#echo submit $runfile
+#else 
+RunSPHARM-PDM_Put_and_GP_EBDS_final.script $runfile 0 &
+#let count++
+#echo submit $runfile
+#fi 
+
+done

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+
+
+runfile="/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles_WARP/Conte4Yr/RunList_Conte4Yr.txt"
+
+#if [ $count==3 ]
+#then
+#RunSPHARM-PDM_Put_and_GP_EBDS_final.script $runfile 0 
+#count=0
+#echo submit $runfile
+#else 
+
+/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/Label_Combine_WARPtoDWISpace_SALTSubcorts_EBDS_final.sh $runfile 1 /NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/CSV_Civility/Conte_4Year/Conte_4Yr.csv
+#let count++
+#echo submit $runfile
+#fi 
+
+#done

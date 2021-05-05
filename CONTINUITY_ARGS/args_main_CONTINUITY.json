@@ -1,0 +1,423 @@
+{
+    "Parameters": {
+        "noGUI": {
+            "type": "str",
+            "help": "Use CONTINUITY script without interface and json user file",
+            "value": "false"
+        },
+        "cluster": {
+            "type": "str",
+            "help": "run script in a cluster",
+            "value": "false"
+        },
+        "cluster_command_line": {
+            "type": "str",
+            "help": "run script in a cluster with this specific command line",
+            "value": "#!/bin/zsh \n #SBATCH -p general \n #SBATCH -N 1 \n #SBATCH --mem 5120 \n #SBATCH -n 1 \n #SBATCH -t 20-00:00:00 \n #SBATCH --mail-type=end \n #SBATCH --mail-user=elodie@email.unc.edu \n module add python \n python3 CONTINUITY_completed_script.py './CONTINUITY_ARGS/args_main_CONTINUITY.json'"
+        },
+        "tractography_model": {
+            "type": "str",
+            "help": "Tractography model: FSL, MRtrix or DIPY",
+            "value": "FSL"
+        },
+        "filtering_with_tcksift": {
+            "type": "str",
+            "help": "filtering_with_tcksift if Tractography model == MRtrix ",
+            "value": "false"
+        },
+        "optimisation_with_tcksift2": {
+            "type": "str",
+            "help": "optimisation_with_tcksift2 if Tractography model == MRtrix",
+            "value": "true"
+        },
+        "act_option": {
+            "type": "str",
+            "help": "use the Anatomically-Constrained Tractography framework during tracking",
+            "value": "false"
+        },
+        "ID": {
+            "type": "str",
+            "help": "Job name",
+            "value": "T0054-1-1-6yr"
+        },
+        "DWI_DATA": {
+            "type": "str",
+            "help": "DWI Image (.nrrd)",
+            "value": "./input_CONTINUITY/T0054-1-1-6yr_42_DWI-Trio_QCed_VC.nrrd"
+        },
+        "T1_DATA": {
+            "type": "str",
+            "help": "T1 (.nrrd)",
+            "value": "./input_CONTINUITY/T0054-1-1-6yr-T1_SkullStripped_scaled.nrrd"
+        },
+        "T2_DATA": {
+            "type": "str",
+            "help": "T2 (.nrrd)",
+            "value": "./input_CONTINUITY/T0054-1-1-6yr-T2_SkullStripped_scaled.nrrd"
+        },
+        "BRAINMASK": {
+            "type": "str",
+            "help": "Brain mask in DWI space (.nrrd)",
+            "value": "./input_CONTINUITY/T0054-1-1-6yr-brainmask.nrrd"
+        },
+        "PARCELLATION_TABLE": {
+            "type": "str",
+            "help": "Parcellation table (.json)",
+            "value": "./input_CONTINUITY/TABLE_Destrieux_SubCorticals_BrainStem.json"
+        },
+        "DO_REGISTRATION": {
+            "type": "str",
+            "help": "Do registration with this tool",
+            "value": "true"
+        },
+        "INTEGRATE_SC_DATA": {
+            "type": "str",
+            "help": "Integrate subcortical data",
+            "value": "true"
+        },
+        "INTEGRATE_SC_DATA_by_generated_sc_surf": {
+            "type": "str",
+            "help": "Integrate subcortical data by generating subcortical surfaces",
+            "value": "true"
+        },
+        "EXTRA_SURFACE_COLOR": {
+            "type": "str",
+            "help": "Inner surface contains color labels",
+            "value": "true"
+        },
+        "labelSetName": {
+            "type": "str",
+            "help": "Labelset name in vtk surface file",
+            "value": "Destrieux"
+        },
+        "ignoreLabel": {
+            "type": "str",
+            "help": "Ignore a label",
+            "value": "false"
+        },
+        "left_right_surface_need_to_be_combining": {
+            "type": "str",
+            "help": "Boolean: left and right white surface provided separatly",
+            "value": "false"
+        },
+        "surface_already_labeled": {
+            "type": "str",
+            "help": "Surfaces already labeled",
+            "value": "false"
+        },
+        "WM_L_Surf": {
+            "type": "str",
+            "help": "Path to WM_L_Surf data",
+            "value": "./input_CONTINUITY/stx_T0054-1-1-6yr-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_ITKspace.vtk"
+        },
+        "WM_R_Surf": {
+            "type": "str",
+            "help": "Path to WM_R_Surf data",
+            "value": "./input_CONTINUITY/stx_T0054-1-1-6yr-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_ITKspace.vtk"
+        },
+        "SURFACE_USER": {
+            "type": "str",
+            "help": "Surface data (left and right white matter already combined)",
+            "value": ""
+        },
+        "WM_L_Surf_NON_REGISTRATION": {
+            "type": "str",
+            "help": "Path to WM_L_Surf data in diffusion space",
+            "value": ""
+        },
+        "WM_R_Surf_NON_REGISTRATION": {
+            "type": "str",
+            "help": "Path to WM_R_Surf data in diffusion space",
+            "value": ""
+        },
+        "SALTDir": {
+            "type": "str",
+            "help": "Path to SALT directory",
+            "value": "./input_CONTINUITY/SALT"
+        },
+        "subcorticalsList": {
+            "type": "str",
+            "help": "List of subcortical regions",
+            "value": "AmyL AmyR CaudL CaudR HippoL HippoR ThalL ThalR GPL GPR PutL PutR"
+        },
+        "subcorticalsListNumber": {
+            "type": "str",
+            "help": "List of subcortical label/number regions",
+            "value": "1 2 3 4 5 6 40 41 7 8 9 10"
+        },
+        "labeled_image": {
+            "type": "str",
+            "help": "labeled_image",
+            "value": "./input_CONTINUITY/T0054-1-1-6yr-T1_SkullStripped_scaled_label.nrrd"
+        },
+        "KWMDir": {
+            "type": "str",
+            "help": "Set where the labels are stored with specific parcellation",
+            "value": "./input_CONTINUITY/TxtLabels_Destrieux"
+        },
+        "cortical_label_left": {
+            "type": "str",
+            "help": "cortical_label_left",
+            "value": "./input_CONTINUITY/Atlas_Left_Destrieux.KWM.txt"
+        },
+        "cortical_label_right": {
+            "type": "str",
+            "help": "cortical_label_right",
+            "value": "./input_CONTINUITY/Atlas_Right_Destrieux.KWM.txt"
+        },
+        "UPSAMPLING_DWI": {
+            "type": "str",
+            "help": "Boolean for upsampling DWI data",
+            "value": "true"
+        },
+        "first_fixed_img": {
+            "type": "str",
+            "help": "ANTs: fixed image of the first metric",
+            "value": "FA_NRRD"
+        },
+        "first_moving_img": {
+            "type": "str",
+            "help": "ANTs: moving image of the first metric",
+            "value": "T1_DATA"
+        },
+        "second_fixed_img": {
+            "type": "str",
+            "help": "ANTs: fixed image of the second metric",
+            "value": "B0_BiasCorrect_NRRD"
+        },
+        "second_moving_img": {
+            "type": "str",
+            "help": "ANTs: moving image of the second metric",
+            "value": "T2_DATA"
+        },
+        "first_metric_weight": {
+            "type": "str",
+            "help": "ANTs: The metric weight(s) for each stage",
+            "value": 1
+        },
+        "first_radius": {
+            "type": "str",
+            "help": "ANTs: Radius of the region",
+            "value": 4
+        },
+        "second_metric_weight": {
+            "type": "str",
+            "help": "ANTs: The metric weight(s) for each stage",
+            "value": 2
+        },
+        "second_radius": {
+            "type": "str",
+            "help": "ANTs: Radius of the region",
+            "value": 4
+        },
+        "deformation_field_sigma": {
+            "type": "str",
+            "help": "ANTs: Regularization: deformation field sigma",
+            "value": 0.5
+        },
+        "gradient_field_sigma": {
+            "type": "str",
+            "help": "ANTs: Regularization: gradient field sigma",
+            "value": 3.0
+        },
+        "SyN_param": {
+            "type": "str",
+            "help": "ANTs: Transformation: SyN parameter",
+            "value": 0.25
+        },
+        "iteration1": {
+            "type": "str",
+            "help": "ANTs: Transformation: number of iteration: first iteration",
+            "value": 100
+        },
+        "iteration2": {
+            "type": "str",
+            "help": "ANTs: Transformation: number of iteration: second iteration",
+            "value": 50
+        },
+        "iteration3": {
+            "type": "str",
+            "help": "ANTs: Transformation: number of iteration: third iteration",
+            "value": 25
+        },
+        "nb_threads": {
+            "type": "str",
+            "help": "ANTs: number of threads",
+            "value": 6
+        },
+        "overlapping": {
+            "type": "str",
+            "help": "Overlapping surfaces name",
+            "value": "true"
+        },
+        "nb_fibers": {
+            "type": "str",
+            "help": "Bedpostx: number of fibers",
+            "value": 2
+        },
+        "nb_fiber_per_seed": {
+            "type": "str",
+            "help": "Tractography / Probtrackx2 options: P: Number of fibers per seed",
+            "value": 100
+        },
+        "steplength": {
+            "type": "str",
+            "help": "Tractography / Probtrackx2 options: step length in mm",
+            "value": 0.75
+        },
+        "sampvox": {
+            "type": "str",
+            "help": "Tractography / Probtrackx2 options: Sample random points within seed voxels",
+            "value": 0.5
+        },
+        "loopcheck": {
+            "type": "str",
+            "help": "Lookcheck",
+            "value": "true"
+        },
+        "json_config_file": {
+            "type": "str",
+            "help": "json config file with user configuration",
+            "value": "./output_CONTINUITY"
+        },
+        "OUT_PATH": {
+            "type": "str",
+            "help": "Path to out folder",
+            "value": "./output_CONTINUITY"
+        }
+    },
+    "Executables": {
+        "unu": {
+            "type": "str",
+            "help": "Path to Unu",
+            "value": "False"
+        },
+        "N4BiasFieldCorrection": {
+            "type": "str",
+            "help": "Path to N4BiasFieldCorrection",
+            "value": "False"
+        },
+        "BRAINSFit": {
+            "type": "str",
+            "help": "Path to BRAINSFit",
+            "value": "False"
+        },
+        "dtiprocess": {
+            "type": "str",
+            "help": "Path to Dtiprocess",
+            "value": "False"
+        },
+        "dtiestim": {
+            "type": "str",
+            "help": "Path to Dtiestim",
+            "value": "False"
+        },
+        "ANTS": {
+            "type": "str",
+            "help": "Path to ANTS:",
+            "value": "False"
+        },
+        "ITKTransformTools_v1": {
+            "type": "str",
+            "help": "Path to ITKTransformTools_v1.2.3",
+            "value": "False"
+        },
+        "polydatatransform_v1": {
+            "type": "str",
+            "help": "Path to polydatatransform_v1.2.1",
+            "value": "False"
+        },
+        "WarpImageMultiTransform": {
+            "type": "str",
+            "help": "Path to WarpImageMultiTransform",
+            "value": "False"
+        },
+        "DWIConvert": {
+            "type": "str",
+            "help": "Path to DWIConvert",
+            "value": "False"
+        },
+        "slicer": {
+            "type": "str",
+            "help": "Path to slicer",
+            "value": "False"
+        },
+        "fsl": {
+            "type": "str",
+            "help": "Path to FSL",
+            "value": "False"
+        },
+        "ExtractLabelSurfaces": {
+            "type": "str",
+            "help": "Path to ExtractLabelSurfaces",
+            "value": "False"
+        },
+        "MRtrix": {
+            "type": "str",
+            "help": "Path to MRtrix",
+            "value": "False"
+        },
+        "SegPostProcessCLP": {
+            "type": "str",
+            "help": "Path to SegPostProcessCLP",
+            "value": "False"
+        },
+        "GenParaMeshCLP": {
+            "type": "str",
+            "help": "Path to GenParaMeshCLP",
+            "value": "False"
+        },
+        "ParaToSPHARMMeshCLP": {
+            "type": "str",
+            "help": "Path to ParaToSPHARMMeshCLP",
+            "value": "False"
+        }
+    },
+    "View_Controllers": {
+        "Red": {
+            "type": "str",
+            "help": "red param for view controllers in Slicer",
+            "value": "B0"
+        },
+        "Yellow": {
+            "type": "str",
+            "help": "yellow param for view controllers in Slicer",
+            "value": "B0"
+        },
+        "Green": {
+            "type": "str",
+            "help": "green param for view controllers in Slicer",
+            "value": "B0"
+        },
+        "Slice4": {
+            "type": "str",
+            "help": "slice4 param for view controllers in Slicer",
+            "value": "T1_registered"
+        },
+        "Slice5": {
+            "type": "str",
+            "help": "slice5 param for view controllers in Slicer",
+            "value": "T1_registered"
+        },
+        "Slice6": {
+            "type": "str",
+            "help": "slice6 param for view controllers in Slicer",
+            "value": "T1_registered"
+        },
+        "Slice7": {
+            "type": "str",
+            "help": "slice7 param for view controllers in Slicer",
+            "value": "AD"
+        },
+        "Slice8": {
+            "type": "str",
+            "help": "slice8 param for view controllers in Slicer",
+            "value": "AD"
+        },
+        "Slice9": {
+            "type": "str",
+            "help": "slice9 param for view controllers in Slicer",
+            "value": "AD"
+        }
+    }
+}

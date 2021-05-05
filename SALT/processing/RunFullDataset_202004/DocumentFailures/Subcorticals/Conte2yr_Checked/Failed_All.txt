@@ -1,0 +1,3 @@
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0359-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0359-1-2year-T1_SkullStripped_scaled_label_PutR_pp.nrrd
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0243-1-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0243-1-2year-T1_SkullStripped_scaled_label_CaudL_pp.nrrd
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0451-2-2year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0451-2-2year-T1_SkullStripped_scaled_label_CaudL_pp.nrrd

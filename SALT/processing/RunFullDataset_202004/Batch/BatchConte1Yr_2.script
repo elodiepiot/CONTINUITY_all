@@ -1,0 +1,14 @@
+#!/bin/bash
+
+CreateBrainStemSurfaces_ImperialParc_EBDS_finalTestBSSegMorphClose2.sh '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Conte1Yr/RunList_Conte1YrBatch_0.txt' 0 &
+
+echo submit batch 0
+
+
+CreateBrainStemSurfaces_ImperialParc_EBDS_finalTestBSSegMorphClose2.sh '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Conte1Yr/RunList_Conte1YrBatch_1.txt' 0 &
+
+echo submit batch 1
+
+
+
+

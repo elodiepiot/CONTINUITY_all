@@ -1,0 +1,8 @@
+#!/bin/tcsh -f
+set x = 'test'
+foreach idx (`cat $1`)
+
+echo $idx
+end
+
+exit

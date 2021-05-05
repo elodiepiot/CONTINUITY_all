@@ -1,0 +1,30 @@
+#!/bin/tcsh -f
+
+set nonomatch
+
+
+
+
+
+
+
+
+	foreach idx (`cat $1`)
+		set case = $DataDir/$idx/AutoSegTissue_1year_v2-MultiAtlas/fused-labels/$idx-$fterm
+		#echo $case
+
+		set OutputDir = $case:h:h/SALT
+        
+
+
+
+	   
+            
+	  
+
+
+	end
+
+
+
+exit

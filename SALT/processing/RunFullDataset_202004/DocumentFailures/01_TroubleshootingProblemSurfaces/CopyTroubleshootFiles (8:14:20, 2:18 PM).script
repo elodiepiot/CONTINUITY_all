@@ -1,0 +1,52 @@
+#!/bin/tcsh -f
+
+set nonomatch
+
+set Filename = Conte6yr_Checked
+
+# set the main directory where the unsorted input matrices are located  
+
+set inFile = /NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/DocumentFailures/Subcorticals/$Filename/Failed_All.txt
+
+ 
+# Make the directory where the sorted files will be stored
+set outDirMain = /NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/DocumentFailures/01_TroubleshootingProblemSurfaces/$Filename
+
+mkdir $outDirMain
+
+# for each subject ID in the input .txt list 
+
+foreach idx (`cat $inFile`)
+
+
+echo $idx
+set name = $idx:h:h:h:t
+set file1 = $idx:t
+
+set outDir = $outDirMain/$name
+
+mkdir $outDir
+
+
+# copy the original pp .nrrd file 
+
+set to = $outDir/$file1
+# copy the selected file 
+cp -r $idx $to 
+echo cp -r $idx $to 
+
+# copy over the T1 image to overlay 
+
+set to2 = $outDir/${name}-T1_SkullStripped_scaled.nrrd
+
+set from2 = $idx:h:h:h/${name}-T1*SkullStripped*.nrrd
+echo $from2
+ 
+
+# copy the selected file 
+cp -r $from2 $to2
+echo cp -r $from2 $to2 
+		
+end # for each idx 
+
+exit

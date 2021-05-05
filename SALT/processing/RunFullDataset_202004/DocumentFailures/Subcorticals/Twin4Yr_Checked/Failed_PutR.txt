@@ -1,0 +1,1 @@
+/Human/twin-gilmore/AUTOSEG_4-6year_T1andMultiAtlas/Data/T0300-1-2-4yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0300-1-2-4yr-T1_SkullStripped_scaled_label_PutR_pp_surf.vtk

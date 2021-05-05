@@ -1,0 +1,1 @@
+/Human/conte_projects/CONTE_NEO/AUTOSEG_4-6year_T1andMultiAtlas/Data/neo-0249-1-4year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0249-1-4year-T1_SkullStripped_scaled_label_PutL_pp_surf.vtk

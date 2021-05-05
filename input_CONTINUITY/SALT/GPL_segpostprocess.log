@@ -1,0 +1,16 @@
+Loading file /Human/twin-gilmore/AUTOSEG_4-6year_T1andMultiAtlas/Data/T0054-1-1-6yr/AutoSegTissue_1year_v2-MultiAtlas/fused-labels/T0054-1-1-6yr-T1_SkullStripped_scaled_label.nrrd
+size of the image 146,190,165
+extracting object 7
+set object to 255
+fill inside 
+ resampling (NN interpol) the data to voxelsize 0.75, 0.75, 0.75, 
+size of the resized image 197,257,223
+Closing 1
+Connected Component Labeling 1
+Level Set Smoothing 1
+enforce strict 6 connectedness
+NoDiag scan 1
+NoDiag scan 2
+6
+writing processed data
+end of prog

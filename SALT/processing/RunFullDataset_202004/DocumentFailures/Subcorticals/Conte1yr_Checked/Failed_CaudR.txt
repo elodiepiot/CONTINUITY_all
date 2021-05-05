@@ -1,0 +1,1 @@
+/dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0478-1-1year/AutoSegTissue_1year_v2-MultiAtlas/SALT/neo-0478-1-1year-T1_SkullStripped_scaled_label_CaudR_pp_surf.vtk

@@ -1,0 +1,1 @@
+/Human2/CONTE2/TWINS-SubCort/Data/T0123-1-1-1yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0123-1-1-1yr-T1_regAtlas-SkullStripped_label_HippoL_pp_surf.vtk

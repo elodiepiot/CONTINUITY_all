@@ -1,0 +1,4 @@
+/Human2/CONTE2/TWINS-SubCort/Data/T0320-1-1-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0320-1-1-2yr-T1_regAtlas-SkullStripped_label_ThalL_pp_surf.vtk
+/Human2/CONTE2/TWINS-SubCort/Data/T0320-1-1-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0320-1-1-2yr-T1_regAtlas-SkullStripped_label_ThalL_pp_surfSPHARM.vtk
+/Human2/CONTE2/TWINS-SubCort/Data/T0323-1-2-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0323-1-2-2yr-T1_regAtlas-SkullStripped_label_ThalL_pp_surf.vtk
+/Human2/CONTE2/TWINS-SubCort/Data/T0323-1-2-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0323-1-2-2yr-T1_regAtlas-SkullStripped_label_ThalL_pp_surfSPHARM.vtk

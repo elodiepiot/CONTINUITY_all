@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+RunSPHARM-PDM_CheckIfRun.script '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Twin1Yr/RunList_Twin1Yr.txt' 2 &
+
+
+echo Submitted Check SubCorticals 
+
+RunSPHARM-PDM_Put_and_GP_EBDS_final.script '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Twin1Yr/RunList_Twin1YrBatch_0.txt' 2 &
+
+echo Submit Batch 0
+
+RunSPHARM-PDM_Put_and_GP_EBDS_final.script '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Twin1Yr/RunList_Twin1YrBatch_1.txt' 2 &
+
+echo Submit Batch 1 
+
+RunSPHARM-PDM_Put_and_GP_EBDS_final.script '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Twin1Yr/RunList_Twin1YrBatch_2.txt' 2 &
+
+echo Submit Batch 2
+
+RunSPHARM-PDM_Put_and_GP_EBDS_final.script '/NIRAL/work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT/processing/RunFullDataset_202004/RunFiles/Twin1Yr/RunList_Twin1YrBatch_3.txt' 2 &
+
+echo Submit Batch 3 
+

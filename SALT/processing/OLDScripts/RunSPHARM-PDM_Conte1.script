@@ -1,0 +1,108 @@
+#!/bin/tcsh -f
+
+set nonomatch
+
+#set ShapeDir = /work/mahmoudm/New_Subcortical_Processing/Conte/
+set ShapeDir = /work/maria5/EBDS_CIVILITY/LongitudinalConnectome_PostRegError/SubCortical_Processing/SALT
+# check to make sure doesn't overwrite the output
+set DataDir  = /dichter/AutoSeg_Rerun_CONTE1and2/Data
+set ShapeAnalysisModuleCmd = /tools/bin_linux64/ShapeAnalysisModule
+
+#set BuildDir = /work/mahmoudm/Subcortical_Processing/MapThicknessToSpharmSurface/build
+
+#Modify for Putamen and GP 
+#set Labels     = (1    2    3     4     5      6      	40    	41)
+#set LabelNames = (AmyL AmyR CaudL CaudR HippoL HippoR ThalL ThalR)
+# checked the labels in ITK SNAP)
+set Labels = (7   8   9    10)
+set LabelNames = (GPL GPR PutL PutR)
+
+set TemplateDir = $ShapeDir/Template
+set ProcessDir  = $ShapeDir/processing
+
+set counter = 0
+set maxcounter = $#Labels
+
+# I don't know where these files were from- however he uses it to label the output surface
+set ParaPhiFile = $ProcessDir/paraPhi_l10.txt
+set ParaThetaFile = $ProcessDir/paraTheta_l10.txt
+set CheckerFile = $ProcessDir/checkerboardRGB_l10.txt
+
+
+while ($counter < $maxcounter)
+    echo $counter
+
+    @ counter = $counter + 1
+    set index = $counter
+
+    echo doing $Labels[$index] ':' $LabelNames[$index]
+# NOTE check why using this Template Mean etc and if we need it 
+    set TemplateProc = $TemplateDir/$LabelNames[$index]/Template_Mean.vtk
+    set TemplateCoef = $TemplateDir/$LabelNames[$index]/Template_*_ellalign.coef
+    if ($#TemplateCoef > 1) set TemplateCoef = $TemplateCoef[1]
+
+    if (! -e $TemplateProc || ! -e $TemplateCoef) then
+	echo $TemplateProc or $TemplateCoef does not exist, skipping
+    else
+	echo Computing SPHARM for $Labels[$index] ':' $LabelNames[$index]
+        
+	set Cases = $DataDir/neo-*1year/AutoSegTissue_1year_v2-MultiAtlas/fused-labels/*T1_SkullStripped_scaled_label.nrrd
+	echo $#Cases  Cases found
+        
+        # why use random permutations?
+	#set randomSet = (`randperm 1 $#Cases`)
+        
+	set caseNum = 0
+	#foreach case ($Cases)
+	set case = /dichter/AutoSeg_Rerun_CONTE1and2/Data/neo-0029-3-1year/AutoSegTissue_1year_v2-MultiAtlas/fused-labels/neo-0029-3-1year-T1_SkullStripped_scaled_label.nrrd
+	    #@ caseNum = $caseNum + 1
+	    #set caseIndex = $randomSet[$caseNum]
+	    #set case = $Cases[$caseIndex]
+            
+	    echo $case
+
+	    set OutputDir = $case:h:h/SALT
+            echo $OutputDir
+
+	    if (! -e $OutputDir) mkdir $OutputDir
+	    
+	    set PPtarget = $OutputDir/$case:t:r_$LabelNames[$index]_pp.nrrd
+	    if (! -e $PPtarget) then
+		echo `date` SegPostProcessCLP $case:t $OutputDir
+
+
+		SegPostProcessCLP $case $PPtarget --label $Labels[$index] --space 0.75,0.75,0.75 --rescale --verb >! $OutputDir/$LabelNames[$index]_segpostprocess.log
+	    endif
+           
+
+	    set Paratarget = $PPtarget:r_para.vtk
+	    set Surftarget = $PPtarget:r_surf.vtk
+	    if (! -e $Paratarget) then
+		echo `date` GenParaMeshCLP $Paratarget
+		GenParaMeshCLP --EulerFile --outEulerName $PPtarget:r_Euler.txt --iter 500 --label 1 $PPtarget $Paratarget $Surftarget --verb >! $OutputDir/$LabelNames[$index]_genparamesh.log
+	    endif
+            
+	    set SurfVTKtarget = $Surftarget:rSPHARM.vtk
+	    if (! -e $SurfVTKtarget) then
+		echo `date` ParaToSPHARMMeshCLP $SurfVTKtarget
+		ParaToSPHARMMeshCLP $Paratarget $Surftarget $Surftarget:r --subdivLevel 10 --spharmDegree 15 --flipTemplate $TemplateCoef --regTemplate $TemplateProc --flipTemplateOn --regTemplateFileOn  --phiIteration 100 --thetaIteration 100 --medialMesh --paraOut >! $OutputDir/$LabelNames[$index]_paraspharm.log
+
+
+		#SurfaceColorMapping currently missing  libMesh.so.1.0 on most of the servers- Think I can just exclude at this point 
+		#SurfaceColorMapping -i $SurfVTKtarget -o $SurfVTKtarget  -c $CheckerFile 
+		MeshMath $SurfVTKtarget $SurfVTKtarget -KWMtoPolyData $ParaThetaFile Theta 
+		MeshMath $SurfVTKtarget $SurfVTKtarget -KWMtoPolyData $ParaPhiFile  Phi
+	    endif
+        
+            #set SurfMedialVTKtarget = $Surftarget:rSPHARMMedialMesh.vtk
+ 	    #if (-e $SurfVTKtarget && -e $Surftarget && -e $SurfMedialVTKtarget) then
+            #echo `date` $BuildDir/MapThicknessToSpharmSurface $SurfMedialVTKtarget $SurfVTKtarget
+            #$BuildDir/MapThicknessToSpharmSurface $SurfMedialVTKtarget $SurfVTKtarget 
+	    #endif
+       
+	#end # foreach
+       
+    endif
+end
+
+exit

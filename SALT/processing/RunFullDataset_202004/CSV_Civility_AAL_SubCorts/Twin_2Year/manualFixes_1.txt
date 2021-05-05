@@ -1,0 +1,4 @@
+/Human2/CONTE2/TWINS-SubCort/Data/T0101-1-2-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0101-1-2-2yr-*_label_GPL_ppManualFix_surfSPHARM.vtk
+/Human2/CONTE2/TWINS-SubCort/Data/T0101-1-2-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0101-1-2-2yr-*_label_GPR_ppManualFix_surfSPHARM.vtk
+/Human2/CONTE2/TWINS-SubCort/Data/T0101-1-2-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0101-1-2-2yr-*_label_PutL_ppManualFix_surfSPHARM.vtk
+/Human2/CONTE2/TWINS-SubCort/Data/T0101-1-2-2yr/AutoSegTissue_1year_v2-MultiAtlas/SALT/T0101-1-2-2yr-*_label_PutR_ppManualFix_surfSPHARM.vtk
