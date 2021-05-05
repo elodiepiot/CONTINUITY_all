@@ -815,6 +815,7 @@ def compute_radius_of_each_seed(line):
 # *************************************************************************************
 
 def compute_point_destrieux(new_parcellation_table, subcorticals_list_checked_with_surfaces, KWMDir, SALTDir, ID):
+    print('subcorticals_list_checked_with_surfaces', subcorticals_list_checked_with_surfaces)
 
     # KWM file for left and right surfaces:
     left_KWM  = './CONTINUITY_QC/Destrieux_points/Atlas_Left_Destrieux.KWM.txt'
@@ -955,6 +956,8 @@ def compute_point_destrieux(new_parcellation_table, subcorticals_list_checked_wi
         # Add scalar and gravity center of this region: 
         scalar_sorted_without_duplicate_all.append(int(scalar))
         gravity_center_of_each_Region_all.append(gravity_center_of_this_Region)
+
+    print('scalar_sorted_without_duplicate_all',scalar_sorted_without_duplicate_all)
         
 
     # *****************************************
@@ -1006,7 +1009,7 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
             # SegPostProcessCLP
             # *****************************************
 
-            PPtarget = os.path.join(OutputDir, ID + '_' + LabelNames[index] +'_pp.nrrd')   #tsch: -r : remove extension 
+            PPtarget = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] +'_pp.nrrd')   #tsch: -r : remove extension 
 
             if os.path.exists(PPtarget):
                 print('SegPostProcessCLP already done')
@@ -1025,15 +1028,15 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
             # GenParaMeshCLP
             # ***************************************** 
 
-            Paratarget = os.path.join(OutputDir, ID + '_' + LabelNames[index] +'_pp_para.vtk')
-            Surftarget = os.path.join(OutputDir, ID + '_' + LabelNames[index] +'_pp_surf.vtk')
+            Paratarget = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] +'_pp_para.vtk')
+            Surftarget = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] +'_pp_surf.vtk')
             
             if os.path.exists(Paratarget):
                 print('GenParaMeshCLP already done')
             else: 
                 print('Do GenParaMeshCLP')
-                genparamesh_log = os.path.join(OutputDir, LabelNames[index] + '_pp_genparamesh.txt')
-                Euler_txt       = os.path.join(OutputDir, LabelNames[index] + '_pp_Euler.txt')
+                genparamesh_log = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] + '_pp_genparamesh.txt')
+                Euler_txt       = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] + '_pp_Euler.txt')
 
                 # Spherical Parametrization : The output is two meshes, one for the surface and one for the spherical parametrization
                 command = [GenParaMeshCLPPath, '--EulerFile',  #write a .txt file with the euler number
@@ -1051,7 +1054,7 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
             else:
                 print('Surftarget already done, try to run the SPHARM ')
 
-                SurfVTKtarget =  os.path.join(OutputDir, ID + '_' + LabelNames[index] +'_pp_surfSPHARM.vtk')
+                SurfVTKtarget =  os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] +'_pp_surfSPHARM.vtk')
 
                 if os.path.exists(SurfVTKtarget):
                     print("SurfVTKtarget found ")
@@ -1062,7 +1065,7 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
 
                     print('Do ParaToSPHARMMeshCLP ')
 
-                    Surftarget_prefix = os.path.join(OutputDir, ID + '_' + LabelNames[index] +'_pp_surf')
+                    Surftarget_prefix = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] +'_pp_surf')
                     TemplateCoef      = os.path.join(TemplateDir, LabelNames[index], 'Template_101247_V06_ellalign.coef')
 
                     # Compute SPHARM coefs and associated Mesh : The output is a series of SPHARM coefficients and SPHARM-PDM meshes, 

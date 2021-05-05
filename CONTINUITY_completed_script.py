@@ -650,6 +650,7 @@ with Tee(log_file):
 
 			# Update the localization of subcortical surfaces: 
 			SALTDir = os.path.join(OUT_FOLDER, 'my_SALT') 
+			
 
 
 
@@ -675,9 +676,11 @@ with Tee(log_file):
 					if region[-1].lower() == "l" or region[-1].lower() == 'r':
 						if name.lower() == region[:-1].lower():
 							data_region_find = 'True'
+					'''
 					else: #brainstem
 						if name.lower() == region.lower():
 								data_region_find = 'True'
+					'''
 
 			# After check all the json file: 
 			if data_region_find == 'False':
