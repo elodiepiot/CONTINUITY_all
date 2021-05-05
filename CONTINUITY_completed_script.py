@@ -1078,7 +1078,7 @@ with Tee(log_file):
 			now = datetime.datetime.now()
 			print (now.strftime("Script running probtrackx2 command since: %H:%M %m-%d-%Y"))
 			start = time.time()
-			run_command("probtrackx2", [FSLPath + 'probtrackx2', "-s", os.path.join(OUT_TRACTOGRAPHY, "Diffusion.bedpostX", "merged"), #-s,--samples	
+			run_command("probtrackx2", [FSLPath + '/probtrackx2', "-s", os.path.join(OUT_TRACTOGRAPHY, "Diffusion.bedpostX", "merged"), #-s,--samples	
 							                             "-m", os.path.join(OUT_TRACTOGRAPHY, "Diffusion.bedpostX", "nodif_brain_mask"), #-m,--mask
 							                             "-x", os.path.join(OUT_TRACTOGRAPHY, "seeds.txt"), #-x,--seed
 							                             "--forcedir", "--network", "--omatrix1", "-V", "0",
