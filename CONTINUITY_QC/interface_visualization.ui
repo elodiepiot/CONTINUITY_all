@@ -921,8 +921,14 @@ p, li { white-space: pre-wrap; }
         <height>541</height>
        </rect>
       </property>
+      <property name="inputMethodHints">
+       <set>Qt::ImhNone</set>
+      </property>
       <property name="title">
        <string/>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
      </widget>
      <widget class="QWidget" name="layoutWidget">
@@ -1004,7 +1010,7 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_19">
        <attribute name="title">
@@ -1170,11 +1176,14 @@ vmax = 1/n(n-1)  (with n: number of region)</string>
          </item>
          <item row="0" column="1">
           <widget class="QDoubleSpinBox" name="vmin_normalize_matrix_spinBox">
+           <property name="inputMethodHints">
+            <set>Qt::ImhNone</set>
+           </property>
            <property name="decimals">
             <number>12</number>
            </property>
            <property name="maximum">
-            <double>100000.000000000000000</double>
+            <double>10000000.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.100000000000000</double>
@@ -1190,17 +1199,37 @@ vmax = 1/n(n-1)  (with n: number of region)</string>
          </item>
          <item row="1" column="1">
           <widget class="QDoubleSpinBox" name="vmax_normalize_matrix_spinBox">
+           <property name="font">
+            <font>
+             <strikeout>false</strikeout>
+            </font>
+           </property>
            <property name="mouseTracking">
             <bool>true</bool>
+           </property>
+           <property name="tabletTracking">
+            <bool>true</bool>
+           </property>
+           <property name="acceptDrops">
+            <bool>false</bool>
+           </property>
+           <property name="inputMethodHints">
+            <set>Qt::ImhFormattedNumbersOnly|Qt::ImhPreferLowercase</set>
+           </property>
+           <property name="wrapping">
+            <bool>false</bool>
            </property>
            <property name="decimals">
             <number>12</number>
            </property>
            <property name="maximum">
-            <double>100000.000000000000000</double>
+            <double>100000000.000000000000000</double>
            </property>
            <property name="singleStep">
             <double>0.100000000000000</double>
+           </property>
+           <property name="stepType">
+            <enum>QAbstractSpinBox::DefaultStepType</enum>
            </property>
            <property name="value">
             <double>100.000000000000000</double>
@@ -3753,6 +3782,22 @@ p, li { white-space: pre-wrap; }
     <hint type="sourcelabel">
      <x>229</x>
      <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>564</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>save_normalize_matrix_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TabWidget</receiver>
+   <slot>save_normalize_matrix_pushButton_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>76</x>
+     <y>444</y>
     </hint>
     <hint type="destinationlabel">
      <x>564</x>

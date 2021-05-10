@@ -449,7 +449,7 @@ class Ui_visu(QtWidgets.QTabWidget):
             table_json_object = json.load(table_json_file)
 
         # Init list to extract name of regions:
-        global label_names
+        #global label_names
         label_names, lh_labels, rh_labels = ([], [], [])
       
         for key in table_json_object:
@@ -471,7 +471,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         node_order.extend(rh_labels)
 
         # Create a circular layout:
-        global node_angles
+        #global node_angles
         node_angles = circular_layout(label_names, node_order, start_pos=90, group_boundaries=[0, len(label_names) / 2])
 
 
@@ -500,15 +500,10 @@ class Ui_visu(QtWidgets.QTabWidget):
             connectivity_score = minimum_symmetrization(connectivity_score)
         
         # Transform a list of list into a numpy array:
-        global connectivity_matrix
+        #global connectivity_matrix
         connectivity_matrix = np.array(connectivity_score)
-        #connectivity_matrix = connectivity_matrix.astype(np.float)
-        #connectivity_matrix = np.asarray(connectivity_matrix, dtype = np.float64, order ='C')
 
-        print(np.shape(connectivity_matrix))
-
-
-        global number_total_line
+        #global number_total_line
         number_total_line = np.count_nonzero(np.absolute(connectivity_matrix)) #Doc plot_connectivity_circle: n_lines strongest connections (strength=abs(con))
         max_value = np.amax(connectivity_matrix)
 
@@ -581,7 +576,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         # Normalized printed color:
         norm_map = plt.Normalize(vmin, vmax)
 
-        global label_color
+        #global label_color
         label_color = [] #list
         for i in range(len(list_val)):
             strenght_norm =(list_val[i] - min_strenght) / (max_strenght - min_strenght)  # norm between 0 to 1 
@@ -605,9 +600,6 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.fig = plt.figure(facecolor='black')
         self.canvas = FigureCanvas(self.fig)
         self.Layoutcircle.addWidget(self.canvas)
-
-        print(np.shape(connectivity_matrix))
-        print(connectivity_matrix)
 
         plot_connectivity_circle(connectivity_matrix, label_names, n_lines = int((self.n_lines_spinBox.value() / 100) * number_total_line),
                                                                    linewidth = self.linewidth_spinBox.value(),
@@ -660,6 +652,8 @@ class Ui_visu(QtWidgets.QTabWidget):
     # *****************************************
 
     def update_cirlcle_connectome(self): 
+        print("to do ")
+        '''
         if display == 'true': 
             # Remove previous circle plot:
             for i in reversed(range(self.Layoutcircle.count())): 
@@ -684,13 +678,11 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                                        node_linewidth = self.nodelinewidth_spinBox.value() )
 
             self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
+        '''
 
 
         
         
-
-
-
 
 
 

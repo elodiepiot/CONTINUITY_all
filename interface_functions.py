@@ -705,7 +705,7 @@ class Ui(QtWidgets.QTabWidget):
             self.question_SALT_pushButton.setText("close help")
             self.question_SALT_textEdit.setText('SALT directory : directory with one subfolder per subcortical <font color="red">region</font>. '+
                                                 'In each subfolder, you need to provide a file with a name like that: "job_name-T1_SkullStripped_scaled_label_'+
-                                                '<font color="red">region</font>_..."  \n"job_name": same name that specify in the first tab')
+                                                '<font color="red">region</font>_..."  \n where "job_name" is the same name that specify in the first tab')
             self.question_SALT_textEdit.setStyleSheet("color: blue;"  "background-color: transparent")
         else: # self.question_job_name_pushButton.text() == "X":
             self.question_SALT_pushButton.setText("Help")
@@ -722,7 +722,7 @@ class Ui(QtWidgets.QTabWidget):
         if self.question_KWM_pushButton.text() == "Help":
             self.question_KWM_pushButton.setText("close help")
             self.question_KWM_textEdit.setText('KWM directory : directory with a txt file per subcortical region. For each subcortical region, you need to provide a file' +
-                                               'which contains the name of the subcortical region in his name.')
+                                               ' which contains the name of the subcortical region in his name.')
             self.question_KWM_textEdit.setStyleSheet("color: blue;"  "background-color: transparent")
         else: # self.question_job_name_pushButton.text() == "X":
             self.question_KWM_pushButton.setText("Help")

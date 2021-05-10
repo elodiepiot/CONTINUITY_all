@@ -148,8 +148,11 @@ if os.path.exists(surface_right_labeled):
 # Get not and display data in the good place
 # *****************************************
 
+#Set the view: https://apidocs.slicer.org/v4.8/classvtkMRMLLayoutNode.html#a8273252526dff35749ddeefd80c5226a
+slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutThreeByThreeSliceView)
+
 for place in ['Red', 'Yellow', 'Green', 'Slice4', 'Slice5', 'Slice6','Slice7', 'Slice8', 'Slice9']:
-	node = slicer.util.getNode(str(json_user_object['View_Controllers'][place]['value']))
+	node = slicer.util.getNode(str(json_user_object['View_Controllers'][place]['value'])
 
 	# Display
 	slicer.app.layoutManager().sliceWidget(place).sliceLogic().GetSliceCompositeNode().SetForegroundVolumeID( node.GetID() ) 
