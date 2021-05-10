@@ -253,7 +253,7 @@
         "nb_fibers": {
             "type": "str",
             "help": "Bedpostx: number of fibers",
-            "default": 2
+            "default": 2000
         },
         "nb_fiber_per_seed": {
             "type": "str",
