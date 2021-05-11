@@ -346,7 +346,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         
         elif self.vmin_vmax_real_values_checkBox.isChecked(): 
             max_a = float(max_a)
-            if not(self.vmax_normalize_matrix_spinBox.value() <=  max_a and self.vmin_normalize_matrix_spinBox.value() >= min_a):
+            if not(self.vmax_normalize_matrix_spinBox.value() <=  float(max_a) and self.vmin_normalize_matrix_spinBox.value() >= min_a):
                 self.error_label.setText( '<font color="red">Please select 2 values between ' + str(min_a) + ' to ' + str("%.7f" % (max_a))+ '</font>'  )
                 check_before_display = 'False'
 
@@ -650,6 +650,8 @@ class Ui_visu(QtWidgets.QTabWidget):
     # *****************************************
 
     def update_cirlcle_connectome(self): 
+        print("to do")
+        '''
         
         if display == 'true': 
             # Remove previous circle plot:
@@ -675,6 +677,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                                        node_linewidth = self.nodelinewidth_spinBox.value() )
 
             self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
+        '''
 
 
         
