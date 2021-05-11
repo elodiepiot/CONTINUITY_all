@@ -1323,8 +1323,8 @@ with Tee(log_file):
 					
 
 				# Add common parameters: 
-				command.append('-select')
-				command.append(nb_fibers)
+				#command.append('-select')
+				#command.append(nb_fibers) #=2000
 				
 				command.append('-fslgrad')
 				command.append(os.path.join(OUT_DIFFUSION, "bvecs"))
