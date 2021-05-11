@@ -23,6 +23,8 @@ import nrrd
 sys.path.insert(1, os.path.split(os.getcwd())[0])  # if you want to open the second interface alone
 sys.path.insert(1, os.getcwd())                    # if you want to open the second interface with the first interface
 
+# sys.path.insert(1, '/proj/NIRAL/tools/CONTINUITY/')
+
 from CONTINUITY_functions import *
 
 
@@ -423,10 +425,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
         
-
-
-
-
 
 
 

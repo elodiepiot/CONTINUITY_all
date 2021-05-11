@@ -128,16 +128,12 @@ pathITK_TRANSTOOL_EXE     = str(json_user_object["Executables"]["ITKTransformToo
 pathPOLY_TRANSTOOL_EXE    = str(json_user_object["Executables"]["polydatatransform_v1"]['value'])
 pathWARP_TRANSFORM        = str(json_user_object["Executables"]["WarpImageMultiTransform"]['value'])
 DWIConvertPath            = str(json_user_object["Executables"]["DWIConvert"]['value'])
-
 FSLPath                   = str(json_user_object["Executables"]["fsl"]['value']) 
 ExtractLabelSurfaces      = str(json_user_object["Executables"]["ExtractLabelSurfaces"]['value']) 
-
 MRtrixPath                = str(json_user_object["Executables"]["MRtrix"]['value']) 
-
 SegPostProcessCLPPath     = str(json_user_object["Executables"]["SegPostProcessCLP"]['value'])
 GenParaMeshCLPPath        = str(json_user_object["Executables"]["GenParaMeshCLP"]['value']) 
 ParaToSPHARMMeshCLPPath   = str(json_user_object["Executables"]["ParaToSPHARMMeshCLP"]['value']) 
-
 writeSeedListScript       = "./writeSeedList.py" 
 
 
@@ -587,12 +583,6 @@ with Tee(log_file):
        
 
 
-
-
-
-
-
-
 	########################################################################
 	'''
 		CONTINUITY script 3:
@@ -651,8 +641,6 @@ with Tee(log_file):
 			# Update the localization of subcortical surfaces: 
 			SALTDir = os.path.join(OUT_FOLDER, 'my_SALT') 
 			
-
-
 
 		subcorticals = subcorticalsList.split() 
 
@@ -1101,6 +1089,13 @@ with Tee(log_file):
 		save_connectivity_matrix('whole', whole_normalization(matrixFile), NETWORK_DIR, ID, overlapName, loopcheck)
 		save_connectivity_matrix('row_region', row_region_normalization(matrixFile), NETWORK_DIR, ID, overlapName, loopcheck)
 		save_connectivity_matrix('row_column', row_column_normalization(matrixFile), NETWORK_DIR, ID, overlapName, loopcheck)
+
+
+
+
+
+
+
 
 
 

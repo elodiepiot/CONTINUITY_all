@@ -583,7 +583,6 @@ def whole_normalization(matrix):
           a[i][j]= val / waytotal
           j=j+1
         i=i+1
-
     return a 
 
 
@@ -969,11 +968,12 @@ def compute_point_destrieux(new_parcellation_table, subcorticals_list_checked_wi
         data = json.load(data_file)
 
     for key in data: 
-        # Get the index of the scalar of this region to be able to find the corresponding cordinates: 
-        index_scalar = scalar_sorted_without_duplicate_all.index( int(key['labelValue']) ) 
+        if key['labelValue'] != '12182': # specific futur script for Brainstrem
+            # Get the index of the scalar of this region to be able to find the corresponding cordinates: 
+            index_scalar = scalar_sorted_without_duplicate_all.index( int(key['labelValue']) ) 
 
-        # Update the cordiantes of this region :
-        key["coord"] = gravity_center_of_each_Region_all[index_scalar]
+            # Update the cordiantes of this region :
+            key["coord"] = gravity_center_of_each_Region_all[index_scalar]
 
     # Write :
     with open(new_parcellation_table, 'w') as txtfile:
@@ -997,7 +997,7 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
 
     # Already created files (by other scripts) located in this folder: 
     TemplateDir = os.path.join('./SALT', 'Template')
-    ProcessDir  = os.path.join('./SALT', 'processing')
+    ProcessDir  = os.path.join(os.getcwd() +'/SALT', 'processing')
 
     # Loop throught all subcortical regions:
     index = 0
