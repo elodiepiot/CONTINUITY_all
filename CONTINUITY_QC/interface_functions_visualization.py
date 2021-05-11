@@ -747,9 +747,9 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         # Set subtitles: 
         self.ax1.title.set_text("Axial")
-        self.ax2.title.set_text("Sagital right")
+        self.ax2.title.set_text("Sagittal right")
         if self.sagittal_left_checkBox.isChecked():
-            self.ax2.title.set_text("Sagital left")
+            self.ax2.title.set_text("Sagittal left")
         self.ax3.title.set_text("Coronal")
 
 
