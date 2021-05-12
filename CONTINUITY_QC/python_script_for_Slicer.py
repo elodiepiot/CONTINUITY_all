@@ -2,6 +2,7 @@
 import argparse
 import json
 import os 
+import vtk
 
 #macro: 
 #import slicer
@@ -151,8 +152,40 @@ if os.path.exists(surface_right_labeled):
 #Set the view: https://apidocs.slicer.org/v4.8/classvtkMRMLLayoutNode.html#a8273252526dff35749ddeefd80c5226a
 slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutThreeByThreeSliceView)
 
-for place in ['Red', 'Yellow', 'Green', 'Slice4', 'Slice5', 'Slice6','Slice7', 'Slice8', 'Slice9']:
-	node = slicer.util.getNode(str(json_user_object['View_Controllers'][place]['value'])
+list_view = ['Red', 'Yellow', 'Green', 'Slice4', 'Slice5', 'Slice6','Slice7', 'Slice8', 'Slice9']
 
+sliceNodes = slicer.util.getNodesByClass('vtkMRMLSliceNode')
+sliceNodes.append(slicer.mrmlScene.GetDefaultNodeByClass('vtkMRMLSliceNode'))
+cpt = 0 
+
+for sliceNode in sliceNodes:
+	place = list_view[cpt]
+
+	# Get node:
+	node = slicer.util.getNode(str(json_user_object['View_Controllers'][place]['value']))
+
+	orientationPresetName = sliceNode.GetOrientation()
+	print('orientationPresetName', orientationPresetName)
+
+	if place == 'Red' or place =='Yellow' or place == 'Green':
+		print("do nothing")
+
+	else: 
+	  	#https://framagit.org/OpenAtWork/Slicer/blob/1eeef1a211589c809f624ff5ca7615605dc4541c/Libs/MRML/vtkMRMLSliceNode.cxx
+	  	#https://www.slicer.org/wiki/Documentation/4.10/ScriptRepository#Iterate_over_current_visible_slice_views.2C_and_set_foreground_and_background_images
+
+		if place == "Slice4" or place == "Slice7": #set to axial
+			sliceNode.SetOrientation("Axial")
+
+
+		elif place == "Slice5" or place == "Slice8": #set to sagittal
+			sliceNode.SetOrientation("Sagittal")
+
+
+
+		elif place == "Slice6" or place == "Slice9": #set to coronal
+			sliceNode.SetOrientation("Coronal")
+	cpt += 1
+		
 	# Display
 	slicer.app.layoutManager().sliceWidget(place).sliceLogic().GetSliceCompositeNode().SetForegroundVolumeID( node.GetID() ) 
