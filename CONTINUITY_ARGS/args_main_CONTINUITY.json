@@ -278,7 +278,7 @@
         "json_config_file": {
             "type": "str",
             "help": "json config file with user configuration",
-            "value": "./output_CONTINUITY"
+            "value": "/home/elodie/Desktop/CONTINUITY/output_CONTINUITY"
         },
         "OUT_PATH": {
             "type": "str",

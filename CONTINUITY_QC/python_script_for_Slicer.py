@@ -34,18 +34,7 @@ testUtility= slicer.app.testingUtility()
 success = testUtility.playTests("./CONTINUITY_QC/test_macro4.xml")
 '''
 
-
-# *****************************************
-# Extraction name of parcellation 
-# *****************************************
-
-parc_inv = ''
-for i in json_user_object['Parameters']['PARCELLATION_TABLE']['value'][::-1]:
-    if i == "_":
-        break
-    parc_inv = parc_inv +i
-NAME_PARCELLATION_TABLE_json = parc_inv[::-1]
-NAME_PARCELLATION_TABLE = NAME_PARCELLATION_TABLE_json[:-5]
+NAME_PARCELLATION_TABLE = json_user_object['Parameters']['labelSetName']['value']
 
 
 
@@ -55,6 +44,7 @@ NAME_PARCELLATION_TABLE = NAME_PARCELLATION_TABLE_json[:-5]
 
 ID = json_user_object['Parameters']['ID']['value']
 input_path = os.path.join( json_user_object['Parameters']['OUT_PATH']['value'], ID, "InputDataForSlicer")
+print(input_path)
 
 
 #find datas for B0_BiasCorrect
@@ -88,21 +78,21 @@ if not os.path.exists(FA):
 
 
 # Find data for surface: 
-registered_combine_surface         = os.path.join( input_path, ID + "stx_" + ID + "_T1_CombinedSurface_" + NAME_PARCELLATION_TABLE + ".vtk")
-registered_combine_surface_with_sc = os.path.join( input_path, ID + "stx_" + ID + "_T1_CombinedSurface_" + NAME_PARCELLATION_TABLE + "._WithSubcorticals.vtk")
 
-surface_left          = os.path.join( input_path, ID + "stx_" + ID 
-							+ "_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace" + NAME_PARCELLATION_TABLE + ".vtk")
+registered_combine_surface         = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID + "_T1_CombinedSurface_white_" + NAME_PARCELLATION_TABLE + ".vtk")
+registered_combine_surface_with_sc = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID + "_T1_CombinedSurface_white_" + NAME_PARCELLATION_TABLE + "_WithSubcorticals.vtk")
 
-surface_left_labeled  = os.path.join( input_path, ID + "stx_" + ID 
-							+ "_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace_labeled" + NAME_PARCELLATION_TABLE + ".vtk")
+surface_left          = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
+							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace.vtk")
 
-surface_right         = os.path.join( input_path, ID + "stx_" + ID 
-							+ "_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace" + NAME_PARCELLATION_TABLE + ".vtk")
+surface_left_labeled  = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
+							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace_labeled_" + NAME_PARCELLATION_TABLE + ".vtk")
 
-surface_right_labeled = os.path.join( input_path, ID + "stx_" + ID 
-							+ "_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace_labeled" + NAME_PARCELLATION_TABLE + ".vtk")
+surface_right         = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
+							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace.vtk")
 
+surface_right_labeled = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
+							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace_labeled_" + NAME_PARCELLATION_TABLE + ".vtk")
 
 
 
@@ -110,38 +100,37 @@ surface_right_labeled = os.path.join( input_path, ID + "stx_" + ID
 # Load data in Slicer (no show)
 # *****************************************
 if os.path.exists(B0):
-	loadedVolumeNode_B0                                 = slicer.util.loadVolume(B0,            properties={'name': 'B0', 'show': False})
+	loadedVolumeNode_B0            = slicer.util.loadVolume(B0,            properties={'name': 'B0', 'show': False})
 
 if os.path.exists(B0_with_biais):
-	loadedVolumeNode_B0_with_biais                      = slicer.util.loadVolume(B0_with_biais, properties={'name': 'B0_with_biais', 'show': False})
+	loadedVolumeNode_B0_with_biais = slicer.util.loadVolume(B0_with_biais, properties={'name': 'B0_with_biais', 'show': False})
 
 if os.path.exists(T1_registered):
-	loadedVolumeNode_T1_registered                      = slicer.util.loadVolume(T1_registered, properties={'name': 'T1_registered', 'show': False})
+	loadedVolumeNode_T1_registered = slicer.util.loadVolume(T1_registered, properties={'name': 'T1_registered', 'show': False})
 
 if os.path.exists(AD):
-	loadedVolumeNode_AD                                 = slicer.util.loadVolume(AD, properties={'name': 'AD' , 'show': False} )
+	loadedVolumeNode_AD            = slicer.util.loadVolume(AD, properties={'name': 'AD' , 'show': False} )
 
 if os.path.exists(FA):
-	loadedVolumeNode_FA                                 = slicer.util.loadVolume(FA, properties={'name': 'FA' , 'show': False} )
+	loadedVolumeNode_FA            = slicer.util.loadVolume(FA, properties={'name': 'FA' , 'show': False} )
 
 if os.path.exists(registered_combine_surface):
-	loadedVolumeNode_registered_combine_surface         = slicer.util.loadVolume(registered_combine_surface,         properties={'name': 'registered_combine_surface' , 'show': False} )
+	loadedVolumeNode_registered_combine_surface         = slicer.util.loadModel(registered_combine_surface)
 
 if os.path.exists(registered_combine_surface_with_sc):
-	loadedVolumeNode_registered_combine_surface_with_sc = slicer.util.loadVolume(registered_combine_surface_with_sc, properties={'name': 'registered_combine_surface_with_sc' , 'show': False} )
+	loadedVolumeNode_registered_combine_surface_with_sc = slicer.util.loadModel(registered_combine_surface_with_sc )
 
 if os.path.exists(surface_left):
-	loadedVolumeNode_surface_left                       = slicer.util.loadVolume(surface_left,          properties={'name': 'surface_left' , 'show': False} )
+	loadedVolumeNode_surface_left                       = slicer.util.loadModel(surface_left )
 
 if os.path.exists(surface_left_labeled):
-	loadedVolumeNode_surface_left_labeled               = slicer.util.loadVolume(surface_left_labeled,  properties={'name': 'surface_left_labeled' , 'show': False} )
+	loadedVolumeNode_surface_left_labeled               = slicer.util.loadModel(surface_left_labeled)
 
 if os.path.exists(surface_right):
-	loadedVolumeNode_surface_right                      = slicer.util.loadVolume(surface_right,         properties={'name': 'surface_right' , 'show': False} )
+	loadedVolumeNode_surface_right                      = slicer.util.loadModel(surface_right )
 
 if os.path.exists(surface_right_labeled):
-	loadedVolumeNode_surface_right_labeled              = slicer.util.loadVolume(surface_right_labeled, properties={'name': 'surface_right_labeled' , 'show': False} )
-
+	loadedVolumeNode_surface_right_labeled              = slicer.util.loadModel(surface_right_labeled )
 
 
 
@@ -156,36 +145,39 @@ list_view = ['Red', 'Yellow', 'Green', 'Slice4', 'Slice5', 'Slice6','Slice7', 'S
 
 sliceNodes = slicer.util.getNodesByClass('vtkMRMLSliceNode')
 sliceNodes.append(slicer.mrmlScene.GetDefaultNodeByClass('vtkMRMLSliceNode'))
+
 cpt = 0 
 
+#node_background = slicer.util.getNode(str(registered_combine_surface_with_sc))
+
 for sliceNode in sliceNodes:
-	place = list_view[cpt]
+	#print(sliceNode)
 
-	# Get node:
-	node = slicer.util.getNode(str(json_user_object['View_Controllers'][place]['value']))
+	if cpt <= len(list_view)-1:
+		place = list_view[cpt]
 
-	orientationPresetName = sliceNode.GetOrientation()
-	print('orientationPresetName', orientationPresetName)
+		# Get node:
+		node = slicer.util.getNode(str(json_user_object['View_Controllers'][place]['value']))
 
-	if place == 'Red' or place =='Yellow' or place == 'Green':
-		print("do nothing")
+		# Get orientation: 
+		orientationPresetName = sliceNode.GetOrientation()
 
-	else: 
 	  	#https://framagit.org/OpenAtWork/Slicer/blob/1eeef1a211589c809f624ff5ca7615605dc4541c/Libs/MRML/vtkMRMLSliceNode.cxx
 	  	#https://www.slicer.org/wiki/Documentation/4.10/ScriptRepository#Iterate_over_current_visible_slice_views.2C_and_set_foreground_and_background_images
 
-		if place == "Slice4" or place == "Slice7": #set to axial
+		if place == 'Red' or place == "Slice4" or place == "Slice7": #set to axial
 			sliceNode.SetOrientation("Axial")
 
-
-		elif place == "Slice5" or place == "Slice8": #set to sagittal
+		elif place =='Green' or place == "Slice5" or place == "Slice8": #set to sagittal
 			sliceNode.SetOrientation("Sagittal")
 
-
-
-		elif place == "Slice6" or place == "Slice9": #set to coronal
+		elif place == 'Sagittal' or place == "Slice6" or place == "Slice9": #set to coronal
 			sliceNode.SetOrientation("Coronal")
+
 	cpt += 1
 		
-	# Display
+	# Display foreground
 	slicer.app.layoutManager().sliceWidget(place).sliceLogic().GetSliceCompositeNode().SetForegroundVolumeID( node.GetID() ) 
+
+	# Display background
+	#slicer.app.layoutManager().sliceWidget(place).sliceLogic().GetSliceCompositeNode().SetBackgroundVolumeID( node_background.GetID() ) 

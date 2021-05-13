@@ -20,7 +20,7 @@
    <string>CONTINUITY QC</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -261,16 +261,6 @@ p, li { white-space: pre-wrap; }
              <string>FA</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>
@@ -318,16 +308,6 @@ p, li { white-space: pre-wrap; }
            <item>
             <property name="text">
              <string>FA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
             </property>
            </item>
           </widget>
@@ -379,16 +359,6 @@ p, li { white-space: pre-wrap; }
              <string>FA</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -427,16 +397,6 @@ p, li { white-space: pre-wrap; }
            <item>
             <property name="text">
              <string>FA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
             </property>
            </item>
           </widget>
@@ -488,16 +448,6 @@ p, li { white-space: pre-wrap; }
              <string>FA</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>
@@ -547,16 +497,6 @@ p, li { white-space: pre-wrap; }
              <string>FA</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -595,16 +535,6 @@ p, li { white-space: pre-wrap; }
            <item>
             <property name="text">
              <string>FA</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
             </property>
            </item>
           </widget>
@@ -656,16 +586,6 @@ p, li { white-space: pre-wrap; }
              <string>FA</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>
@@ -715,16 +635,6 @@ p, li { white-space: pre-wrap; }
              <string>FA</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>DWI</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Registered combined surface</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -769,7 +679,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>false</bool>
@@ -2680,29 +2590,26 @@ p, li { white-space: pre-wrap; }
          </rect>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab_14">
          <attribute name="title">
-          <string>Lines and points</string>
+          <string>Lines, points and opacity</string>
          </attribute>
          <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
-            <x>70</x>
-            <y>10</y>
-            <width>151</width>
-            <height>60</height>
+            <x>71</x>
+            <y>11</y>
+            <width>149</width>
+            <height>92</height>
            </rect>
           </property>
-          <layout class="QGridLayout" name="gridLayout_9">
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="linewidth_3D_spinBox">
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.800000000000000</double>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_35">
+             <property name="text">
+              <string>Point size:</string>
              </property>
             </widget>
            </item>
@@ -2723,10 +2630,30 @@ p, li { white-space: pre-wrap; }
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_35">
+           <item row="1" column="1">
+            <widget class="QDoubleSpinBox" name="linewidth_3D_spinBox">
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.800000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_45">
              <property name="text">
-              <string>Point size:</string>
+              <string>Opacity</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="opacity_3D_spinBox">
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.800000000000000</double>
              </property>
             </widget>
            </item>
@@ -3802,6 +3729,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>opacity_3D_spinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>TabWidget</receiver>
+   <slot>updata_opacity()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>424</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>564</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slicer_path_button_clicked()</slot>
@@ -3845,5 +3788,6 @@ p, li { white-space: pre-wrap; }
   <slot>checkBox_vmin_vmax_cliked()</slot>
   <slot>uptate_colormap_connectivity_matrix()</slot>
   <slot>update_cirlcle_connectome()</slot>
+  <slot>updata_opacity()</slot>
  </slots>
 </ui>

@@ -225,8 +225,6 @@ class Ui_visu(QtWidgets.QTabWidget):
                       "T1 registered":"T1_registered",
                       "T2 registered":"T2_registered",
                       "FA":"FA",
-                      "DWI":"DWI",
-                      "Registered combined surface":"Registered_combined_surface",
                       "AD":"AD"}
         return dict_param[Qt_param]
 
@@ -1093,7 +1091,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         # Create the actor for brains surfaces:
         actor = vtk.vtkActor()
         actor.SetMapper(mapper)
-        actor.GetProperty().SetOpacity(0.2)
+        actor.GetProperty().SetOpacity(self.opacity_3D_spinBox.value())
 
         # Create the renderer: 
         self.ren = vtk.vtkRenderer()
@@ -1619,6 +1617,27 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         print("end size line update")
         '''
+
+
+    # *****************************************
+    # Update the opacity of the brain surface: first actor! 
+    # *****************************************
+
+    def updata_opacity(self):
+        # Update actor:
+        actors = vtk.vtkPropCollection() 
+        actors = self.ren.GetViewProps()
+        actors.InitTraversal()
+
+        # Brain surface: first actor
+        actors.GetNextProp().GetProperty().SetOpacity(self.opacity_3D_spinBox.value())
+
+        # Update visualization
+        self.ren.ResetCamera()
+        self.ren.GetActiveCamera().Zoom(1.3)
+        self.iren.Initialize()
+
+        print("end opacity update")
 
 
 
