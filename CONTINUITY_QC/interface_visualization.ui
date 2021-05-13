@@ -20,7 +20,7 @@
    <string>CONTINUITY QC</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>1</number>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -679,7 +679,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>false</bool>
@@ -1310,6 +1310,12 @@ p, li { white-space: pre-wrap; }
         <width>671</width>
         <height>541</height>
        </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="tabletTracking">
+       <bool>true</bool>
       </property>
       <property name="title">
        <string/>
@@ -3789,5 +3795,6 @@ p, li { white-space: pre-wrap; }
   <slot>uptate_colormap_connectivity_matrix()</slot>
   <slot>update_cirlcle_connectome()</slot>
   <slot>updata_opacity()</slot>
+  <slot>track_click()</slot>
  </slots>
 </ui>

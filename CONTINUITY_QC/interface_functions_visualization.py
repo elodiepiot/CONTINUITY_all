@@ -20,6 +20,9 @@ import mne
 from mne.viz import circular_layout, plot_connectivity_circle
 import nrrd
 
+
+from functools import partial
+
 sys.path.insert(1, os.path.split(os.getcwd())[0])  # if you want to open the second interface alone
 sys.path.insert(1, os.getcwd())                    # if you want to open the second interface with the first interface
 
@@ -334,7 +337,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.max_a_norm_label.setText(str("{:e}".format(max_a)))
 
         # Plotting the correlation matrix:
-        vmin, vmaw = (0,0)
+        vmin, vmax = (0,0)
         check_before_display = 'True'
         
         if self.vmin_vmax_percentage_checkBox.isChecked(): 
@@ -462,8 +465,9 @@ class Ui_visu(QtWidgets.QTabWidget):
                     rh_labels.append( key["name"]) 
 
         # Save the plot order:    matrixRow in json table: set the order in connectivity matrix
+        global node_order
         node_order = list()
-        node_order.extend(lh_labels[::-1])  # reverse the order
+        node_order.extend(lh_labels[::-1])  # reverse the order: first element finish as the last element
         node_order.extend(rh_labels)
 
         # Create a circular layout:
@@ -617,6 +621,48 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
         display = 'true'
 
+        #print(self.fig.get_figwidth()* self.fig.dpi)  #dpi:resolution
+        #print(self.fig.get_figheight()* self.fig.dpi)
+
+        #print(self.Layoutcircle.sizeHint())
+
+
+
+
+
+        con_thresh = np.sort(np.abs(connectivity_matrix).ravel())[-int((self.n_lines_spinBox.value() / 100) * number_total_line)]
+
+        indices = np.tril_indices(len(label_names), -1)
+        # get the connections which we are drawing and sort by connection strength
+        # this will allow us to draw the strongest connections first
+        con_abs = np.abs(connectivity_matrix)
+        con_draw_idx = np.where(con_abs >= con_thresh)[0]
+
+        connectivity_matrix = connectivity_matrix[con_draw_idx]
+        con_abs = con_abs[con_draw_idx]
+        indices = [ind[con_draw_idx] for ind in indices]
+
+        # now sort them
+        sort_idx = np.argsort(con_abs)
+        del con_abs
+        connectivity_matrix = connectivity_matrix[sort_idx]
+        indices = [ind[sort_idx] for ind in indices]
+
+
+        callback = partial(get_nodes, fig=self.fig, indices=indices  , node_angles=node_angles)
+
+        self.fig.canvas.mpl_connect('button_press_event', callback)
+
+
+
+
+
+
+
+
+
+
+
 
 
     # *****************************************
@@ -648,8 +694,6 @@ class Ui_visu(QtWidgets.QTabWidget):
     # *****************************************
 
     def update_cirlcle_connectome(self): 
-        print("to do")
-        '''
         
         if display == 'true': 
             # Remove previous circle plot:
@@ -675,8 +719,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                                        node_linewidth = self.nodelinewidth_spinBox.value() )
 
             self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
-        '''
-
+        
 
         
         
@@ -1778,3 +1821,41 @@ class Ui_visu(QtWidgets.QTabWidget):
         interactor.Initialize()
         interactor.Start()
     '''             
+
+def get_nodes(event, fig=None, indices=None, node_angles=None, ylim=[9, 10]):
+    """Isolate connections around a single node when user left clicks a node.
+    On right click, resets all connections.
+    """
+
+    if event.button == 1:  # left click
+        # click must be near node radius
+        if not ylim[0] <= event.ydata <= ylim[1]:  #ydata: node radius 
+            return
+
+        # all angles in range [0, 2*pi]
+        node_angles = node_angles % (np.pi * 2)
+        node = np.argmin(np.abs(event.xdata - node_angles))  #xdata: value of this node in the connectivity matrix
+                                                             #node: connected (true) or not (false)
+        print('node', node)
+
+        cpt_nodes = 0
+        label_names.extend(label_names[::-1])
+        #print(indices) #(array([ 1,  2,  2, ..., 89, 89, 89]), array([ 0,  0,  1, ..., 86, 87, 88])): indices link to label_names 
+        for ii, (x, y) in enumerate(zip(indices[0], indices[1])): #ii: index and (x,y): value
+
+            cpt_nodes +=1
+            # print(ii) # from 0 to 4004
+            if node in [x,y]: #true
+                print('node', x, y, 'connected', 'node_order[x]', node_order[x], 'node_order[y]', node_order[y])
+            
+            #else:
+            #    print('node', x, y, 'unconnected')
+
+
+
+            #patches[ii].set_visible(node in [x, y])
+
+            #print("node",node in [x, y])# False True False False ...
+
+        print("number of node display: ", cpt_nodes)
+  

@@ -278,7 +278,7 @@
         "json_config_file": {
             "type": "str",
             "help": "json config file with user configuration",
-            "value": "/home/elodie/Desktop/CONTINUITY/output_CONTINUITY"
+            "value": "./output_CONTINUITY"
         },
         "OUT_PATH": {
             "type": "str",
@@ -340,7 +340,7 @@
         "slicer": {
             "type": "str",
             "help": "Path to slicer",
-            "value": "/home/elodie/Downloads/Slicer-4.11.20200930-linux-amd64/Slicer"
+            "value": "False"
         },
         "fsl": {
             "type": "str",
