@@ -51,6 +51,8 @@ class Ui_visu(QtWidgets.QTabWidget):
         else:                                                                   # if you open the second interface alone
             uic.loadUi('./interface_visualization.ui', self)
 
+
+
         # Write default values on interface    
         self.setup_default_values()
 
@@ -601,10 +603,13 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.canvas = FigureCanvas(self.fig)
         self.Layoutcircle.addWidget(self.canvas)
 
-        plot_connectivity_circle(connectivity_matrix, label_names, n_lines = int(self.n_lines_spinBox.value()),
+        global n_lines
+        n_lines = int( (self.n_lines_spinBox.value()/100) * number_total_line)
+
+        plot_connectivity_circle(connectivity_matrix, label_names, n_lines = n_lines,
                                                                    linewidth = self.linewidth_spinBox.value(),
-                                                                   #vmin = (self.vmin_connectome_spinBox.value() / 100), 
-                                                                   #vmax = (self.vmax_connectome_spinBox.value() / 100),
+                                                                   vmin = (self.vmin_connectome_spinBox.value() / 100), 
+                                                                   vmax = (self.vmax_connectome_spinBox.value() / 100),
                                                                    node_angles = node_angles, 
                                                                    node_colors = tuple(label_color), 
                                                                    fig = self.fig, show = False,
@@ -620,7 +625,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         else:   
             self.wait_label.setText("done again! ")
         
-        self.nb_line_label.setText(str(number_total_line) + " lines in total")
+        self.nb_line_label.setText(str(int( (self.n_lines_spinBox.value()/100) * number_total_line)) + " lines displayed")
         display = 'true'
 
    
@@ -630,12 +635,8 @@ class Ui_visu(QtWidgets.QTabWidget):
         connectivity_matrix_modif = connectivity_matrix_modif[indices]
 
         global con_thresh
-        con_thresh = np.sort(np.abs(connectivity_matrix_modif).ravel())[-int(self.n_lines_spinBox.value()) ]
+        con_thresh = np.sort(np.abs(connectivity_matrix_modif).ravel())[-n_lines ]
         #ravel: used to change a 2-dimensional array or a multi-dimensional array into a contiguous flattened array.
-
-        
-
-        
 
 
         # get the connections which we are drawing and sort by connection strength this will allow to draw the strongest connections first
@@ -643,15 +644,12 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         global con_abs_util
         con_abs_util = np.abs(connectivity_matrix)
-
         con_draw_idx = np.where(con_abs >= con_thresh)[0]
 
-      
         
         #connectivity_matrix_modif = connectivity_matrix_modif[con_draw_idx]
         con_abs = con_abs[con_draw_idx]
         indices = [ind[con_draw_idx] for ind in indices]
-
 
         # now sort them
         sort_idx = np.argsort(con_abs)
@@ -660,15 +658,76 @@ class Ui_visu(QtWidgets.QTabWidget):
         indices = [ind[sort_idx] for ind in indices]
 
 
-
-        callback =  partial(get_nodes, fig=self.fig, indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
-
-
+        callback =  partial(self.get_nodes, fig=self.fig, axes=self.fig.get_axes()[0],indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
         self.fig.canvas.mpl_connect('button_press_event', callback)
 
+       
 
 
 
+
+
+    # *****************************************
+    # Isolate connections around a single node when user left clicks a node.
+    # https://github.com/mne-tools/mne-python/blob/8aeb4ac07c9b2a2694badb33656fa0b510c8bbcd/mne/viz/circle.py#L91
+    # *****************************************
+
+    def get_nodes(self, event, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
+
+        if event.button == 1:  # left click
+            # click must be near node radius
+            if event.ydata != "None": 
+                if not ylim[0] <= event.ydata <= ylim[1]:
+                    return
+
+                # Convert to radian
+                node_angles = node_angles * np.pi / 180
+
+                # all angles in range [0, 2*pi]
+                node_angles = node_angles % (np.pi * 2)
+                node = np.argmin(np.abs(event.xdata - node_angles))
+    
+
+                #print('Node clicked: ', label_names[node] , '(number ', node, ")")
+                self.clicked_nodes_label.setText('Node clicked: '+ str(label_names[node]))
+
+                text = "Node associated: \n"
+                label_names_update = []
+        
+                my_index = label_names.index(label_names[node])
+          
+                for target in range(len(con_abs_util[0])):
+                  
+                    if con_abs_util[my_index, target] >= con_thresh:
+                        #print('Node associated: ', label_names[target] , '(number ', target, ")")
+                        text += '  ' + label_names[target] + '\n' 
+                        label_names_update.append(' ')#str(label_names[target]))
+                    else: 
+                        label_names_update.append(' ')
+
+
+                
+                self.nodes_associated_plainTextEdit.setPlainText(text)
+
+    
+
+                # Draw node labels
+                angles_deg = 180 * node_angles / np.pi
+                for name, angle_rad, angle_deg in zip(label_names_update, node_angles, angles_deg):
+                    if angle_deg >= 270:
+                        ha = 'left'
+                    else:
+                        # Flip the label, so text is always upright
+                        angle_deg += 180
+                        ha = 'right'
+
+                    axes.text(angle_rad, 10.4, name, size=self.textwidth_spinBox.value(),
+                              rotation=angle_deg, rotation_mode='anchor',
+                              horizontalalignment=ha, verticalalignment='center',
+                              color='white' )
+
+                #fig.canvas.draw()
+                print('end click')
 
 
 
@@ -707,6 +766,7 @@ class Ui_visu(QtWidgets.QTabWidget):
     # *****************************************
 
     def update_cirlcle_connectome(self): 
+        
         print("do to")
         '''
         if display == 'true': 
@@ -1840,41 +1900,4 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
-def get_nodes(event, fig=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
-
-    """
-    Isolate connections around a single node when user left clicks a node.
-    """
-
-
-    if event.button == 1:  # left click
-        # click must be near node radius
-        if event.ydata != "None": 
-            if not ylim[0] <= event.ydata <= ylim[1]:
-                return
-
-            # Convert to radian
-            node_angles = node_angles * np.pi / 180
-
-            # all angles in range [0, 2*pi]
-            node_angles = node_angles % (np.pi * 2)
-            node = np.argmin(np.abs(event.xdata - node_angles))
-
-
-          
-
-            print('Node clicked: ', label_names[node] , '(number ', node, ")")
-            print('con_thresh', con_thresh)
-
-            my_index = label_names.index(label_names[node])
-            print("my index", my_index)
-
-             
-
-            for target in range(len(con_abs_util[0])):
-              
-                if con_abs_util[my_index, target] >= con_thresh:
-                    #print(con_abs_util[my_index, target])
-                    print('Node associated: ', label_names[target] , '(number ', target, ")") 
-  
+    
