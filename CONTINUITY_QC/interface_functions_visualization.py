@@ -504,7 +504,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         connectivity_matrix = np.array(connectivity_score)
 
         global number_total_line
-        number_total_line = np.count_nonzero(np.absolute(connectivity_matrix)) #Doc plot_connectivity_circle: n_lines strongest connections (strength=abs(con))
+        number_total_line = np.count_nonzero(np.abs(connectivity_matrix)) #Doc plot_connectivity_circle: n_lines strongest connections (strength=abs(con))
         max_value = np.amax(connectivity_matrix)
 
 
@@ -597,18 +597,19 @@ class Ui_visu(QtWidgets.QTabWidget):
             self.Layoutcircle.itemAt(i).widget().setParent(None)
         
         # New circle connectome plot: 
-        self.fig = plt.figure(facecolor='black')
+        self.fig = plt.figure(facecolor='SlateGray')
         self.canvas = FigureCanvas(self.fig)
         self.Layoutcircle.addWidget(self.canvas)
 
-        plot_connectivity_circle(connectivity_matrix, label_names, n_lines = int((self.n_lines_spinBox.value() / 100) * number_total_line),
+        plot_connectivity_circle(connectivity_matrix, label_names, n_lines = int(self.n_lines_spinBox.value()),
                                                                    linewidth = self.linewidth_spinBox.value(),
-                                                                   vmin = (self.vmin_connectome_spinBox.value() / 100), 
-                                                                   vmax = (self.vmax_connectome_spinBox.value() / 100),
+                                                                   #vmin = (self.vmin_connectome_spinBox.value() / 100), 
+                                                                   #vmax = (self.vmax_connectome_spinBox.value() / 100),
                                                                    node_angles = node_angles, 
                                                                    node_colors = tuple(label_color), 
                                                                    fig = self.fig, show = False,
                                                                    colorbar_pos = (- 0.1, 0.1), 
+                                                                   facecolor='SlateGray', 
                                                                    fontsize_names = self.textwidth_spinBox.value(),
                                                                    colormap = self.colormap_connectome_comboBox.currentText(),
                                                                    padding = self.padding_spinBox.value(), 
@@ -618,38 +619,50 @@ class Ui_visu(QtWidgets.QTabWidget):
             self.wait_label.setText("done! ")
         else:   
             self.wait_label.setText("done again! ")
-        self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
+        
+        self.nb_line_label.setText(str(number_total_line) + " lines in total")
         display = 'true'
 
-        #print(self.fig.get_figwidth()* self.fig.dpi)  #dpi:resolution
-        #print(self.fig.get_figheight()* self.fig.dpi)
-
-        #print(self.Layoutcircle.sizeHint())
-
-
-
-
-
-        con_thresh = np.sort(np.abs(connectivity_matrix).ravel())[-int((self.n_lines_spinBox.value() / 100) * number_total_line)]
+   
 
         indices = np.tril_indices(len(label_names), -1)
-        # get the connections which we are drawing and sort by connection strength
-        # this will allow us to draw the strongest connections first
-        con_abs = np.abs(connectivity_matrix)
+        connectivity_matrix_modif = connectivity_matrix
+        connectivity_matrix_modif = connectivity_matrix_modif[indices]
+
+        global con_thresh
+        con_thresh = np.sort(np.abs(connectivity_matrix_modif).ravel())[-int(self.n_lines_spinBox.value()) ]
+        #ravel: used to change a 2-dimensional array or a multi-dimensional array into a contiguous flattened array.
+
+        
+
+        
+
+
+        # get the connections which we are drawing and sort by connection strength this will allow to draw the strongest connections first
+        con_abs = np.abs(connectivity_matrix_modif)
+
+        global con_abs_util
+        con_abs_util = np.abs(connectivity_matrix)
+
         con_draw_idx = np.where(con_abs >= con_thresh)[0]
 
-        connectivity_matrix = connectivity_matrix[con_draw_idx]
+      
+        
+        #connectivity_matrix_modif = connectivity_matrix_modif[con_draw_idx]
         con_abs = con_abs[con_draw_idx]
         indices = [ind[con_draw_idx] for ind in indices]
 
+
         # now sort them
         sort_idx = np.argsort(con_abs)
-        del con_abs
-        connectivity_matrix = connectivity_matrix[sort_idx]
+        #del con_abs
+        #connectivity_matrix_modif = connectivity_matrix_modif[sort_idx]
         indices = [ind[sort_idx] for ind in indices]
 
 
-        callback = partial(get_nodes, fig=self.fig, indices=indices  , node_angles=node_angles)
+
+        callback =  partial(get_nodes, fig=self.fig, indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
+
 
         self.fig.canvas.mpl_connect('button_press_event', callback)
 
@@ -694,7 +707,8 @@ class Ui_visu(QtWidgets.QTabWidget):
     # *****************************************
 
     def update_cirlcle_connectome(self): 
-        
+        print("do to")
+        '''
         if display == 'true': 
             # Remove previous circle plot:
             for i in reversed(range(self.Layoutcircle.count())): 
@@ -720,6 +734,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
             self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
         
+        '''
 
         
         
@@ -1822,40 +1837,44 @@ class Ui_visu(QtWidgets.QTabWidget):
         interactor.Start()
     '''             
 
-def get_nodes(event, fig=None, indices=None, node_angles=None, ylim=[9, 10]):
-    """Isolate connections around a single node when user left clicks a node.
-    On right click, resets all connections.
+
+
+
+
+def get_nodes(event, fig=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
+
     """
+    Isolate connections around a single node when user left clicks a node.
+    """
+
 
     if event.button == 1:  # left click
         # click must be near node radius
-        if not ylim[0] <= event.ydata <= ylim[1]:  #ydata: node radius 
-            return
+        if event.ydata != "None": 
+            if not ylim[0] <= event.ydata <= ylim[1]:
+                return
 
-        # all angles in range [0, 2*pi]
-        node_angles = node_angles % (np.pi * 2)
-        node = np.argmin(np.abs(event.xdata - node_angles))  #xdata: value of this node in the connectivity matrix
-                                                             #node: connected (true) or not (false)
-        print('node', node)
+            # Convert to radian
+            node_angles = node_angles * np.pi / 180
 
-        cpt_nodes = 0
-        label_names.extend(label_names[::-1])
-        #print(indices) #(array([ 1,  2,  2, ..., 89, 89, 89]), array([ 0,  0,  1, ..., 86, 87, 88])): indices link to label_names 
-        for ii, (x, y) in enumerate(zip(indices[0], indices[1])): #ii: index and (x,y): value
-
-            cpt_nodes +=1
-            # print(ii) # from 0 to 4004
-            if node in [x,y]: #true
-                print('node', x, y, 'connected', 'node_order[x]', node_order[x], 'node_order[y]', node_order[y])
-            
-            #else:
-            #    print('node', x, y, 'unconnected')
+            # all angles in range [0, 2*pi]
+            node_angles = node_angles % (np.pi * 2)
+            node = np.argmin(np.abs(event.xdata - node_angles))
 
 
+          
 
-            #patches[ii].set_visible(node in [x, y])
+            print('Node clicked: ', label_names[node] , '(number ', node, ")")
+            print('con_thresh', con_thresh)
 
-            #print("node",node in [x, y])# False True False False ...
+            my_index = label_names.index(label_names[node])
+            print("my index", my_index)
 
-        print("number of node display: ", cpt_nodes)
+             
+
+            for target in range(len(con_abs_util[0])):
+              
+                if con_abs_util[my_index, target] >= con_thresh:
+                    #print(con_abs_util[my_index, target])
+                    print('Node associated: ', label_names[target] , '(number ', target, ")") 
   
