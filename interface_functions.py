@@ -269,7 +269,6 @@ class Ui(QtWidgets.QTabWidget):
 
     def button_param_path_clicked(self):
         button_name = self.sender().objectName()[:-11]
-        print(button_name)
         Ui.update_param_path(self, button_name)
 
 
@@ -459,7 +458,7 @@ class Ui(QtWidgets.QTabWidget):
     def NO_registration_cortical_labeled_left_Button_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
-            self.cortical_labeled_left_textEdit.setText(fileName)
+            self.NO_registration_cortical_label_left_textEdit.setText(fileName)
             json_user_object['Parameters']["cortical_label_left"]["value"] = fileName
             Ui.update_user_json_file() 
        
@@ -472,7 +471,7 @@ class Ui(QtWidgets.QTabWidget):
     def NO_registration_cortical_labeled_right_Button_clicked(self):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
-            self.cortical_labeled_right_textEdit.setText(fileName)
+            self.NO_registration_cortical_label_right_textEdit.setText(fileName)
             json_user_object['Parameters']["cortical_label_right"]["value"] = fileName
             Ui.update_user_json_file() 
 
@@ -1151,6 +1150,35 @@ class Ui(QtWidgets.QTabWidget):
             self.no_registration_DWI_textEdit.setText(fileName)
             json_user_object['Parameters']["DWI_DATA"]["value"] = fileName
             Ui.update_user_json_file()
+
+
+
+    # *****************************************
+    # NO registration: open file system and write the DWI bvecs path in user information json file
+    # *****************************************
+
+    def no_registration_DWI_bvecs_pushButton(self):
+        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
+        if fileName:
+            self.no_registration_DWI_DATA_bvecs_textEdit.setText(fileName)
+            json_user_object['Parameters']["DWI_DATA_bvecs"]["value"] = fileName
+            Ui.update_user_json_file()
+
+
+
+    # *****************************************
+    # NO registration: open file system and write the DWI bvals path in user information json file
+    # *****************************************
+
+    def no_registration_DWI_bvals_pushButton(self):
+        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
+        if fileName:
+            self.no_registration_DWI_DATA_bvals_textEdit.setText(fileName)
+            json_user_object['Parameters']["DWI_DATA_bvals"]["value"] = fileName
+            Ui.update_user_json_file()
+
+
+
 
 
 
