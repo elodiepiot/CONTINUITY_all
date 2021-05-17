@@ -239,7 +239,7 @@ with Tee(log_file):
 
 	if afile.endswith('nii.gz'): 
 		print("*****************************************")
-		print("Convert FSL2Nrrd")
+		print("Convert DWI FSL2Nrrd")
 		print("*****************************************")
 
 		new_name = afile[:-7] + '.nrrd'

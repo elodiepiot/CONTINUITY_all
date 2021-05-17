@@ -433,6 +433,18 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     # *****************************************
     # Plot circle connectome
     # ***************************************** 
@@ -449,33 +461,131 @@ class Ui_visu(QtWidgets.QTabWidget):
         with open(os.path.join(self.parcellation_table_textEdit.toPlainText()), "r") as table_json_file:
             table_json_object = json.load(table_json_file)
 
-        # Init list to extract name of regions:
+
+        # Get the number of separation required = number of different 'VisuHierarchy' label:  "VisuHierarchy": "seed.left."
         global label_names
-        label_names, lh_labels, rh_labels = ([], [], [])
-      
+        list_VisuHierarchy, label_names, VisuOrder_associated, VisuHierarchy_associated = ([], [],[],[])
+        number_of_subcortical_regions = 0 
+
         for key in table_json_object:
             # List with all regions names:
             label_names.append(key["name"])
+            VisuHierarchy_associated.append(key["VisuHierarchy"])
 
-            for i in key["name"].split("_"):
-                # Label in the left hemi: 
-                if i == "lh" or i.endswith('L') :   #L: for AAL table, lh: for Destrieux table
-                    lh_labels.append( key["name"])
+            
 
-                # Label in the right hemi: 
-                if i == "rh" or i.endswith('R') :  
-                    rh_labels.append( key["name"]) 
 
-        # Save the plot order:    matrixRow in json table: set the order in connectivity matrix
+        for key in table_json_object:
+            if key["VisuOrder"] == -1: #subcortical regions
+                number_of_subcortical_regions+= 1
+                if key['name'].endswith('_R'):
+                    VisuOrder_associated.append(int(len(label_names)+ number_of_subcortical_regions))
+                else:  #'-L'
+                    VisuOrder_associated.append(int(len(label_names)+30 + number_of_subcortical_regions))
+
+
+
+            else:
+                VisuOrder_associated.append(int(key["VisuOrder"]))
+
+
+            if key["VisuHierarchy"] not in list_VisuHierarchy:
+                list_VisuHierarchy.append(key["VisuHierarchy"])
+
+           
+
+        # Save the plot order: matrixRow in json table: set the order in connectivity matrix
+        
+
+        # Init list to build boundaries: 
+        list_of_list_VisuHierarchy = [[] for i in range(len(list_VisuHierarchy))]
+        
+        for key in table_json_object:
+      
+            # Add label name: 
+            index = list_VisuHierarchy.index(key["VisuHierarchy"])
+            list_of_list_VisuHierarchy[index].append(key["name"])
+
+
+
+        #print('VisuOrder_associated:',VisuOrder_associated)
+
+        sorted_indices = np.argsort( VisuOrder_associated)
+
+        #print('sorted_indices:',sorted_indices)
+
+        
         global node_order
-        node_order = list()
-        node_order.extend(lh_labels[::-1])  # reverse the order: first element finish as the last element
-        node_order.extend(rh_labels)
+        node_order, VisuHierarchy_order = ([],[])
+
+        for i in range(len(VisuOrder_associated)):
+            index = sorted_indices[i]
+            node_order.append(label_names[index])
+            VisuHierarchy_order.append(VisuHierarchy_associated[index])
+        
+
+        #print('VisuHierarchy_order',VisuHierarchy_order)
+        #print('node_order', node_order)
+
+
+        # Build boundaries: 
+        global name_boundaries
+
+        list_boundaries, name_boundaries, list_name_boundaries  = ([0], [], [])
+        i = 0
+
+        while i < len(VisuHierarchy_order)-1:   
+            current_elem = VisuHierarchy_order[i]
+            next_elem = VisuHierarchy_order[i+1]
+
+            if current_elem != next_elem: #boundary
+
+                list_boundaries.append(i+1)
+                print('list_boundaries', list_boundaries)
+                list_name_boundaries.append(current_elem)
+
+                #print('current_elem     ',current_elem ,'next_elem     ', next_elem)
+
+                index = list_VisuHierarchy.index(current_elem)
+                #print(list_of_list_VisuHierarchy[index])
+                #print('*************************************')
+
+            i += 1
+            
+
+
+
+
+        # 
+        middle = [] 
+
+        for i in range(len(list_boundaries)-1):   
+            current_elem = list_boundaries[i]
+            next_elem = list_boundaries[i+1]
+
+            middle.append( int((next_elem - current_elem) /2) + current_elem )
+
+        #last elem:
+        middle.append( int((list_boundaries[-1] - len(list_boundaries)) /2)  + len(label_names) )
+            
+
+        print('middle', middle)
+
+
+        for i in range(len(label_names)): 
+            if i not in middle: 
+                name_boundaries.append("")
+            else: 
+                index = middle.index(i)
+                name_boundaries.append(list_name_boundaries[index])
+      
+        print('name_boundaries', name_boundaries)
+
 
         # Create a circular layout:
         global node_angles
-        node_angles = circular_layout(label_names, node_order, start_pos=90, group_boundaries=[0, len(label_names) / 2])
-
+        node_angles = circular_layout(label_names, node_order, start_pos=90, group_boundaries=list_boundaries)#[0, len(label_names) / 2])
+    
 
         # *****************************************
         # Get the normalize connectivity matrix
@@ -606,6 +716,9 @@ class Ui_visu(QtWidgets.QTabWidget):
         global n_lines
         n_lines = int( (self.n_lines_spinBox.value()/100) * number_total_line)
 
+        global node_angles_copy
+        node_angles_copy = node_angles
+
         fig, axes = plot_connectivity_circle(connectivity_matrix, label_names, n_lines = n_lines,
                                                                    linewidth = self.linewidth_spinBox.value(),
                                                                    vmin = (self.vmin_connectome_spinBox.value() / 100), 
@@ -620,8 +733,6 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                                    padding = self.padding_spinBox.value(), 
                                                                    node_linewidth = self.nodelinewidth_spinBox.value() )
 
-        #print(axes) #PolarAxesSubplot(0.125,0.11;0.62x0.77)
-
         # Udpate text in the interface
         if self.wait_label.text() != "done! ": 
             self.wait_label.setText("done! ")
@@ -631,7 +742,41 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.nb_line_label.setText(str(int( (self.n_lines_spinBox.value()/100) * number_total_line)) + " lines displayed")
         display = 'true'
 
+
+
+
+        
+        # Remove previous node label: 
+        loop = len(axes.texts)
+        for i in range(loop):
+            axes.texts.remove(axes.texts[0])
+
+        # Convert to radian and 
+        node_angles = node_angles_copy * np.pi / 180
+        node_angles_copy_event = node_angles
+
+
+        # Draw new node labels: 
+        angles_deg = 180 * node_angles_copy_event / np.pi
+
+        for name, angle_rad, angle_deg in zip(name_boundaries, node_angles, angles_deg):
+            if angle_deg >= 270:
+                ha = 'left'
+            else:
+                # Flip the label, so text is always upright
+                angle_deg += 180
+                ha = 'right'
+
+            axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
+                      rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white')
+               
+        self.fig.canvas.draw()
+        
+
+
    
+
+
 
         indices = np.tril_indices(len(label_names), -1)
         connectivity_matrix_modif = connectivity_matrix
@@ -639,31 +784,25 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         global con_thresh
         con_thresh = np.sort(np.abs(connectivity_matrix_modif).ravel())[-n_lines ]
-        #ravel: used to change a 2-dimensional array or a multi-dimensional array into a contiguous flattened array.
 
-
-        # get the connections which we are drawing and sort by connection strength this will allow to draw the strongest connections first
+        # Get the connections which we are drawing and sort by connection strength this will allow to draw the strongest connections first
         con_abs = np.abs(connectivity_matrix_modif)
 
         global con_abs_util
         con_abs_util = np.abs(connectivity_matrix)
         con_draw_idx = np.where(con_abs >= con_thresh)[0]
-
         
-        #connectivity_matrix_modif = connectivity_matrix_modif[con_draw_idx]
+        # Connectivity_matrix_modif = connectivity_matrix_modif[con_draw_idx]
         con_abs = con_abs[con_draw_idx]
         indices = [ind[con_draw_idx] for ind in indices]
 
-        # now sort them
+        # Now sort them
         sort_idx = np.argsort(con_abs)
-        #del con_abs
-        #connectivity_matrix_modif = connectivity_matrix_modif[sort_idx]
         indices = [ind[sort_idx] for ind in indices]
 
-        #print(self.fig.get_axes()[0]) #PolarAxesSubplot(0.125,0.11;0.62x0.77)
 
-
-        callback =  partial(self.get_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
+        # Callback function: 
+        callback =  partial(self.get_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles_copy)
         self.fig.canvas.mpl_connect('button_press_event', callback)
 
        
@@ -679,6 +818,11 @@ class Ui_visu(QtWidgets.QTabWidget):
 
     def get_nodes(self, event, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
 
+        # Convert to radian  
+        node_angles = node_angles * np.pi / 180
+        node_angles_copy_event = node_angles
+
+
         if event.button == 1:  # left click
 
             # click must be near node radius
@@ -686,14 +830,10 @@ class Ui_visu(QtWidgets.QTabWidget):
                 if not ylim[0] <= event.ydata <= ylim[1]:
                     return
 
-                # Convert to radian
-                node_angles = node_angles * np.pi / 180
-
-                # All angles in range [0, 2*pi]
+                # Set angles between [0, 2*pi]
                 node_angles = node_angles % (np.pi * 2)
                 node = np.argmin(np.abs(event.xdata - node_angles))
     
-
                 #print('Node clicked: ', label_names[node] , '(number ', node, ")")
                 self.clicked_nodes_label.setText('Node clicked: '+ str(label_names[node]) + "\n Node associated: ")
 
@@ -703,20 +843,31 @@ class Ui_visu(QtWidgets.QTabWidget):
                 my_index = label_names.index(label_names[node])
           
                 for target in range(len(con_abs_util[0])):
-                  
-                    if con_abs_util[my_index, target] >= con_thresh:
+                    
+                    if label_names[target] == label_names[node]: 
+                        label_names_update.append(str(label_names[target]))
+
+                    elif con_abs_util[my_index, target] >= con_thresh:
                         #print('Node associated: ', label_names[target] , '(number ', target, ")")
                         text += '  ' + label_names[target] + '\n' 
-                        label_names_update.append(' ')#str(label_names[target]))
+                        label_names_update.append(str(label_names[target]))
                     else: 
                         label_names_update.append(' ')
 
-                # Display list of connectited regions:
+
+                # Display list of connected regions:
                 self.nodes_associated_plainTextEdit.setPlainText(text)
 
+
+                # Remove previous node label: 
+                loop = len(axes.texts)
+                for i in range(loop):
+                    axes.texts.remove(axes.texts[0])
+
     
-                # Draw node labels: 
-                angles_deg = 180 * node_angles / np.pi
+                # Draw new node labels: 
+                angles_deg = 180 * node_angles_copy_event / np.pi
+        
                 for name, angle_rad, angle_deg in zip(label_names_update, node_angles, angles_deg):
                     if angle_deg >= 270:
                         ha = 'left'
@@ -725,32 +876,53 @@ class Ui_visu(QtWidgets.QTabWidget):
                         angle_deg += 180
                         ha = 'right'
 
-                    axes.text(angle_rad, 10.4, name, size=self.textwidth_spinBox.value(),
-                              rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white' )
-
+                    if name != label_names[node]:
+                        axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
+                              rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white')
+                    else: 
+                        axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
+                              rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='Turquoise')
+                       
                 fig.canvas.draw()
-                #Ui_visu.plt_show(False, fig)
               
-                print('end click')
+                print('end left click')
 
 
-    '''
-    def plt_show(show=True, fig=None, **kwargs):
-        """Show a figure while suppressing warnings.
-        Parameters
-        ----------
-        show : bool
-            Show the figure.
-        fig : instance of Figure | None
-            If non-None, use fig.show().
-        **kwargs : dict
-            Extra arguments for :func:`matplotlib.pyplot.show`.
-        """
-        from matplotlib import get_backend
-        import matplotlib.pyplot as plt
-        if show and get_backend() != 'agg':
-            (fig or plt).show(**kwargs)
-    '''
+
+
+
+
+
+
+        elif event.button == 3:  # right click
+            # Remove previous node label: 
+            loop = len(axes.texts)
+            for i in range(loop):
+                axes.texts.remove(axes.texts[0])
+
+
+            # Draw new node labels: 
+            angles_deg2 = 180 * node_angles_copy_event / np.pi
+            for name, angle_rad, angle_deg in zip(name_boundaries, node_angles, angles_deg2):
+                if angle_deg >= 270:
+                    ha = 'left'
+                else:
+                    # Flip the label, so text is always upright
+                    angle_deg += 180
+                    ha = 'right'
+
+                
+                axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
+                      rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white')
+            
+            fig.canvas.draw()
+
+            self.clicked_nodes_label.setText("")
+            self.nodes_associated_plainTextEdit.setPlainText("")
+
+            print('end right click')
+
+
 
 
 

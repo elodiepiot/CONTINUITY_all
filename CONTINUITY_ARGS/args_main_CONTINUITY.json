@@ -48,12 +48,12 @@
         "DWI_DATA_bvecs": {
             "type": "str",
             "help": "DWI Image bvectors (in case of DWI in FSL format (.nifti)) ",
-            "value": "/home/elodie/Desktop/CONTINUITY/csv_CONTINUITY.csv"
+            "value": ""
         },
         "DWI_DATA_bvals": {
             "type": "str",
             "help": "DWI Image bvalues (in case of DWI in FSL format (.nifti))",
-            "value": "/home/elodie/Desktop/CONTINUITY/CONTINUITY_completed_script.py"
+            "value": ""
         },
         "T1_DATA": {
             "type": "str",
@@ -78,7 +78,7 @@
         "DO_REGISTRATION": {
             "type": "str",
             "help": "Do registration with this tool",
-            "value": "False"
+            "value": "true"
         },
         "INTEGRATE_SC_DATA": {
             "type": "str",
@@ -108,7 +108,7 @@
         "left_right_surface_need_to_be_combining": {
             "type": "str",
             "help": "Boolean: left and right white surface provided separatly",
-            "value": "False"
+            "value": "false"
         },
         "surface_already_labeled": {
             "type": "str",
@@ -128,17 +128,17 @@
         "SURFACE_USER": {
             "type": "str",
             "help": "Surface data (left and right white matter already combined)",
-            "value": "/home/elodie/Desktop/CONTINUITY/README.md"
+            "value": ""
         },
         "WM_L_Surf_NON_REGISTRATION": {
             "type": "str",
             "help": "Path to WM_L_Surf data in diffusion space",
-            "value": "/home/elodie/Desktop/CONTINUITY/__init__.py"
+            "value": ""
         },
         "WM_R_Surf_NON_REGISTRATION": {
             "type": "str",
             "help": "Path to WM_R_Surf data in diffusion space",
-            "value": "/home/elodie/Desktop/CONTINUITY/csv_CONTINUITY.csv"
+            "value": ""
         },
         "SALTDir": {
             "type": "str",
@@ -168,12 +168,12 @@
         "cortical_label_left": {
             "type": "str",
             "help": "cortical_label_left",
-            "value": "/home/elodie/Desktop/CONTINUITY/CONTINUITY_completed_script.py"
+            "value": "./input_CONTINUITY/Atlas_Left_Destrieux.KWM.txt"
         },
         "cortical_label_right": {
             "type": "str",
             "help": "cortical_label_right",
-            "value": "/home/elodie/Desktop/CONTINUITY/main_CONTINUITY.py"
+            "value": "./input_CONTINUITY/Atlas_Right_Destrieux.KWM.txt"
         },
         "UPSAMPLING_DWI": {
             "type": "str",
