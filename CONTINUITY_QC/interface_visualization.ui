@@ -679,7 +679,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>false</bool>
@@ -1432,7 +1432,7 @@ p, li { white-space: pre-wrap; }
        <attribute name="title">
         <string>Informations</string>
        </attribute>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -3318,7 +3318,7 @@ p, li { white-space: pre-wrap; }
    <sender>display_brain_connectome_3D_pushButton</sender>
    <signal>clicked()</signal>
    <receiver>TabWidget</receiver>
-   <slot>display_brain_connectome_3D_pushButton_clicked()</slot>
+   <slot>create_brain_connectome_3D_pushButton_clicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>909</x>
@@ -3819,7 +3819,7 @@ p, li { white-space: pre-wrap; }
   <slot>connectivity_matrix_no_pushButton_clicked()</slot>
   <slot>download_connectivity_matrix_no_pushButton_clicked()</slot>
   <slot>display_brain_connectome_pushButton_clicked()</slot>
-  <slot>display_brain_connectome_3D_pushButton_clicked()</slot>
+  <slot>create_brain_connectome_3D_pushButton_clicked()</slot>
   <slot>num_slice_horizontalSlider_valueChanged()</slot>
   <slot>min_max_colorbar_brain_connectome_doubleSpinBox_valueChanged()</slot>
   <slot>display_normalize_matrix_pushButton_clicked()</slot>

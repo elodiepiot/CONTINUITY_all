@@ -606,7 +606,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         global n_lines
         n_lines = int( (self.n_lines_spinBox.value()/100) * number_total_line)
 
-        plot_connectivity_circle(connectivity_matrix, label_names, n_lines = n_lines,
+        fig, axes = plot_connectivity_circle(connectivity_matrix, label_names, n_lines = n_lines,
                                                                    linewidth = self.linewidth_spinBox.value(),
                                                                    vmin = (self.vmin_connectome_spinBox.value() / 100), 
                                                                    vmax = (self.vmax_connectome_spinBox.value() / 100),
@@ -619,6 +619,9 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                                    colormap = self.colormap_connectome_comboBox.currentText(),
                                                                    padding = self.padding_spinBox.value(), 
                                                                    node_linewidth = self.nodelinewidth_spinBox.value() )
+
+        #print(axes) #PolarAxesSubplot(0.125,0.11;0.62x0.77)
+
         # Udpate text in the interface
         if self.wait_label.text() != "done! ": 
             self.wait_label.setText("done! ")
@@ -657,8 +660,10 @@ class Ui_visu(QtWidgets.QTabWidget):
         #connectivity_matrix_modif = connectivity_matrix_modif[sort_idx]
         indices = [ind[sort_idx] for ind in indices]
 
+        #print(self.fig.get_axes()[0]) #PolarAxesSubplot(0.125,0.11;0.62x0.77)
 
-        callback =  partial(self.get_nodes, fig=self.fig, axes=self.fig.get_axes()[0],indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
+
+        callback =  partial(self.get_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
         self.fig.canvas.mpl_connect('button_press_event', callback)
 
        
@@ -675,6 +680,7 @@ class Ui_visu(QtWidgets.QTabWidget):
     def get_nodes(self, event, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
 
         if event.button == 1:  # left click
+
             # click must be near node radius
             if event.ydata != "None": 
                 if not ylim[0] <= event.ydata <= ylim[1]:
@@ -683,15 +689,15 @@ class Ui_visu(QtWidgets.QTabWidget):
                 # Convert to radian
                 node_angles = node_angles * np.pi / 180
 
-                # all angles in range [0, 2*pi]
+                # All angles in range [0, 2*pi]
                 node_angles = node_angles % (np.pi * 2)
                 node = np.argmin(np.abs(event.xdata - node_angles))
     
 
                 #print('Node clicked: ', label_names[node] , '(number ', node, ")")
-                self.clicked_nodes_label.setText('Node clicked: '+ str(label_names[node]))
+                self.clicked_nodes_label.setText('Node clicked: '+ str(label_names[node]) + "\n Node associated: ")
 
-                text = "Node associated: \n"
+                text = "" 
                 label_names_update = []
         
                 my_index = label_names.index(label_names[node])
@@ -705,13 +711,11 @@ class Ui_visu(QtWidgets.QTabWidget):
                     else: 
                         label_names_update.append(' ')
 
-
-                
+                # Display list of connectited regions:
                 self.nodes_associated_plainTextEdit.setPlainText(text)
 
     
-
-                # Draw node labels
+                # Draw node labels: 
                 angles_deg = 180 * node_angles / np.pi
                 for name, angle_rad, angle_deg in zip(label_names_update, node_angles, angles_deg):
                     if angle_deg >= 270:
@@ -722,18 +726,31 @@ class Ui_visu(QtWidgets.QTabWidget):
                         ha = 'right'
 
                     axes.text(angle_rad, 10.4, name, size=self.textwidth_spinBox.value(),
-                              rotation=angle_deg, rotation_mode='anchor',
-                              horizontalalignment=ha, verticalalignment='center',
-                              color='white' )
+                              rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white' )
 
-                #fig.canvas.draw()
+                fig.canvas.draw()
+                #Ui_visu.plt_show(False, fig)
+              
                 print('end click')
 
 
-
-
-
-
+    '''
+    def plt_show(show=True, fig=None, **kwargs):
+        """Show a figure while suppressing warnings.
+        Parameters
+        ----------
+        show : bool
+            Show the figure.
+        fig : instance of Figure | None
+            If non-None, use fig.show().
+        **kwargs : dict
+            Extra arguments for :func:`matplotlib.pyplot.show`.
+        """
+        from matplotlib import get_backend
+        import matplotlib.pyplot as plt
+        if show and get_backend() != 'agg':
+            (fig or plt).show(**kwargs)
+    '''
 
 
 
@@ -779,18 +796,7 @@ class Ui_visu(QtWidgets.QTabWidget):
             self.canvas = FigureCanvas(self.fig)
             self.Layoutcircle.addWidget(self.canvas)
 
-            plot_connectivity_circle(connectivity_matrix, label_names, n_lines = int((self.n_lines_spinBox.value() / 100) * number_total_line),
-                                                                       linewidth = self.linewidth_spinBox.value(),
-                                                                       vmin = (self.vmin_connectome_spinBox.value() / 100), 
-                                                                       vmax = (self.vmax_connectome_spinBox.value() / 100),
-                                                                       node_angles = node_angles, 
-                                                                       node_colors = tuple(label_color), 
-                                                                       fig = self.fig, show = False,
-                                                                       colorbar_pos = (- 0.1, 0.1), 
-                                                                       fontsize_names = self.textwidth_spinBox.value(),
-                                                                       colormap = self.colormap_connectome_comboBox.currentText(),
-                                                                       padding = self.padding_spinBox.value(), 
-                                                                       node_linewidth = self.nodelinewidth_spinBox.value() )
+            plot_connectivity_circle(... )
 
             self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
         
@@ -798,11 +804,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         
         
-
-
-
-
-
 
 
 
@@ -1119,7 +1120,7 @@ class Ui_visu(QtWidgets.QTabWidget):
     # Display the 3D brain connectome THE FIRST TIME
     # ***************************************** 
 
-    def display_brain_connectome_3D_pushButton_clicked(self):
+    def create_brain_connectome_3D_pushButton_clicked(self):
         now = datetime.datetime.now()
         print(now.strftime("Display 3D brain connectome function: %H:%M %m-%d-%Y"))
         start = time.time()
@@ -1442,133 +1443,20 @@ class Ui_visu(QtWidgets.QTabWidget):
         print("End display 3D brain connectome: ",time.strftime("%H h: %M min: %S s",time.gmtime( time.time() - start )))
 
 
+
+
+
+        #callback =  partial(self.get_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
+        #self.fig.canvas.mpl_connect('button_press_event', callback)
+
+
+
+
+
+
     
 
 
-
-    def loop_for_points(point):
-        # *****************************************
-        # Creates points thanks to parcellation table 
-        # *****************************************
-
-        # Create the polydata where we will store all the geometric data (points and lines):
-        pointPolyData = vtk.vtkPolyData()
-
-        # Create points and the topology of the point (a vertex):
-        points = vtk.vtkPoints()
-        vertices = vtk.vtkCellArray()
-
-        # Add all point: 
-        id = points.InsertNextPoint(point[0],point[1],point[2])#list_x[i],list_y[i],list_z[i]
-        vertices.InsertNextCell(1)
-        vertices.InsertCellPoint(id)
-
-        # Add the points to the polydata container:
-        pointPolyData.SetPoints(points)
-        pointPolyData.SetVerts(vertices)
-
-
-        # *****************************************
-        # Points colors
-        # *****************************************
-
-        # Setup colors parameters for point:
-        colors = vtk.vtkUnsignedCharArray()
-        colors.SetNumberOfComponents(3)
-
-        # Add color: 
-        colors.InsertNextTypedTuple((0,0,255))
-        
-        # Add color points to the polydata container: 
-        pointPolyData.GetPointData().SetScalars(colors)
-
-        # Create the mapper for point:
-        mapper_points = vtk.vtkPolyDataMapper()  
-        mapper_points.SetInputData(pointPolyData)
-
-        # Create the actor for points:
-        actor_point = vtk.vtkActor()
-        actor_point.SetMapper(mapper_points)
-        actor_point.GetProperty().SetPointSize(self.point_size_3D_spinBox.value())
-        actor_point.GetProperty().SetRenderPointsAsSpheres(1)
-
-        # Set visibility: 
-        actor_point.SetVisibility(list_visibility_point[i])                
-
-        # Add point to renderer
-        self.ren.AddActor(actor_point) 
-
-
-
-
-
-    def loop_for_lines(element, index):  #index: (0,0) and element replace a[i,j]
-        i = index[0]
-        j = index[1]
-
-        # Normalize the value in connectivity matrix: 
-        my_norm = (element - mmin) / (mmax - mmin) # value between 0 to 1 
-    
-        # Create a container and store the lines in it: 
-        lines = vtk.vtkCellArray()
-
-        # Create the polydata where we will store all the geometric data (points and lines):
-        linesPolyData = vtk.vtkPolyData()
-
-        # To access to 2 points: 
-        two_points = vtk.vtkPoints()
-        two_points.InsertNextPoint(list_x[i],list_y[i],list_z[i])
-        two_points.InsertNextPoint(list_x[j],list_y[j],list_z[j])
-
-        linesPolyData.SetPoints(two_points)
-
-        # Create each lines: 
-        line = vtk.vtkLine()
-        line.GetPointIds().SetId(0,0)
-        line.GetPointIds().SetId(1,1)
-        lines.InsertNextCell(line)
-
-        # Add the lines to the polydata container:
-        linesPolyData.SetLines(lines)
-
-        # Setup colors parameters for lines: 
-        colors_line = vtk.vtkUnsignedCharArray()
-        colors_line.SetNumberOfComponents(3)
-
-        # Add color:
-        my_color = [0.0, 0.0, 0.0]
-        colorLookupTable.GetColor(my_norm, my_color)
-
-        # Change line to tube: 
-        tubes = vtk.vtkTubeFilter()
-        tubes.SetInputData(linesPolyData)
-        tubes.SetRadius(self.linewidth_3D_spinBox.value())
-        tubes.Update()
-
-        # Create the mapper per line:
-        mapper_lines = vtk.vtkPolyDataMapper()  
-        mapper_lines.SetInputData(tubes.GetOutput())   
-     
-        mapper_lines.SetScalarModeToUseCellData()
-        mapper_lines.SetColorModeToMapScalars()
-        mapper_lines.Update()   
-
-        mapper_lines.SetLookupTable(colorLookupTable)
-        mapper_lines.SetScalarRange(vmin_3D, vmax_3D)
-        mapper_lines.Update()  
-
-        # Create one actor per line:
-        actor_lines = vtk.vtkActor()
-        actor_lines.SetMapper(mapper_lines)
-        actor_lines.GetProperty().SetColor(my_color[0], my_color[1], my_color[2])
-
-        # To be coherent with the range of colorbar: 
-        actor_lines.SetVisibility(0)
-        if my_norm > vmin_3D and my_norm < vmax_3D:
-            actor_lines.SetVisibility(1)
-
-        # Add to the renderer:
-        self.ren.AddActor(actor_lines)    
 
 
 
@@ -1799,6 +1687,17 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
     # *****************************************
     # Display a vtk file given by the user
     # *****************************************
@@ -1897,6 +1796,138 @@ class Ui_visu(QtWidgets.QTabWidget):
         interactor.Start()
     '''             
 
+
+
+
+
+
+
+
+    '''
+    def loop_for_points(point):
+        # *****************************************
+        # Creates points thanks to parcellation table 
+        # *****************************************
+
+        # Create the polydata where we will store all the geometric data (points and lines):
+        pointPolyData = vtk.vtkPolyData()
+
+        # Create points and the topology of the point (a vertex):
+        points = vtk.vtkPoints()
+        vertices = vtk.vtkCellArray()
+
+        # Add all point: 
+        id = points.InsertNextPoint(point[0],point[1],point[2])#list_x[i],list_y[i],list_z[i]
+        vertices.InsertNextCell(1)
+        vertices.InsertCellPoint(id)
+
+        # Add the points to the polydata container:
+        pointPolyData.SetPoints(points)
+        pointPolyData.SetVerts(vertices)
+
+
+        # *****************************************
+        # Points colors
+        # *****************************************
+
+        # Setup colors parameters for point:
+        colors = vtk.vtkUnsignedCharArray()
+        colors.SetNumberOfComponents(3)
+
+        # Add color: 
+        colors.InsertNextTypedTuple((0,0,255))
+        
+        # Add color points to the polydata container: 
+        pointPolyData.GetPointData().SetScalars(colors)
+
+        # Create the mapper for point:
+        mapper_points = vtk.vtkPolyDataMapper()  
+        mapper_points.SetInputData(pointPolyData)
+
+        # Create the actor for points:
+        actor_point = vtk.vtkActor()
+        actor_point.SetMapper(mapper_points)
+        actor_point.GetProperty().SetPointSize(self.point_size_3D_spinBox.value())
+        actor_point.GetProperty().SetRenderPointsAsSpheres(1)
+
+        # Set visibility: 
+        actor_point.SetVisibility(list_visibility_point[i])                
+
+        # Add point to renderer
+        self.ren.AddActor(actor_point) 
+
+
+
+
+
+    def loop_for_lines(element, index):  #index: (0,0) and element replace a[i,j]
+        i = index[0]
+        j = index[1]
+
+        # Normalize the value in connectivity matrix: 
+        my_norm = (element - mmin) / (mmax - mmin) # value between 0 to 1 
+    
+        # Create a container and store the lines in it: 
+        lines = vtk.vtkCellArray()
+
+        # Create the polydata where we will store all the geometric data (points and lines):
+        linesPolyData = vtk.vtkPolyData()
+
+        # To access to 2 points: 
+        two_points = vtk.vtkPoints()
+        two_points.InsertNextPoint(list_x[i],list_y[i],list_z[i])
+        two_points.InsertNextPoint(list_x[j],list_y[j],list_z[j])
+
+        linesPolyData.SetPoints(two_points)
+
+        # Create each lines: 
+        line = vtk.vtkLine()
+        line.GetPointIds().SetId(0,0)
+        line.GetPointIds().SetId(1,1)
+        lines.InsertNextCell(line)
+
+        # Add the lines to the polydata container:
+        linesPolyData.SetLines(lines)
+
+        # Setup colors parameters for lines: 
+        colors_line = vtk.vtkUnsignedCharArray()
+        colors_line.SetNumberOfComponents(3)
+
+        # Add color:
+        my_color = [0.0, 0.0, 0.0]
+        colorLookupTable.GetColor(my_norm, my_color)
+
+        # Change line to tube: 
+        tubes = vtk.vtkTubeFilter()
+        tubes.SetInputData(linesPolyData)
+        tubes.SetRadius(self.linewidth_3D_spinBox.value())
+        tubes.Update()
+
+        # Create the mapper per line:
+        mapper_lines = vtk.vtkPolyDataMapper()  
+        mapper_lines.SetInputData(tubes.GetOutput())   
+     
+        mapper_lines.SetScalarModeToUseCellData()
+        mapper_lines.SetColorModeToMapScalars()
+        mapper_lines.Update()   
+
+        mapper_lines.SetLookupTable(colorLookupTable)
+        mapper_lines.SetScalarRange(vmin_3D, vmax_3D)
+        mapper_lines.Update()  
+
+        # Create one actor per line:
+        actor_lines = vtk.vtkActor()
+        actor_lines.SetMapper(mapper_lines)
+        actor_lines.GetProperty().SetColor(my_color[0], my_color[1], my_color[2])
+
+        # To be coherent with the range of colorbar: 
+        actor_lines.SetVisibility(0)
+        if my_norm > vmin_3D and my_norm < vmax_3D:
+            actor_lines.SetVisibility(1)
+
+        # Add to the renderer:
+        self.ren.AddActor(actor_lines)    
+    '''
 
 
 
