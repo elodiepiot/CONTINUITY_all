@@ -44,6 +44,16 @@
             "help": "DWI Image (.nrrd)",
             "default": "required" 
         },
+        "DWI_DATA_bvecs": {
+            "type": "str",
+            "help": "DWI Image bvectors (in case of DWI in FSL format (.nifti)) ",
+            "default": ""
+        },
+        "DWI_DATA_bvals": {
+            "type": "str",
+            "help": "DWI Image bvalues (in case of DWI in FSL format (.nifti))",
+            "default": ""
+        },
         "T1_DATA": { 
             "type": "str",
             "help": "T1 (.nrrd)",

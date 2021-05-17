@@ -69,6 +69,8 @@ optimisation_with_tcksift2				= str(json_user_object["Parameters"]["optimisation
 act_option				                = str(json_user_object["Parameters"]["act_option"]['value'])
 ID                                      = str(json_user_object["Parameters"]["ID"]['value'])
 DWI_DATA                                = str(json_user_object["Parameters"]["DWI_DATA"]['value'])
+DWI_DATA_bvecs                          = str(json_user_object["Parameters"]["DWI_DATA_bvecs"]['value'])
+DWI_DATA_bvals                          = str(json_user_object["Parameters"]["DWI_DATA_bvecs"]['value'])
 T1_DATA                                 = str(json_user_object["Parameters"]["T1_DATA"]['value'])
 T2_DATA                                 = str(json_user_object["Parameters"]["T2_DATA"]['value'])
 BRAINMASK                               = str(json_user_object["Parameters"]["BRAINMASK"]['value'])
@@ -229,37 +231,33 @@ with Tee(log_file):
 	# Function to convert inputs in nifti format to nrrd format 
 	# *****************************************
 
-	# Convert nifti input to nrrd:  
-	for file in [T1_DATA, T2_DATA, DWI_DATA, BRAINMASK]:
-		[path, afile] =os.path.split(file)
-		print(path) #./input_CONTINUITY
-		print(afile) #T0054-1-1-6yr-T1_SkullStripped_scaled.nrrd
+	# Convert DWI nifti input to nrrd:  
 
-		if afile.endswith('nii.gz'): 
-			print("*****************************************")
-			print("Convert FSL2Nrrd")
-			print("*****************************************")
+	[path, afile] =os.path.split(DWI_DATA)
+	print(path) #./input_CONTINUITY
+	print(afile) #T0054-1-1-6yr-T1_SkullStripped_scaled.nrrd
 
-			new_name = afile[:-7] + '.nrrd'
-			print(new_name)
-			
-			# New folder: 
-			OUT_FOLDER_nifti2nrrd = os.path.join(OUT_FOLDER, 'nifti2nrrd') 
-			if not os.path.exists(OUT_FOLDER_nifti2nrrd):
-				os.mkdir(OUT_FOLDER_nifti2nrrd)
+	if afile.endswith('nii.gz'): 
+		print("*****************************************")
+		print("Convert FSL2Nrrd")
+		print("*****************************************")
 
-			output_nrrd = os.path.join(OUT_FOLDER_nifti2nrrd, new_name)
-			print("TO DO ")
-			inputBValues = ''
-			inputBVectors = ''
+		new_name = afile[:-7] + '.nrrd'
+		print(new_name)
+		
+		# New folder: 
+		OUT_FOLDER_nifti2nrrd = os.path.join(OUT_FOLDER, 'nifti2nrrd') 
+		if not os.path.exists(OUT_FOLDER_nifti2nrrd):
+			os.mkdir(OUT_FOLDER_nifti2nrrd)
 
-			run_command("DWIConvert: convert input image in nifti format to nrrd format", [DWIConvertPath, "--inputVolume", file, 
-															                             "--conversionMode", "FSLToNrrd", 
-															                             "--outputVolume", output_nrrd, 
-															                             "--inputBValues",inputBValues, 
-															                             "--inputBVectors",inputBVectors])
-			# New path :
-			file = output_nrrd
+		output_nrrd = os.path.join(OUT_FOLDER_nifti2nrrd, new_name)
+
+		run_command("DWIConvert: convert input image in nifti format to nrrd format", [DWIConvertPath, "--inputVolume", DWI_DATA, 
+														                             "--conversionMode", "FSLToNrrd", 
+														                             "--outputVolume", output_nrrd, 
+														                             "--inputBValues",DWI_DATA_bvals, "--inputBVectors",DWI_DATA_bvecs])
+		# New path :
+		DWI_DATA = output_nrrd
 			
 
 
