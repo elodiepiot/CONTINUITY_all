@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1131</width>
-    <height>630</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="font">
@@ -1305,10 +1305,10 @@ p, li { white-space: pre-wrap; }
      <widget class="QGroupBox" name="circle_connectome_groupBox">
       <property name="geometry">
        <rect>
-        <x>320</x>
-        <y>0</y>
-        <width>781</width>
-        <height>541</height>
+        <x>310</x>
+        <y>-80</y>
+        <width>881</width>
+        <height>671</height>
        </rect>
       </property>
       <property name="mouseTracking">
@@ -1316,6 +1316,13 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="tabletTracking">
        <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QGroupBox{
+	background-color : transparent;
+	color : transparent;
+	border : 0px rgb(166, 166, 166)
+}</string>
       </property>
       <property name="title">
        <string/>
@@ -1357,17 +1364,17 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_21">
        <attribute name="title">
-        <string>Nodes</string>
+        <string>Clicked node</string>
        </attribute>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
+          <y>12</y>
           <width>281</width>
           <height>341</height>
          </rect>
@@ -1376,7 +1383,14 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLabel" name="clicked_nodes_label">
            <property name="text">
-            <string/>
+            <string>Node clicked: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="clicked_nodes_label_2">
+           <property name="text">
+            <string>Node associated: </string>
            </property>
           </widget>
          </item>
@@ -1400,6 +1414,21 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
         </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_23">
+       <attribute name="title">
+        <string>All nodes</string>
+       </attribute>
+       <widget class="QListWidget" name="all_nodes_listWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>281</width>
+          <height>341</height>
+         </rect>
+        </property>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_22">
@@ -1641,7 +1670,7 @@ p, li { white-space: pre-wrap; }
             <double>0.100000000000000</double>
            </property>
            <property name="value">
-            <double>2.000000000000000</double>
+            <double>0.500000000000000</double>
            </property>
           </widget>
          </item>
@@ -2088,6 +2117,11 @@ p, li { white-space: pre-wrap; }
        </widget>
       </widget>
      </widget>
+     <zorder>circle_connectome_groupBox</zorder>
+     <zorder>textEdit</zorder>
+     <zorder>display_circle_connectome_pushButton</zorder>
+     <zorder>wait_label</zorder>
+     <zorder>tabWidget_2</zorder>
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
