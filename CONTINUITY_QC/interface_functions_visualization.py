@@ -473,33 +473,36 @@ class Ui_visu(QtWidgets.QTabWidget):
             VisuHierarchy_associated.append(key["VisuHierarchy"])
 
 
+        # Build 'VisuOrder_associated' list and 'list_VisuHierarchy': 
         for key in table_json_object:
-            if key["VisuOrder"] == -1: #subcortical regions
+            # Subcortical regions: currently all with -1 and if I didn't do that I have an issue to display them after sort their key["VisuOrder"]
+            if key["VisuOrder"] == -1: 
                 number_of_subcortical_regions+= 1
                 if key['name'].endswith('_R'):
                     VisuOrder_associated.append(int(len(label_names)+ number_of_subcortical_regions))
                 else:  #'-L'
                     VisuOrder_associated.append(int(len(label_names)+30 + number_of_subcortical_regions))
+            
+            # Cortical regions: 
             else:
                 VisuOrder_associated.append(int(key["VisuOrder"]))
-
 
             if key["VisuHierarchy"] not in list_VisuHierarchy:
                 list_VisuHierarchy.append(key["VisuHierarchy"])
 
            
-        # Init list to build boundaries: 
+        # Build 'list_of_list_VisuHierarchy'
         list_of_list_VisuHierarchy = [[] for i in range(len(list_VisuHierarchy))]
-        
         for key in table_json_object:
-      
-            # Add label name: 
             index = list_VisuHierarchy.index(key["VisuHierarchy"])
             list_of_list_VisuHierarchy[index].append(key["name"])
 
 
+        # Sort regions by VisuHierarchy number: 
         sorted_indices = np.argsort( VisuOrder_associated)
         
+
+        # Build 'node_order' and 'VisuHierarchy_order'
         global node_order
         node_order, VisuHierarchy_order = ([],[])
 
@@ -509,9 +512,8 @@ class Ui_visu(QtWidgets.QTabWidget):
             VisuHierarchy_order.append(VisuHierarchy_associated[index])
         
 
-        # Build boundaries: 
+        # Build 'list_boundaries' and 'list_name_boundaries': 
         global name_boundaries
-
         list_boundaries, name_boundaries, list_name_boundaries  = ([0], [], [])
         i = 0
 
@@ -522,17 +524,16 @@ class Ui_visu(QtWidgets.QTabWidget):
             if current_elem != next_elem: #boundary
                 list_boundaries.append(i+1)
                 list_name_boundaries.append(current_elem)
-
             i += 1
 
 
-        # Get the middle of each region 
+        # Get the middle of each number of element for each region 
         middle = [0 for x in range(len(list_of_list_VisuHierarchy))]
-
         for i in range(len(list_of_list_VisuHierarchy)):   
             middle[i] = int(len(list_of_list_VisuHierarchy[i])/2)
 
 
+        # Build 'name_boundaries': only the name of each group of region
         list_of_cpt = [0 for x in range(len(list_VisuHierarchy))]
         for key in table_json_object:
 
@@ -547,8 +548,9 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         # Create a circular layout:
         global node_angles
-        node_angles = circular_layout(label_names, node_order, start_pos=90, group_boundaries=list_boundaries)#[0, len(label_names) / 2])
+        node_angles = circular_layout(label_names, node_order, start_pos=90, group_boundaries=list_boundaries)
     
+
 
         # *****************************************
         # Get the normalize connectivity matrix
@@ -683,8 +685,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         node_angles_copy = node_angles
 
         global axes
-        fig, axes = plot_connectivity_circle(connectivity_matrix, 
-                                             label_names, 
+        fig, axes = plot_connectivity_circle(connectivity_matrix, label_names, 
                                              n_lines = n_lines,linewidth = self.linewidth_spinBox.value(),
                                              vmin = (self.vmin_connectome_spinBox.value() / 100), vmax = (self.vmax_connectome_spinBox.value() / 100),
                                              node_angles = node_angles, node_colors = tuple(label_color), 
@@ -693,8 +694,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                                              fontsize_names = self.textwidth_spinBox.value(),
                                              colormap = self.colormap_connectome_comboBox.currentText(),
                                              padding = self.padding_spinBox.value(), 
-                                             node_linewidth = self.nodelinewidth_spinBox.value(),
-                                             node_edgecolor='Black' )
+                                             node_linewidth = self.nodelinewidth_spinBox.value(),node_edgecolor='Black' )
 
         # Udpate text in the interface
         if self.wait_label.text() != "done! ": 
@@ -756,14 +756,12 @@ class Ui_visu(QtWidgets.QTabWidget):
         sort_idx = np.argsort(con_abs)
         indices = [ind[sort_idx] for ind in indices]
 
-
         # Callback function: 
         callback =  partial(self.get_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles_copy)
         self.fig.canvas.mpl_connect('button_press_event', callback)
 
         global my_fig
         my_fig = self.fig
-
 
 
         while i < len(VisuHierarchy_order):   
@@ -776,18 +774,14 @@ class Ui_visu(QtWidgets.QTabWidget):
             self.all_nodes_listWidget.addItems(list_of_list_VisuHierarchy[list_VisuHierarchy.index(current_elem)])
 
             for i in range(self.all_nodes_listWidget.count()):
-                item = self.all_nodes_listWidget.item(i)
-              
-
-            # Callback function: 
-            #callback_all =  partial(self.all_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles_copy)
-            #self.all_nodes_listWidget.mpl_connect('itemDoubleClicked', callback_all)            
+                item = self.all_nodes_listWidget.item(i)        
 
             i += 1
 
-        self.all_nodes_listWidget.currentItemChanged.connect(self.get_item)#self.stop_signal(fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy))
+        self.all_nodes_listWidget.currentItemChanged.connect(self.get_item)
 
  
+
 
        
     def get_item(self, item):
@@ -795,9 +789,8 @@ class Ui_visu(QtWidgets.QTabWidget):
         Ui_visu.stop_signal(self, item.text() ,fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
 
+
     def stop_signal(self, item, fig, axes, indices, n_nodes, node_angles):
-      
-        print('stop_signal',item)
 
         self.all_nodes_listWidget.blockSignals(True)
         
@@ -809,8 +802,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
     def all_nodes(self, item, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None):
   
-  
-        print("Region clicked on the list", item)
+        print("Region clicked (on the list)", item)
 
         node_clicked = item
         # Convert to radian  
@@ -835,7 +827,6 @@ class Ui_visu(QtWidgets.QTabWidget):
                 label_names_update.append(str(label_names[target]))
 
             elif con_abs_util[my_index, target] >= con_thresh:
-                #print('Node associated: ', label_names[target] , '(number ', target, ")")
                 text += '  ' + label_names[target] + '\n' 
                 label_names_update.append(str(label_names[target]))
             else: 
