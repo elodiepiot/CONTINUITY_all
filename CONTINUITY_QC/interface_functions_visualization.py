@@ -544,40 +544,45 @@ class Ui_visu(QtWidgets.QTabWidget):
                 print('list_boundaries', list_boundaries)
                 list_name_boundaries.append(current_elem)
 
-                #print('current_elem     ',current_elem ,'next_elem     ', next_elem)
-
+                print('region',current_elem)
                 index = list_VisuHierarchy.index(current_elem)
-                #print(list_of_list_VisuHierarchy[index])
-                #print('*************************************')
+                print(list_of_list_VisuHierarchy[index])
+                print('*************************************')
 
             i += 1
+
+        print('list_name_boundaries', list_name_boundaries)
             
 
 
 
 
-        # 
-        middle = [] 
+        # Get the middle of each region 
+        middle = [0 for x in range(len(list_of_list_VisuHierarchy))]
 
-        for i in range(len(list_boundaries)-1):   
-            current_elem = list_boundaries[i]
-            next_elem = list_boundaries[i+1]
-
-            middle.append( int((next_elem - current_elem) /2) + current_elem )
-
-        #last elem:
-        middle.append( int((list_boundaries[-1] - len(list_boundaries)) /2)  + len(label_names) )
-            
+        for i in range(len(list_of_list_VisuHierarchy)):   
+            middle[i] = int(len(list_of_list_VisuHierarchy[i])/2)
 
         print('middle', middle)
 
 
-        for i in range(len(label_names)): 
-            if i not in middle: 
-                name_boundaries.append("")
+
+
+
+
+
+
+        list_of_cpt = [0 for x in range(len(list_VisuHierarchy))]
+        for key in table_json_object:
+
+
+            index = list_VisuHierarchy.index(key["VisuHierarchy"])
+            list_of_cpt[index] += 1
+
+            if list_of_cpt[index] == middle[index]: 
+                name_boundaries.append(key["VisuHierarchy"])
             else: 
-                index = middle.index(i)
-                name_boundaries.append(list_name_boundaries[index])
+                name_boundaries.append("")
       
         print('name_boundaries', name_boundaries)
 
