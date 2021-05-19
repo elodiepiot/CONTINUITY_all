@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1131</width>
+    <width>1130</width>
     <height>631</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
    <string>CONTINUITY</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <property name="documentMode">
    <bool>false</bool>
@@ -66,7 +66,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="tabsClosable">
       <bool>false</bool>
@@ -88,7 +88,7 @@
         </rect>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
@@ -144,7 +144,7 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>DWI image (.nrrd or .nifti): </string>
+                  <string>DWI image (.nrrd or .nii.gz): </string>
                  </property>
                 </widget>
                </item>
@@ -207,7 +207,7 @@ p, li { white-space: pre-wrap; }
              </rect>
             </property>
             <property name="title">
-             <string>If DWI image in FSL format (.nifti), you had to provide two others files: </string>
+             <string>If DWI image in FSL format (.nii.gz), you had to provide two others files: </string>
             </property>
             <widget class="QWidget" name="layoutWidget">
              <property name="geometry">
@@ -623,7 +623,7 @@ p, li { white-space: pre-wrap; }
             <x>396</x>
             <y>24</y>
             <width>651</width>
-            <height>53</height>
+            <height>71</height>
            </rect>
           </property>
           <property name="styleSheet">
@@ -646,6 +646,8 @@ p, li { white-space: pre-wrap; }
            <bool>false</bool>
           </property>
          </widget>
+         <zorder>question_job_name_textEdit</zorder>
+         <zorder>layoutWidget</zorder>
         </widget>
        </widget>
        <widget class="QWidget" name="tab_3">
@@ -814,7 +816,7 @@ p, li { white-space: pre-wrap; }
              <x>97</x>
              <y>21</y>
              <width>923</width>
-             <height>51</height>
+             <height>71</height>
             </rect>
            </property>
            <property name="styleSheet">
@@ -851,6 +853,9 @@ p, li { white-space: pre-wrap; }
             <string>Help</string>
            </property>
           </widget>
+          <zorder>question_cortical_labeled_textEdit</zorder>
+          <zorder>layoutWidget_10</zorder>
+          <zorder>question_cortical_labeled_pushButton</zorder>
          </widget>
          <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
@@ -1488,7 +1493,7 @@ p, li { white-space: pre-wrap; }
           </rect>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1719,38 +1724,11 @@ p, li { white-space: pre-wrap; }
           <attribute name="title">
            <string>Name of subcortical regions</string>
           </attribute>
-          <widget class="QGroupBox" name="list_sc_groupBox">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>10</y>
-             <width>481</width>
-             <height>261</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-             <stylestrategy>PreferDefault</stylestrategy>
-             <kerning>true</kerning>
-            </font>
-           </property>
-           <property name="contextMenuPolicy">
-            <enum>Qt::DefaultContextMenu</enum>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-          </widget>
           <widget class="QTextEdit" name="color_sc_textEdit">
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>280</y>
+             <y>10</y>
              <width>481</width>
              <height>91</height>
             </rect>
@@ -1772,6 +1750,16 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+          <widget class="QListWidget" name="list_sc_listWidget">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>110</y>
+             <width>481</width>
+             <height>261</height>
+            </rect>
            </property>
           </widget>
          </widget>
@@ -2375,7 +2363,7 @@ p, li { white-space: pre-wrap; }
          </rect>
         </property>
         <property name="title">
-         <string>If DWI image in FSL format (.nifti), you had to provide two others files: </string>
+         <string>If DWI image in FSL format (.nii.gz), you had to provide two others files: </string>
         </property>
         <widget class="QWidget" name="layoutWidget_9">
          <property name="geometry">
@@ -2526,7 +2514,7 @@ p, li { white-space: pre-wrap; }
               </font>
              </property>
              <property name="text">
-              <string>DWI image (.nrrd or .nifti): </string>
+              <string>DWI image (.nrrd or .nii.gz): </string>
              </property>
             </widget>
            </item>
@@ -2883,7 +2871,7 @@ p, li { white-space: pre-wrap; }
            <x>100</x>
            <y>20</y>
            <width>941</width>
-           <height>61</height>
+           <height>81</height>
           </rect>
          </property>
          <property name="styleSheet">
@@ -2899,6 +2887,11 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Structure of each file: &amp;quot;NUMBER_OF_POINTS=&amp;quot;  then &amp;quot;DIMENSION=&amp;quot; then &amp;quot;TYPE=&amp;quot; then values&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
+        <zorder>NO_registration_question_cortical_labeled_textEdit</zorder>
+        <zorder>NO_registration_cortical_label_left_textEdit</zorder>
+        <zorder>NO_registration_cortical_label_right_textEdit</zorder>
+        <zorder>layoutWidget</zorder>
+        <zorder>NO_registration_question_cortical_labeled_pushButton</zorder>
        </widget>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
@@ -3145,7 +3138,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">

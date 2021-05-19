@@ -89,8 +89,9 @@ SURFACE_USER                            = str(json_user_object["Parameters"]["SU
 WM_L_Surf_NON_REGISTRATION              = str(json_user_object["Parameters"]["WM_L_Surf_NON_REGISTRATION"]['value'])
 WM_R_Surf_NON_REGISTRATION              = str(json_user_object["Parameters"]["WM_R_Surf_NON_REGISTRATION"]['value'])
 SALTDir                                 = str(json_user_object["Parameters"]["SALTDir"]['value'])
-subcorticalsList                        = str(json_user_object["Parameters"]["subcorticalsList"]['value'])
-subcorticalsListNumber                  = str(json_user_object["Parameters"]["subcorticalsListNumber"]['value'])
+subcorticals_region_names               = str(json_user_object["Parameters"]["subcorticals_region_names"]['value'])
+subcorticals_region_SALT_KWM_names      = str(json_user_object["Parameters"]["subcorticals_region_SALT_KWM_names"]['value'])
+subcorticals_region_labels              = str(json_user_object["Parameters"]["subcorticals_region_labels"]['value'])
 labeled_image                           = str(json_user_object["Parameters"]["labeled_image"]['value'])
 KWMDir                                  = str(json_user_object["Parameters"]["KWMDir"]['value'])
 surface_already_labeled                 = str(json_user_object["Parameters"]["surface_already_labeled"]['value'])
@@ -238,6 +239,7 @@ with Tee(log_file):
 	print(afile) #T0054-1-1-6yr-T1_SkullStripped_scaled.nrrd
 
 	if afile.endswith('nii.gz'): 
+
 		print("*****************************************")
 		print("Convert DWI FSL2Nrrd")
 		print("*****************************************")
@@ -619,6 +621,8 @@ with Tee(log_file):
 		print("*****************************************")
 
 
+
+
 		if INTEGRATE_SC_DATA_by_generated_sc_surf.lower() == 'true':
 
 			print("*****************************************")
@@ -629,49 +633,56 @@ with Tee(log_file):
 			print (now.strftime("Generation of subcortical surfaces: %H:%M %m-%d-%Y"))
 			start = time.time()
 
-			Labels     = list(subcorticalsListNumber.split(" ")) # [1, 2, 3, 4, 5, 6, 40, 41, 7, 8, 9, 10]
-			LabelNames = list(subcorticalsList.split(" ")) # ['AmyL', 'AmyR', 'CaudL', 'CaudR', 'HippoL', 'HippoR', 'ThalL', 'ThalR', 'GPL', 'GPR', 'PutL', 'PutR']
+			 # ['AmyL', 'AmyR', 'CaudL', 'CaudR', 'HippoL', 'HippoR', 'ThalL', 'ThalR', 'GPL', 'GPR', 'PutL', 'PutR']
 
 			# Generate subcortical surfaces: 
-			generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, LabelNames, SegPostProcessCLPPath, GenParaMeshCLPPath, ParaToSPHARMMeshCLPPath)
+			generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, subcorticals_region_labels, subcorticals_region_names, 
+				                                                                SegPostProcessCLPPath, GenParaMeshCLPPath, ParaToSPHARMMeshCLPPath)
 			print("Generation of subcortical surfaces: ",time.strftime("%H h: %M min: %S s",time.gmtime(time.time() - start)))
 
 			# Update the localization of subcortical surfaces: 
 			SALTDir = os.path.join(OUT_FOLDER, 'my_SALT') 
-			
 
-		subcorticals = subcorticalsList.split() 
+
+
+
+
+
+		subcorticals = subcorticals_region_names
 
 		# Copy to have only regions with good KWM and SALT files
-		subcorticals_list_checked = subcorticalsList
-
+		subcorticals_list_checked = subcorticals_region_names
+	
+		'''
 		# Copy the original parcellation table to be able to build an other specific with only good subcortical regions ( = with good KWM and SALT files)
 		new_parcellation_table = os.path.join(OUT_TRACTOGRAPHY, 'new_parcellation_table' )
 		shutil.copy(PARCELLATION_TABLE, new_parcellation_table)
 
-		# Check if all elements in subcorticalsList are referenced in the parcellation table with subcortical data:
+		# Check if all elements in subcorticals_region_names are referenced in the parcellation table with subcortical data:
 		for region in subcorticals:  # "AmyL AmyR CaudL CaudR GPL GPR HippoL HippoR PutL PutR ThalL ThalR Brainstem"  
+			
+			if subcorticals_region_SALT_KWM_names != []: #get the name of this region in the subcorticals_region_SALT_KWM_names list 
+				index = subcorticals.index(region)
+				region = subcorticals_region_SALT_KWM_names[index]
+
+
 			#Open parcellation table file with subcortical regions:
 			with open(new_parcellation_table) as data_file:    
 				data = json.load(data_file)
 
 			data_region_find = 'False' 
 			for seed in data:
-				for name in str(seed['name']).split("_"): # ctx _ rh _ S _ temporal _ sup    OR    sub_rh_thal	
-	
-					if region[-1].lower() == "l" or region[-1].lower() == 'r':
-						if name.lower() == region[:-1].lower():
-							data_region_find = 'True'
-					'''
-					else: #brainstem
-						if name.lower() == region.lower():
-								data_region_find = 'True'
-					'''
+				if seed['name'] == region: 
+					data_region_find = 'True'
+
 
 			# After check all the json file: 
 			if data_region_find == 'False':
 				print(" NO information about ", region, "in your parcellation table with subcortical data")
+				print(" The name of the region in your region in the name of your SALT file has to be the same as in your parcellation table " +
+						"or you can provide a matched list ")
 				subcorticals_list_checked = subcorticals_list_checked.remove(region)
+		'''
 				
 
 
@@ -680,22 +691,26 @@ with Tee(log_file):
 		print("*****************************************")
 
 		# Only region with info in parcellation table
-		subcorticals_list_checked = subcorticals_list_checked.split() 
 		subcorticals_list_checked_with_surfaces = []
 
 		# For each region label the SALT file with the Atlas label value. Create SPHARM surface labeled with the new atlas label. 
 		for region in subcorticals_list_checked:
+
 			#​The KWM files are intermediate .txt files for labeling the vertices on the respective subcortical SPHARM surfaces with a parcellation specific label number.
 			KWMFile = os.path.join(KWMDir,region + "_1002_KWM.txt")
 			SPHARMSurf = os.path.join(SALTDir, ID + "-T1_SkullStripped_scaled_label_" + region + "_pp_surfSPHARM.vtk")
+
 
 			if not os.path.exists(SPHARMSurf) or not os.path.exists(KWMFile) : 
 				SPHARMSurf = os.path.join(SALTDir, ID + "-T1_SkullStripped_scaled_label_" + region +"_ppManualFix_surfSPHARM.vtk")
 				print(SPHARMSurf,file=open( os.path.join(OUT_LABELS,"manualFixes.txt"),"a"))
 
+				'''
 				# Delete info of this region in the new-parcellation-table:
 				with open(new_parcellation_table, 'r') as data_file:
 				    data = json.load(data_file)
+
+			
 
 				for i in range(len(data)):
 					if data[i]['name'] == region: 
@@ -704,6 +719,7 @@ with Tee(log_file):
 
 				with open(new_parcellation_table, 'w') as data_file:
 					data = json.dump(data, data_file, indent = 2)
+				'''
 
 			else: 
 				subcorticals_list_checked_with_surfaces.append(region)

@@ -47,12 +47,12 @@
         },
         "DWI_DATA_bvecs": {
             "type": "str",
-            "help": "DWI Image bvectors (in case of DWI in FSL format (.nifti)) ",
+            "help": "DWI Image bvectors (in case of DWI in FSL format (.nii.gz)) ",
             "default": ""
         },
         "DWI_DATA_bvals": {
             "type": "str",
-            "help": "DWI Image bvalues (in case of DWI in FSL format (.nifti))",
+            "help": "DWI Image bvalues (in case of DWI in FSL format (.nii.gz))",
             "default": ""
         },
         "T1_DATA": {
@@ -145,15 +145,20 @@
             "help": "Path to SALT directory",
             "default": "./input_CONTINUITY/SALT"
         },
-        "subcorticalsList": {
-            "type": "str",
-            "help": "List of subcortical regions",
-            "default": "AmyL AmyR CaudL CaudR HippoL HippoR ThalL ThalR GPL GPR PutL PutR"      
+        "subcorticals_region_names": { 
+            "type": "list",
+            "help": "List of subcortical regions names(same name as in the parcellation table) ",
+            "default": ["AmyL", "AmyR", "CaudL", "CaudR", "HippoL", "HippoR", "ThalL", "ThalR", "GPL", "GPR", "PutL", "PutR"]
         }, 
-        "subcorticalsListNumber": {
-            "type": "str",
+        "subcorticals_region_SALT_KWM_names": {
+            "type": "list",
+            "help": "List of subcortical regions names in your SALT and KWM folder",
+            "default": []
+        },
+        "subcorticals_region_labels": {
+            "type": "list",
             "help": "List of subcortical label/number regions",
-            "default": "1 2 3 4 5 6 40 41 7 8 9 10"
+            "default": [1, 2, 3, 4, 5, 6, 40, 41, 7, 8, 9, 10]
         },      
         "labeled_image": {
             "type": "str",

@@ -761,6 +761,8 @@ class Ui_visu(QtWidgets.QTabWidget):
         global my_fig
         my_fig = self.fig
 
+        self.all_nodes_listWidget.clear()
+
 
         while i < len(VisuHierarchy_order):   
             current_elem = VisuHierarchy_order[i]

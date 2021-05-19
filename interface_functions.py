@@ -11,6 +11,8 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QCheckBox, QGridLayout, QLabel, QTableWidgetItem
 from PyQt5.QtCore import Qt
 
+from PyQt5 import QtGui
+
 from main_CONTINUITY import * 
 from CONTINUITY_functions import *
 
@@ -533,22 +535,19 @@ class Ui(QtWidgets.QTabWidget):
         else: 
             self.INTEGRATE_SC_DATA_by_generated_sc_surf_groupBox.setChecked(True)
 
-
         
-
-
 
     # *****************************************
     # Integrate subcortical data but without SALT dir: write bool in json user file and change interface 
     # *****************************************
 
     def INTEGRATE_SC_DATA_by_generated_sc_surf_groupBox_clicked(self):
+
         if self.INTEGRATE_SC_DATA_by_generated_sc_surf_groupBox.isChecked():
             self.own_sc_groupBox.setChecked(False)
 
             json_user_object['Parameters']["INTEGRATE_SC_DATA_by_generated_sc_surf"]["value"] = "True"
             Ui.update_user_json_file()
-
 
             self.question_SALT_pushButton.setStyleSheet( "background-color: white")
             self.question_KWM_pushButton.setStyleSheet( "background-color: white")
@@ -557,8 +556,6 @@ class Ui(QtWidgets.QTabWidget):
             self.own_sc_groupBox.setChecked(True)
             self.question_SALT_pushButton.setStyleSheet( "background-color: blue")
             self.question_KWM_pushButton.setStyleSheet( "background-color: blue")
-
-
 
 
 
@@ -598,102 +595,92 @@ class Ui(QtWidgets.QTabWidget):
     def tab_name_sc_region_clicked(self):
         if self.SALTDir_textEdit.toPlainText() != "No file selected." and self.KWMDir_textEdit.toPlainText() != "No file selected.":
 
-            # Initiate subcorticalsList parameter                        
-            json_user_object['Parameters']["subcorticalsList"]["value"] = ""
+            # Initiate subcorticals_region_names parameter                        
+            list_sc = []
             Ui.update_user_json_file()
 
-            # Create new dir:
-            if not os.path.exists(json_user_object['Parameters']["OUT_PATH"]["value"]):
-                os.mkdir(json_user_object['Parameters']["OUT_PATH"]["value"])
-
-            if not os.path.exists(os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"])):
-                os.mkdir(os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"]))
-
-            if not os.path.exists(os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Salt")):
-                os.mkdir(os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Salt"))
-
-            # Path to new folder: 
-            SALTDir_new = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Salt","Salt_new" )
-            KWMDir_new = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Salt","KWM_new")
-
-            list_sc_region_SALT_original = organize_SALT_dir(json_user_object['Parameters']["ID"]["value"], 
-                                                            json_user_object['Parameters']["SALTDir"]["value"],
-                                                            SALTDir_new,
-                                                            json_user_object['Parameters']["PARCELLATION_TABLE"]["value"])
-            list_sc_region_KWM_original = organize_KWM_dir(json_user_object['Parameters']["ID"]["value"], 
-                                                            json_user_object['Parameters']["KWMDir"]["value"],
-                                                            KWMDir_new,
-                                                            json_user_object['Parameters']["PARCELLATION_TABLE"]["value"]) 
-            '''
-            # Extract regions in both folder
-            list_sc_region_SALT = sorted(Ui.extract_name_sc_region(self, SALTDir_new))
-            #print("SALT:",list_sc_region_SALT)
-            list_sc_region_KWM = sorted(Ui.extract_name_sc_region(self,KWMDir_new))
-            #print("KWM: ",list_sc_region_KWM)
-            '''
-
-            region_only_SALTDir = []
-            region_only_KWMDir = []
+            list_sc_region_SALT, list_sc_region_KWM = extract_name_sc_region(json_user_object['Parameters']["SALTDir"]["value"], 
+                                                                             json_user_object['Parameters']["KWMDir"]["value"],
+                                                                             json_user_object['Parameters']["ID"]["value"] )
         
+
+            region_only_SALTDir, region_only_KWMDir = ([], [])
+
             # Compare lists to extract common regions: 
-            for region_SALT in list_sc_region_SALT_original :
-                if not(region_SALT in list_sc_region_KWM_original): #a of list_sc_region_SALT isn't in list_sc_region_KWM
+            for region_SALT in list_sc_region_SALT:
+                if not(region_SALT in list_sc_region_KWM): #a of list_sc_region_SALT isn't in list_sc_region_KWM
                     region_only_SALTDir.append(region_SALT)
          
-            for region_KWM in list_sc_region_KWM_original :
-                if not(region_KWM in list_sc_region_SALT_original): #b of list_sc_region_KWM isn't in list_sc_region_SALT
+            for region_KWM in list_sc_region_KWM:
+                if not(region_KWM in list_sc_region_SALT): #b of list_sc_region_KWM isn't in list_sc_region_SALT
                     region_only_KWMDir.append(region_KWM)
 
             # Concatenate all regions without copie
-            global all_sc_region
-            all_sc_region = sorted(list_sc_region_SALT_original + region_only_KWMDir)
+           
+            all_sc_region = sorted(list_sc_region_SALT + region_only_KWMDir)
 
-            # Create layout inside a groupBox
-            self.sc_gridLayouttest = QGridLayout()
-            self.list_sc_groupBox.setLayout(self.sc_gridLayouttest)
 
             # Add color code explanation
             self.color_sc_textEdit.setText('<font color="green">Checkbox in green</font>: file for this region in the SALT and KWM directory \n' + 
                                            '<font color="red">Checkbox in red</font>: file for this region only in the KWM directory \n' + '\n'
                                            '<font color="purple">Checkbox in purple</font>: file for this region only in the SALT directory') 
 
-            # Create checkBox for each region and change their color
-            positions = [(i, j) for i in range(6) for j in range( int(len(all_sc_region)/6)+1)]
-            for position, name in zip(positions, all_sc_region):
-                # create checkbox: 
-                my_name = "CheckBox" + name
-                self.my_name = QCheckBox(name, self)
-                self.sc_gridLayouttest.addWidget(self.my_name, *position )
+            self.list_sc_listWidget.clear()
 
-                if name not in region_only_SALTDir and name not in region_only_KWMDir: #both directory 
-                    self.my_name.setStyleSheet("color: green")
-                    self.my_name.setChecked(True)
+            self.list_sc_listWidget.addItems(all_sc_region)
 
-                    # Modify .json
-                    json_user_object['Parameters']["subcorticalsList"]["value"] = json_user_object['Parameters']["subcorticalsList"]["value"] + self.my_name.text()  + " "
-                    Ui.update_user_json_file()
+            for i in range(self.list_sc_listWidget.count()):
+                item = self.list_sc_listWidget.item(i) 
 
-                elif name in region_only_SALTDir: 
-                    self.my_name.setStyleSheet("color: purple") 
 
-                else: #if name in region_only_KWMDir:
-                    self.my_name.setStyleSheet("color: red")
+                if item.text() not in region_only_SALTDir and item.text() not in region_only_KWMDir:
+                    item.setForeground(QtGui.QColor("green"))
+                    item.setCheckState(Qt.Checked)
 
+                    list_sc.append(str(item.text()) )
+
+                elif item.text() in region_only_SALTDir:
+                    item.setForeground(QtGui.QColor("purple"))#'purple')
+
+                else:
+                    item.setForeground(QtGui.QColor("red"))#'red')
                 
 
+            json_user_object['Parameters']["subcorticals_region_names"]["value"] = list_sc
+            Ui.update_user_json_file() 
+
+
+            self.list_sc_listWidget.itemChanged.connect(self.subcortical_region_checkbox)
+
+
 
     # *****************************************
-    # Extract name of subcortical region 
-    # *****************************************
+    # Update subcorticals_region_names list if the user checked or unchecked region
+    # *****************************************  
 
-    def extract_name_sc_region(self,fileDir):
-        list_sc_region = []
-        for entry in os.listdir(fileDir):
-            if os.path.isdir(os.path.join(fileDir, entry)):  #is directory  
-                if entry.startswith("sub") or entry.startswith( "brain"):  # error if you remove one of this 'if' with an 'and'
-                        list_sc_region.append(str(entry))
-        return list_sc_region
+    def subcortical_region_checkbox(self, item):
 
+        self.list_sc_listWidget.blockSignals(True)
+        sc = json_user_object['Parameters']["subcorticals_region_names"]["value"]
+       
+        if item.checkState() == Qt.Unchecked: 
+            if item.text() in sc: 
+                index = sc.index(item.text())
+                del sc[index]
+
+        if item.checkState() == Qt.Checked:             
+            if item.text() not in sc:
+                sc.append(item.text())
+
+        json_user_object['Parameters']["subcorticals_region_names"]["value"] = sc 
+        Ui.update_user_json_file() 
+
+
+        self.list_sc_listWidget.blockSignals(False) 
+        print(json_user_object['Parameters']["subcorticals_region_names"]["value"])
+
+
+                
 
     # *****************************************
     # Button help which display explanations
@@ -727,6 +714,11 @@ class Ui(QtWidgets.QTabWidget):
             self.question_KWM_pushButton.setText("Help")
             self.question_KWM_textEdit.setText("")
             self.question_KWM_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")
+
+
+
+
+
 
 
 
@@ -808,7 +800,7 @@ class Ui(QtWidgets.QTabWidget):
         self.table_sc_regions_tableWidget.setRowCount(len(list_subcortical_regions))
         self.table_sc_regions_tableWidget.setColumnCount(4)
 
-        Labels = list(json_user_object['Parameters']["subcorticalsListNumber"]["value"].split(" "))
+        Labels = list(json_user_object['Parameters']["subcorticals_region_labels"]["value"].split(" "))
         
         cpt = 0
         for the_region in range(len(list_subcortical_regions)): 
@@ -868,15 +860,13 @@ class Ui(QtWidgets.QTabWidget):
                         else: 
                             help = 'RIGHT'
                         self.check_table.setText('<font color="red"> Row \'' + str(list_subcortical_regions[row]) 
-                                                + '\' , column \'label/number ' + help + '\' ' 
-                                                + ' : write an integrer please </font> ')
+                                                + '\' , column \'label/number ' + help + '\' '   + ' : write an integrer please </font> ')
 
                      
-
             if error != 'True': 
                 self.check_table.setText(" ")
             else: 
-                json_user_object['Parameters']["subcorticalsList"]["value"] = " ".join(new_label)
+                json_user_object['Parameters']["subcorticals_region_names"]["value"] = " ".join(new_label)
                 print( " ".join(new_label))
                 Ui.update_user_json_file()
 
@@ -1488,10 +1478,10 @@ class Ui(QtWidgets.QTabWidget):
         for checkbox in self.list_sc_groupBox.findChildren(QCheckBox):
             #print('%s: %s' % (checkbox.text(), checkbox.isChecked()))
             if checkbox.isChecked() == True:
-                if checkbox.text() not in json_user_object['Parameters']["subcorticalsList"]["value"]:
-                   json_user_object['Parameters']["subcorticalsList"]["value"] = json_user_object['Parameters']["subcorticalsList"]["value"] + checkbox.text()  + " "
+                if checkbox.text() not in json_user_object['Parameters']["subcorticals_region_names"]["value"]:
+                   json_user_object['Parameters']["subcorticals_region_names"]["value"] = json_user_object['Parameters']["subcorticals_region_names"]["value"] + checkbox.text()  + " "
             else:
-                json_user_object['Parameters']["subcorticalsList"]["value"] = json_user_object['Parameters']["subcorticalsList"]["value"].replace(checkbox.text() + " ","")
+                json_user_object['Parameters']["subcorticals_region_names"]["value"] = json_user_object['Parameters']["subcorticals_region_names"]["value"].replace(checkbox.text() + " ","")
         Ui.update_user_json_file()
 
         # Display the begin time

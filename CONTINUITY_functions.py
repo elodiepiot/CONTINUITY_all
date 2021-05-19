@@ -36,172 +36,48 @@ def run_command(text_printed, command):
 
 
 
+
+
 # *************************************************************************************
-# Extract name of region in SALTDir
+# Extract name of subcortical regions
 # *************************************************************************************
 
-def extract_name_sc_region_SALTDir(SALT_dir, ID):
-    List_sc_region = []
-    List_sc_region_without_L_R = []
+def extract_name_sc_region(SALTDir, KWMDir , ID):
 
-    (_, _, filenames) = next(os.walk(SALT_dir))
+    list_sc_region_SALT, list_sc_region_KWM = ([],[])
+
+    (_, _, filenames) = next(os.walk(SALTDir))
     for entry in filenames:
+        
         if entry.startswith( str( ID + "-T1_SkullStripped_scaled_label_")):
             start = entry.find("-T1_SkullStripped_scaled_label_") + len("-T1_SkullStripped_scaled_label_")
             end = entry.find("_",len(ID) + len("-T1_SkullStripped_scaled_label_") )
 
             if str(end) == "-1": #no underscore found
                 end = entry.find(".", len(ID) + len("-T1_SkullStripped_scaled_label_") ) 
-              
-            region = entry[start:end]  
-
-            region_without_L_R = entry[start:end]
-            if region[-1] == "L" or region[-1] == "R": 
-                region_without_L_R = entry[start:end-1]
-
-            if region not in List_sc_region: 
-                List_sc_region.append(region)
-
-            if region_without_L_R not in List_sc_region_without_L_R:
-                List_sc_region_without_L_R.append(region_without_L_R)
-
-    return List_sc_region, List_sc_region_without_L_R
+       
+            region = entry[start:end]
+            if region not in list_sc_region_SALT: 
+                list_sc_region_SALT.append(region)
 
 
-
-# *************************************************************************************
-# Change the structure of SALT directory: one subfolder by subcortical region named in a json file
-# *************************************************************************************
-
-def organize_SALT_dir(ID, SALT_dir, SALT_dir_new, Table_sc_json):
-    list_sc_region, list_sc_region_without_L_R = extract_name_sc_region_SALTDir(SALT_dir, ID)
-    print("list_sc_region: ", list_sc_region)
-    print("list_sc_region_without_L_R: ", list_sc_region_without_L_R) #'Thal', 'Amy', 'Hippo, 'Caud', 'Brainstem', 'Put', 'GP']
-
-    add_list_sc_region_without_L_R = []
-    list_sc_region_without_L_R_lower = []
-
-    for i in range(len(list_sc_region_without_L_R)):
-        new_i_r = "sub_rh_" + list_sc_region_without_L_R[i].lower()
-        new_i_l = "sub_lh_" + list_sc_region_without_L_R[i].lower()
-        add_list_sc_region_without_L_R.append(new_i_r)
-        add_list_sc_region_without_L_R.append(new_i_l)
-
-        if list_sc_region_without_L_R[i] != "Brainstem":
-            list_sc_region_without_L_R_lower.append(list_sc_region_without_L_R[i].lower())
-        else: 
-            list_sc_region_without_L_R_lower.append(list_sc_region_without_L_R[i])
-
-    print(add_list_sc_region_without_L_R)
-    print(list_sc_region_without_L_R_lower)
-
-
-    with open(Table_sc_json, "r") as table_sc_json_file:
-         table_sc_json_object = json.load(table_sc_json_file)
-
-    list_name_label_sc_json = []
-    for key in table_sc_json_object:
-        for i in key["name"].split("_"):
-            if i in list_sc_region_without_L_R_lower: 
-                list_name_label_sc_json.append( key["name"] + " " + key["labelValue"] ) #sub_rh_gp"
-    print("list_name_label_sc_json:", list_name_label_sc_json)
-
-    # Create new dir:
-    if not os.path.exists(SALT_dir_new):
-        os.mkdir(SALT_dir_new)
-
-    # Create subdirectories
-    for region in list_name_label_sc_json:
-        if not os.path.exists(os.path.join(SALT_dir_new, region)):
-            os.mkdir(os.path.join(SALT_dir_new, region))
-
-    # Copy file in subdirectories: 
-    (_, _, filenames) = next(os.walk(SALT_dir))
+    (_, _, filenames) = next(os.walk(KWMDir))
     for entry in filenames:
-        for name in entry.replace('.','_').split("_"): #T0054-1-1-6yr-T1 _ SkullStripped _ scaled _ label _ AmyL _pp
-            if name.lower() in list_sc_region:    #name = amyl
-                for item in list_name_label_sc_json: #for list of subfolder:  sub_lh_amy_11176
-                    if not os.path.exists( os.path.join(SALT_dir_new, item, entry) ):
-                        substring = item.split("_")
-                        if name.lower()[-1] == "l" or name.lower()[-1] == "r": 
-                            if (substring[1][0] == name.lower()[-1]  and substring[2] == name.lower()[:-1]):
-                                    shutil.copy( os.path.join(SALT_dir, entry), os.path.join(SALT_dir_new, item ) )
-                        else: 
-                            if (substring[0] == name.lower()):
-                                    shutil.copy( os.path.join(SALT_dir, entry), os.path.join(SALT_dir_new, item ) )
-    return list_sc_region
+     
+        if entry.endswith("_1002_KWM.txt"):
+            end = entry.find("_1002_KWM.txt")
+
+            region = entry[:end]
+            if region not in list_sc_region_KWM: 
+                list_sc_region_KWM.append(region)
+
+    return list_sc_region_SALT, list_sc_region_KWM
 
 
 
-# *************************************************************************************
-# Extract name of region in KWMDir
-# *************************************************************************************
-
-def extract_name_sc_region_KWMDir(fileName):
-    List_sc_region = []
-    List_sc_region_without_L_R = []
-    for entry in os.listdir(fileName):
-        if os.path.isfile(os.path.join(fileName, entry)):
-            if entry.endswith("_1002_KWM.txt"):
-                end = entry.find("_1002_KWM.txt")
-                region = entry[:end]
-               
-                region_without_L_R = region
-                if region[-1] == "L" or region[-1] == "R": 
-                    region_without_L_R = entry[:end-1]
-
-                if region not in List_sc_region: 
-                    List_sc_region.append(region)
-                    List_sc_region_without_L_R.append(region_without_L_R)
-
-    return List_sc_region, List_sc_region_without_L_R
 
 
 
-# *************************************************************************************
-# Change the structure of KWM directory: one subfolder by subcortical region named in a json file
-# *************************************************************************************
-
-def organize_KWM_dir(ID, KWM_dir,KWM_dir_new, Table_sc_json): 
-    list_sc_region, list_sc_region_without_L_R = extract_name_sc_region_KWMDir(KWM_dir)
-    #print("list_sc_region: ", list_sc_region)
-    #print("list_sc_region_without_L_R: ", list_sc_region_without_L_R)
-
-    with open(Table_sc_json, "r") as table_sc_json_file:
-        table_sc_json_object = json.load(table_sc_json_file)
-
-    list_name_label_sc_json = []
-    for key in table_sc_json_object:
-        for i in key["name"].split("_"):
-            if i in list_sc_region_without_L_R: 
-                list_name_label_sc_json.append( key["name"] + "_" + key["labelValue"] )
-    #print("list_name_label_sc_json:", list_name_label_sc_json)
-
-    # Create new dir:
-    if not os.path.exists(KWM_dir_new):
-        os.mkdir(KWM_dir_new)
-
-    #create subdirectories
-    for region in list_name_label_sc_json:
-        if not os.path.exists(os.path.join(KWM_dir_new, region)):
-            os.mkdir(os.path.join(KWM_dir_new, region))
-
-    #move file in subdirectories
-    (_, _, filenames) = next(os.walk(KWM_dir))
-    for entry in filenames:
-        for name in entry.replace('.','_').split("_"): #T0054-1-1-6yr-T1 _ SkullStripped _ scaled _ label _ AmyL _pp
-            if name.lower() in list_sc_region:    #name = amyl
-                for item in list_name_label_sc_json: #for list of subfolder:  sub_lh_amy_11176
-                    if not os.path.exists( os.path.join(KWM_dir_new, item, entry) ):
-                        substring = item.split("_")
-                        if name.lower()[-1] == "l" or name.lower()[-1] == "r": 
-                            if (substring[1][0] == name.lower()[-1]  and substring[2] == name.lower()[:-1]):
-                                    shutil.copy( os.path.join(KWM_dir, entry), os.path.join(KWM_dir_new, item ) )
-                        else: 
-                            if (substring[0] == name.lower()):
-                                    shutil.copy( os.path.join(KWM_dir, entry), os.path.join(KWM_dir_new, item ) )
-
-    return list_sc_region
 
 
 
