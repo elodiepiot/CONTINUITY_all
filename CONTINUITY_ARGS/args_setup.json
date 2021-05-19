@@ -1,13 +1,13 @@
 {   "Parameters": {
         "noGUI": {
-            "type": "str",
+            "type": "bool",
             "help": "Use CONTINUITY script without interface and json user file",
-            "default": "false" 
+            "default": false 
         },
         "cluster": {
-            "type": "str",
+            "type": "bool",
             "help": "run script in a cluster",
-            "default": "false" 
+            "default": false
         },
         "cluster_command_line": {
             "type": "str",
@@ -20,19 +20,19 @@
             "default": "FSL"
         },
         "filtering_with_tcksift": {
-            "type": "str",
+            "type": "bool",
             "help": "filtering_with_tcksift if Tractography model == MRtrix ",
-            "default": "false"
+            "default": false
         },
         "optimisation_with_tcksift2": {
-            "type": "str",
+            "type": "bool",
             "help": "optimisation_with_tcksift2 if Tractography model == MRtrix",
-            "default": "true"
+            "default": true
         },
         "act_option": {
-            "type": "str",
+            "type": "bool",
             "help": "use the Anatomically-Constrained Tractography framework during tracking",
-            "default": "false"
+            "default": false
         },
         "ID": {
             "type": "str",
@@ -64,7 +64,7 @@
             "help": "T2 (.nrrd)",
             "default": "" 
         },
-         "BRAINMASK": { 
+        "BRAINMASK": { 
             "type": "str",
             "help": "Brain mask in DWI space (.nrrd)",
             "default": "required" 
@@ -75,24 +75,24 @@
             "default": "required" 
         },
         "DO_REGISTRATION": { 
-            "type": "str",
+            "type": "bool",
             "help": "Do registration with this tool",
-            "default": "false" 
+            "default": false
         },
         "INTEGRATE_SC_DATA": { 
-            "type": "str",
+            "type": "bool",
             "help": "Integrate subcortical data",
-            "default": "false" 
+            "default": false
         },
         "INTEGRATE_SC_DATA_by_generated_sc_surf": {
-            "type": "str",
+            "type": "bool",
             "help": "Integrate subcortical data by generating subcortical surfaces",
-            "default": "true"
+            "default": true
         },
         "EXTRA_SURFACE_COLOR": { 
-            "type": "str",
+            "type": "bool",
             "help": "Inner surface contains color labels",
-            "default": "true" 
+            "default": true 
         },
         "labelSetName": { 
             "type": "str",
@@ -100,19 +100,19 @@
             "default": "" 
         },     
         "ignoreLabel": { 
-            "type": "str",
+            "type": "bool",
             "help": "Ignore a label",
-            "default": "false" 
+            "default": false
         },      
         "left_right_surface_need_to_be_combining": {
-            "type": "str",
+            "type": "bool",
             "help": "Boolean: left and right white surface provided separatly",
-            "default": "false"
+            "default": false
         }, 
         "surface_already_labeled": {
-            "type": "str",
+            "type": "bool",
             "help": "Surfaces already labeled",
-            "default": "false"
+            "default": false
         },   
         "WM_L_Surf": { 
             "type": "str",
@@ -180,9 +180,9 @@
             "default": "" 
         }, 
         "UPSAMPLING_DWI": { 
-            "type": "str",
+            "type": "bool",
             "help": "Boolean for upsampling DWI data",
-            "default": "true" 
+            "default": true
         },   
         "first_fixed_img": { 
             "type": "str",
@@ -205,89 +205,89 @@
             "default": "T2_DATA" 
         },     
         "first_metric_weight": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: The metric weight(s) for each stage",
             "default": 1 
         }, 
         "first_radius": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: Radius of the region",
             "default": 4 
         },
         "second_metric_weight": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: The metric weight(s) for each stage",
             "default": 2 
         }, 
         "second_radius": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: Radius of the region",
             "default": 4
         },       
         "deformation_field_sigma": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: Regularization: deformation field sigma",
             "default": 0.5 
         }, 
         "gradient_field_sigma": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: Regularization: gradient field sigma",
             "default": 3
         },
         "SyN_param": { 
-            "type": "str",
+            "type": "float",
             "help": "ANTs: Transformation: SyN parameter",
             "default": 0.25 
         },   
         "iteration1": { 
-            "type": "str",
+            "type": "int",
             "help": "ANTs: Transformation: number of iteration: first iteration",
             "default": 100
         }, 
         "iteration2": { 
-            "type": "str",
+            "type": "int",
             "help": "ANTs: Transformation: number of iteration: second iteration",
             "default": 50 
         }, 
         "iteration3": { 
-            "type": "str",
+            "type": "int",
             "help": "ANTs: Transformation: number of iteration: third iteration",
             "default": 25 
         },   
         "nb_threads": { 
-            "type": "str",
+            "type": "int",
             "help": "ANTs: number of threads",
             "default": 6
         },  
         "overlapping": { 
-            "type": "str",
+            "type": "bool",
             "help": "Overlapping surfaces name",
-            "default": "true" 
+            "default": true 
         },  
         "nb_fibers": { 
-            "type": "str",
+            "type": "int",
             "help": "Bedpostx: number of fibers",
             "default": 2000
         }, 
         "nb_fiber_per_seed": { 
-            "type": "str",
+            "type": "int",
             "help": "Tractography / Probtrackx2 options: P: Number of fibers per seed",
             "default": 100 
         },
         "steplength": { 
-            "type": "str",
+            "type": "float",
             "help": "Tractography / Probtrackx2 options: step length in mm",
             "default": 0.75 
         },
         "sampvox": { 
-            "type": "str",
+            "type": "float",
             "help": "Tractography / Probtrackx2 options: Sample random points within seed voxels",
             "default": 0.5 
         },
         "loopcheck": { 
-            "type": "str",
+            "type": "bool",
             "help": "Lookcheck",
-            "default": "true" 
+            "default": true
         }, 
         "json_config_file": {
             "type": "str",

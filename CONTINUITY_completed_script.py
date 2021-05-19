@@ -281,7 +281,7 @@ with Tee(log_file):
 	print("Script 1: prepare files for T1 to DWI space registration")
 	print("**********************************************************************************")
 
-	if DO_REGISTRATION.lower() == "true":
+	if DO_REGISTRATION:
 		print("Starting Pre-registration: (Up)sampled DWI, DWI BrainMask, T1 DWISpace, DWISpace T1 surfaces")
 
 		# Create different names for DWI_NRRD and DWI_MASK according to the value of UPSAMPLING_DWI and find the position of the gradient 
@@ -615,7 +615,7 @@ with Tee(log_file):
 		os.mkdir(OUT_LABELS)
 
 
-	if INTEGRATE_SC_DATA.lower() == "true":  
+	if INTEGRATE_SC_DATA:  
 		print("*****************************************")
 		print("Integration of subcortical data ")
 		print("*****************************************")
@@ -623,7 +623,7 @@ with Tee(log_file):
 
 
 
-		if INTEGRATE_SC_DATA_by_generated_sc_surf.lower() == 'true':
+		if INTEGRATE_SC_DATA_by_generated_sc_surf:
 
 			print("*****************************************")
 			print("Generation of subcortical surfaces (~30 min )")
@@ -790,9 +790,9 @@ with Tee(log_file):
 	print("Labelization of the cortical surfaces ")
 	print("*****************************************")
 
-	if surface_already_labeled.lower() == "false":
+	if not surface_already_labeled:
 
-		if DO_REGISTRATION.lower() == "false":
+		if not DO_REGISTRATION:
 			# Outputs:
 			RSL_WM_L_Surf_NON_REGISTRATION_labeled = os.path.join(OUT_00_QC_VISUALIZATION, "stx_" + ID + 
 			            "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace_labeled_" + NAME_PARCELLATION_TABLE + ".vtk")
@@ -813,7 +813,7 @@ with Tee(log_file):
 				KWMtoPolyData(RSL_WM_R_Surf_NON_REGISTRATION, RSL_WM_R_Surf_NON_REGISTRATION_labeled, cortical_label_right, NAME_PARCELLATION_TABLE)  		
 
 
-		else: #DO_REGISTRATION.lower() == "true":
+		else: 
 			# Outputs:
 			RSL_WM_L_Surf_labeled = os.path.join(OUT_00_QC_VISUALIZATION, "stx_" + ID + 
 			           "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace_labeled_" + NAME_PARCELLATION_TABLE + ".vtk")
@@ -838,7 +838,7 @@ with Tee(log_file):
 
 
 	else: #surfaces already labeled
-		if DO_REGISTRATION.lower() == "false":
+		if not DO_REGISTRATION:
 			RSL_WM_L_Surf_NON_REGISTRATION_labeled = RSL_WM_L_Surf_NON_REGISTRATION
 			RSL_WM_R_Surf_NON_REGISTRATION_labeled = RSL_WM_R_Surf_NON_REGISTRATION
 
@@ -859,11 +859,11 @@ with Tee(log_file):
 	# Create cortical.vtk: 
 	SURFACE = os.path.join(OUT_SURFACE, "stx_" + ID + "_T1_CombinedSurface_white_" + NAME_PARCELLATION_TABLE + ".vtk")
 
-	if DO_REGISTRATION.lower() == "false":
+	if not DO_REGISTRATION:
 		if os.path.exists(SURFACE):
 			print("NOT REGISTRATION: Combine cortical file: Found Skipping combining cortical left and right surface ")
 		else: 
-			if left_right_surface_need_to_be_combining.lower() == "true":
+			if not left_right_surface_need_to_be_combining:
 				# NOT REGISTRATION: combine left and right surface 
 				polydatamerge(WM_L_Surf_NON_REGISTRATION_labeled, WM_R_Surf_NON_REGISTRATION_labeled, SURFACE)
 			else:
@@ -881,7 +881,7 @@ with Tee(log_file):
 
 
 
-	if INTEGRATE_SC_DATA.lower() == "true": 
+	if INTEGRATE_SC_DATA: 
 		print("*****************************************")
 		print("Start the integration of subcortical data: Combine subcortical with cortical vtk file in DWI Space of choice (Destrieux, AAL, etc)")
 		print("*****************************************")
@@ -927,7 +927,7 @@ with Tee(log_file):
 	# Set parameters
 	# *****************************************
 
-	if EXTRA_SURFACE_COLOR.lower() == "true":
+	if EXTRA_SURFACE_COLOR:
 		EXTRA_SURFACE_COLOR = SURFACE
 
 	overlapFlag, overlapName, loopcheckFlag, loopcheckName = ("", "", "", "")
@@ -1000,7 +1000,7 @@ with Tee(log_file):
 								  	    	 "--vtkFile", SURFACE,
 								  	    	 overlapFlag]
 
-		if ignoreLabel != '' or ignoreLabel.lower() != 'false':
+		if not ignoreLabel:
 			command.append("--ignoreLabel")
 			command.append(str(ignoreLabel))
 			run_command("ExtractLabelSurfaces if 'ignoreLabel' != ''", command)
@@ -1129,10 +1129,10 @@ with Tee(log_file):
 		# *****************************************
 
 		add = ""
-		if filtering_with_tcksift.lower() == 'true':
+		if filtering_with_tcksift:
 			add = '_tcksif'
 
-		if optimisation_with_tcksift2.lower() == "true": 
+		if optimisation_with_tcksift2: 
 			add = '_tcksif2'
 
 
@@ -1229,7 +1229,7 @@ with Tee(log_file):
 		if not os.path.exists(OUT_MRTRIX_vtk): os.mkdir(OUT_MRTRIX_vtk)
 		
 		# Output tcksift:
-		if filtering_with_tcksift.lower() == 'true':
+		if filtering_with_tcksift:
 			tcksift_folder = os.path.join(OUT_MRTRIX, "output_tcksift") 
 			if not os.path.exists(tcksift_folder): os.mkdir(tcksift_folder)
 
@@ -1240,7 +1240,7 @@ with Tee(log_file):
 			if not os.path.exists(tcksift_vtk): os.mkdir(tcksift_vtk)			
 
 		# Output tcksift2:
-		if optimisation_with_tcksift2.lower() == 'true': 
+		if optimisation_with_tcksift2: 
 			tcksift2_txt = os.path.join(OUT_MRTRIX, "output_tcksift2_streamlines_weights_txt") 
 			if not os.path.exists(tcksift2_txt): os.mkdir(tcksift2_txt)
 
@@ -1248,7 +1248,7 @@ with Tee(log_file):
 		weights_folder = os.path.join(OUT_MRTRIX, "output_tckEdit_tracks_and_streamlines_weight") 
 		if not os.path.exists(weights_folder): os.mkdir(weights_folder)
 
-		if optimisation_with_tcksift2.lower() == 'false': 
+		if not optimisation_with_tcksift2: 
 			weight_txt = os.path.join(weights_folder, "output_tckEdit_streamlines_weights_txt") 
 			if not os.path.exists(weight_txt): os.mkdir(weight_txt)
 
@@ -1331,7 +1331,7 @@ with Tee(log_file):
 									   
 
 				# act option: (not a seed option)
-				if act_option.lower() == 'true': 
+				if act_option: 
 					command.append('-act')
 					command.append(fivett_img)
 					
@@ -1369,7 +1369,7 @@ with Tee(log_file):
 				
 
 			# Run tcksift: 
-			if filtering_with_tcksift.lower() == 'true': # Filtering with SIFT 
+			if filtering_with_tcksift: # Filtering with SIFT 
 
 				# *****************************************
 				# tcksift: Filter a whole-brain fibre-tracking data
@@ -1411,7 +1411,7 @@ with Tee(log_file):
 				# Outputs:
 				output_tckEdit_tracks_tck = os.path.join(weight_tck, "output_tckEdit_tracks_" + number_region + '_with_' + number_region_target + ".tck" )
 				
-				if optimisation_with_tcksift2.lower() == "false": 
+				if not optimisation_with_tcksift2: 
 					weight_txt_file = os.path.join(weight_txt, "output_tckEdit_streamlines_weight_" + number_region + '_with_' + number_region_target + ".txt" )
 				else: 
 					output_tcksift2_txt = os.path.join(tcksift2_txt, "output_tcksift2_streamlines_weights_" + number_region + '_with_' + number_region_target + ".txt")
@@ -1426,7 +1426,7 @@ with Tee(log_file):
 					# *****************************************
 
 					# Add input track file for tckEdit: file with all streamlines between the considering region and the target region
-					if filtering_with_tcksift.lower() == 'false': # NO filtering with SIFT before tckEdit
+					if not filtering_with_tcksift: # NO filtering with SIFT before tckEdit
 						command = [MRtrixPath + "/tckedit", output_track_tckgen_tck] 
 																	   
 					else: # Filtering with SIFT before tckEdit
@@ -1437,7 +1437,7 @@ with Tee(log_file):
 					command.append('-force')
 
 					# Option '-tck_weights_out': specify the path for an output text scalar file containing streamline weights
-					if optimisation_with_tcksift2.lower() == "false": 
+					if not optimisation_with_tcksift2: 
 						command.append('-tck_weights_out')
 						command.append(weight_txt_file)
 
@@ -1454,7 +1454,7 @@ with Tee(log_file):
 					
 
 				# tcksift2:
-				if optimisation_with_tcksift2.lower() == "true": 
+				if optimisation_with_tcksift2: 
 					# Extract the number of streamlines:
 					run = subprocess.Popen([MRtrixPath + "/tckinfo", '-count', output_tckEdit_tracks_tck], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 					out, err = run.communicate()

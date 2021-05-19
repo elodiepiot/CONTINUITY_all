@@ -91,7 +91,7 @@ class Ui(QtWidgets.QTabWidget):
         Ui.no_registration_surface_data_clicked(self)
         Ui.no_registration_surface_data_clicked2(self)
 
-        if (json_setup_object['Parameters']["DO_REGISTRATION"]["default"]).lower() == "false": 
+        if not json_setup_object['Parameters']["DO_REGISTRATION"]["default"]: 
             self.registration_tab1_groupBox.setChecked(False)
             self.registration_tab2_groupBox.setChecked(True)
             Ui.no_registration_surface_data_clicked(self)
@@ -116,12 +116,12 @@ class Ui(QtWidgets.QTabWidget):
 
         # Surface_already_labeled:
         self.surface_already_labeled_groupBox.setChecked(True)
-        if json_setup_object['Parameters']["surface_already_labeled"]["default"].lower() == "true":
+        if json_setup_object['Parameters']["surface_already_labeled"]["default"]:
             self.surface_already_labeled_groupBox.setChecked(False)
 
         # NO_registration_surface_already_labeled:
         self.NO_registration_surface_already_labeled_groupBox.setChecked(True)
-        if json_setup_object['Parameters']["surface_already_labeled"]["default"].lower() == "true":
+        if json_setup_object['Parameters']["surface_already_labeled"]["default"]:
             self.NO_registration_surface_already_labeled_groupBox.setChecked(False)
 
         # Cortical_label left and right: do and do not registration:
@@ -140,7 +140,7 @@ class Ui(QtWidgets.QTabWidget):
         # Subcortical tab: helps buttons and help texts
         self.integrate_sc_data_groupBox.setChecked(False)
         color = "background-color: white"
-        if (json_setup_object['Parameters']["INTEGRATE_SC_DATA"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["INTEGRATE_SC_DATA"]["default"]:
             self.integrate_sc_data_groupBox.setChecked(True)
             color = "background-color: blue"
         self.question_SALT_pushButton.setStyleSheet(color)
@@ -148,7 +148,7 @@ class Ui(QtWidgets.QTabWidget):
 
         # Registration tab: upsampling
         self.upsampling_checkBox.setChecked(False)
-        if (json_setup_object['Parameters']["UPSAMPLING_DWI"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["UPSAMPLING_DWI"]["default"]:
             self.upsampling_checkBox.setChecked(True)
    
         # Initialization ANTS param: images for cross correlation
@@ -183,32 +183,32 @@ class Ui(QtWidgets.QTabWidget):
         self.ignore_label_checkBox.setChecked(False)
         self.value_ignore_label_label.setStyleSheet("color: lightGray")
         self.ignore_label_lineEdit.setStyleSheet("background-color: transparent")
-        if (json_setup_object['Parameters']["ignoreLabel"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["ignoreLabel"]["default"]:
             self.ignore_label_checkBox.setChecked(True)
 
         # Overlapping:
         self.overlapping_checkBox.setChecked(False)
-        if (json_setup_object['Parameters']["overlapping"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["overlapping"]["default"]:
             self.overlapping_checkBox.setChecked(True)
 
         # Loopcheck:
         self.loopcheck_checkBox.setChecked(False)
-        if (json_setup_object['Parameters']["loopcheck"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["loopcheck"]["default"]:
             self.loopcheck_checkBox.setChecked(True)  
 
         # Filtering_with_tcksift:
         self.filtering_with_tcksift_checkBox.setChecked(False)
-        if (json_setup_object['Parameters']["filtering_with_tcksift"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["filtering_with_tcksift"]["default"]:
             self.filtering_with_tcksift_checkBox.setChecked(True)  
 
         # Optimisation_with_tcksift2:
         self.optimisation_with_tcksift2_checkBox.setChecked(False)
-        if (json_setup_object['Parameters']["optimisation_with_tcksift2"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["optimisation_with_tcksift2"]["default"]:
             self.optimisation_with_tcksift2_checkBox.setChecked(True)  
 
         # Inner surface:
         self.inner_surface_checkBox.setChecked(False)
-        if (json_setup_object['Parameters']["EXTRA_SURFACE_COLOR"]["default"]).lower() == "true":
+        if json_setup_object['Parameters']["EXTRA_SURFACE_COLOR"]["default"]:
             self.inner_surface_checkBox.setChecked(True) 
               
         # Combined or non combined surfaces:
@@ -219,7 +219,7 @@ class Ui(QtWidgets.QTabWidget):
         self.WMR_surface_diffusion_label.setText('White Matter Right surface data in diffusion space (.vtk):')
         self.no_registration_surface_diffusion_label.setText('Surface data labeled in diffusion space (.vtk):')          
         self.no_registration_surface_diffusion_label.setStyleSheet(color)
-        if (json_setup_object['Parameters']["DO_REGISTRATION"]["default"]).lower() == "false":
+        if not json_setup_object['Parameters']["DO_REGISTRATION"]["default"]:
             color = "color: black"
             self.WML_surface_diffusion_label.setText('White Matter Left surface data <font color="red">in diffusion space</font> (.vtk):')
             self.WMR_surface_diffusion_label.setText('White Matter Right surface data <font color="red">in diffusion space</font> (.vtk):')
@@ -729,69 +729,6 @@ class Ui(QtWidgets.QTabWidget):
     def complete_table_label_name_sc_region(self): 
         global table_created
         table_created = 'false'
-
-        '''
-        list_subcortical_regions_lower, list_subcortical_regions_right, list_subcortical_regions_left  = ([],[],[])
-   
-        for i in range(len(list_subcortical_regions)):
-                     
-            if list_subcortical_regions[i] != "Brainstem":
-                list_subcortical_regions_lower.append(list_subcortical_regions[i].lower())
-                new_i_r = "sub_rh_" + list_subcortical_regions[i].lower()
-                new_i_l = "sub_lh_" + list_subcortical_regions[i].lower()
-
-                list_subcortical_regions_right.append(new_i_r)
-                list_subcortical_regions_left.append(new_i_l)
-                
-            else: 
-                list_subcortical_regions_lower.append(list_subcortical_regions[i])
-                new_i_r = list_subcortical_regions[i]
-
-                list_subcortical_regions_right.append(new_i_r)
-           
-        #print('list_subcortical_regions_lower', list_subcortical_regions_lower)
-        #print('list_subcortical_regions_right', list_subcortical_regions_right)
-        #print('list_subcortical_regions_left', list_subcortical_regions_left)
-
-
-        with open(json_user_object['Parameters']["PARCELLATION_TABLE"]["value"], "r") as table_sc_json_file:
-            table_sc_json_object = json.load(table_sc_json_file)
-
-        list_name_label_left, list_name_label_right = ([],[])
-
-        for key in table_sc_json_object:        
-            if key["name"] in list_subcortical_regions_right: 
-                for part_name in key["name"].split('_'): 
-                    if part_name in list_subcortical_regions_lower:
-                        list_name_label_right.append(key["name"] + " " + part_name + " " + key["labelValue"] ) #sub_rh_gp"
-
-            elif key["name"] in list_subcortical_regions_left:
-                for part_name in key["name"].split('_'): 
-                    if part_name in list_subcortical_regions_lower:
-                        list_name_label_left.append(key["name"] + " " + part_name + " " + key["labelValue"] ) 
-
-        print("list_name_label_right:", list_name_label_right) #['amy 12176', 'caud 12177', 'hippo 12178', 'thal 12179', 'put 12180', 'gp 12181', 'Brainstem 12182']
-        print("list_name_label_left:", list_name_label_left) #['amy 11176', 'caud 11177', 'hippo 11178', 'thal 11179', 'put 11180', 'gp 11181']
-
-        #list_name_label_right: ['sub_rh_amy amy 12176', 'sub_rh_caud caud 12177', 'sub_rh_hippo hippo 12178', 'sub_rh_thal thal 12179', 
-        #                        'sub_rh_put put 12180', 'sub_rh_gp gp 12181', 'Brainstem Brainstem 12182']
-        #list_name_label_left: ['sub_lh_amy amy 11176', 'sub_lh_caud caud 11177', 'sub_lh_hippo hippo 11178', 'sub_lh_thal thal 11179', 
-        #                       'sub_lh_put put 11180', 'sub_lh_gp gp 11181']
-
-        for the_region in range(len(list_subcortical_regions_lower)): 
-
-            for left_region_name_label in list_name_label_left:
-                split = left_region_name_label.split(' ')
-                if split[1] == list_subcortical_regions_lower[the_region]:
-                    self.table_sc_regions_tableWidget.setItem(the_region, 0, QTableWidgetItem(split[0]))  #0: name/ID left 
-                    self.table_sc_regions_tableWidget.setItem(the_region, 1, QTableWidgetItem(split[2]))  #1: label/number left
-
-            for right_region_name_label in list_name_label_right:
-                split = right_region_name_label.split(' ')
-                if split[1] == list_subcortical_regions_lower[the_region]:
-                    self.table_sc_regions_tableWidget.setItem(the_region, 2, QTableWidgetItem(split[0]))  #2: name/ID right 
-                    self.table_sc_regions_tableWidget.setItem(the_region, 3, QTableWidgetItem(split[2]))  #3: label/number right
-        '''
         
         global list_subcortical_regions
         list_subcortical_regions = [ 'Amy', 'Caud', 'Hippo', 'Thal', 'GP','Put']

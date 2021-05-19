@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # Run CONTINUITY thanks to a command line: -noGUI / -cvs_file / -cluster
     # *****************************************
 
-    if str(args["noGUI"]).lower() == "true": 
+    if args["noGUI"]: 
 
         with open(user_filename) as user_file:
             data_user = json.load(user_file)
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
 
             # Run CONTINUITY script 
-            if str(args["cluster"]).lower() == 'false':  # Run localy: -noGUI  
+            if not args["cluster"]:  # Run localy: -noGUI  
                 CONTINUITY(user_filename)
             else: # run in longleaf: -noGUI -cluster 
                 cluster("./slurm-job", args["cluster_command_line"])
@@ -172,7 +172,7 @@ if __name__ == '__main__':
                             user_file.write(json.dumps(data_user, indent=4)) 
 
                     # Run CONTINUITY script
-                    if str(args["cluster"]).lower() == 'false': # run in longleaf: -noGUI -csv_file -cluster 
+                    if not args["cluster"]: # run in longleaf: -noGUI -csv_file -cluster 
                         print("SUBJECT: ", row['ID'] )
                         CONTINUITY(user_filename)
                     else: # Run localy: -noGUI -csv_file
