@@ -787,7 +787,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.all_nodes_listWidget.blockSignals(True)
         
         print("Region clicked (on the list)", item.text())
-        Ui_visu.display_nodes_test(self, item.text(), fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
+        Ui_visu.display_nodes(self, item.text(),update_manually_fig=True, fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
 
         self.all_nodes_listWidget.blockSignals(False)
@@ -802,8 +802,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
     def get_nodes(self, event, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
 
-
-       
 
         # Convert to radian  
         node_angles = node_angles * np.pi / 180
@@ -822,8 +820,7 @@ class Ui_visu(QtWidgets.QTabWidget):
             node = np.argmin(np.abs(event.xdata - node_angles))
     
 
-            Ui_visu.display_nodes(self, label_names[node], fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
-
+            Ui_visu.display_nodes(self, label_names[node], update_manually_fig=False, fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
 
         elif event.button == 3:  # right click
@@ -857,88 +854,10 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-    def display_nodes_test(self, selected_node, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None):
-
-
-        # Convert to radian  
-        node_angles = node_angles * np.pi / 180
-        node_angles_copy_event = node_angles
-
-
-        # Set angles between [0, 2*pi]
-        node_angles = node_angles % (np.pi * 2)
-
-        self.clicked_nodes_label.setText('Node selected: <font color="Turquoise">' + str(selected_node) + " </font>")
-
-
-        text = "" 
-        label_names_update = []
-
-        my_index = label_names.index(selected_node)
-  
-        for target in range(len(con_abs_util[0])):
-            
-            if label_names[target] == selected_node: 
-                label_names_update.append(str(label_names[target]))
-
-            elif con_abs_util[my_index, target] >= con_thresh:
-                #print('Node associated: ', label_names[target] , '(number ', target, ")")
-                text += '  ' + label_names[target] + '\n' 
-                label_names_update.append(str(label_names[target]))
-            else: 
-                label_names_update.append(' ')
-
-
-        # Display list of connected regions:
-        self.nodes_associated_plainTextEdit.setPlainText(text)
-
-
-        # Remove previous node label: 
-        loop = len(axes.texts)
-        for i in range(loop):
-            axes.texts.remove(axes.texts[0])
-
-
-        # Draw new node labels: 
-        angles_deg = 180 * node_angles_copy_event / np.pi
-
-        for name, angle_rad, angle_deg in zip(label_names_update, node_angles, angles_deg):
-            if angle_deg >= 270:
-                ha = 'left'
-            else:
-                # Flip the label, so text is always upright
-                angle_deg += 180
-                ha = 'right'
-
-            if name != selected_node:
-                axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
-                      rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white')
-            else: 
-                axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
-                      rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='Turquoise')
-        
-
-        patches = axes.patches
-        node = label_names.index(selected_node)
-        for ii, (x, y) in enumerate(zip(indices[0], indices[1])):
-            patches[ii].set_visible(node in [x, y])
-
-        
-        fig.canvas.draw()
-
-
-      
-        print('end left click')
 
 
 
-
-
-
-
-
-
-    def display_nodes(self, selected_node, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None):
+    def display_nodes(self, selected_node, update_manually_fig=False, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None):
 
 
         # Convert to radian  
@@ -998,6 +917,14 @@ class Ui_visu(QtWidgets.QTabWidget):
                 axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
                       rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='Turquoise')
                
+
+
+        if update_manually_fig: 
+            patches = axes.patches
+            node = label_names.index(selected_node)
+            for ii, (x, y) in enumerate(zip(indices[0], indices[1])):
+                patches[ii].set_visible(node in [x, y])
+
         fig.canvas.draw()
       
         print('end left click')
