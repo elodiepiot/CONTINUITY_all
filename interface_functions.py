@@ -1474,16 +1474,6 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def start_tractography_button_clicked(self):
-        # Save subcortical region list in the user json file 
-        for checkbox in self.list_sc_groupBox.findChildren(QCheckBox):
-            #print('%s: %s' % (checkbox.text(), checkbox.isChecked()))
-            if checkbox.isChecked() == True:
-                if checkbox.text() not in json_user_object['Parameters']["subcorticals_region_names"]["value"]:
-                   json_user_object['Parameters']["subcorticals_region_names"]["value"] = json_user_object['Parameters']["subcorticals_region_names"]["value"] + checkbox.text()  + " "
-            else:
-                json_user_object['Parameters']["subcorticals_region_names"]["value"] = json_user_object['Parameters']["subcorticals_region_names"]["value"].replace(checkbox.text() + " ","")
-        Ui.update_user_json_file()
-
         # Display the begin time
         now = datetime.datetime.now()
         self.start_time_label.setText(now.strftime("Script running since: %Hh:%Mmin , %m-%d-%Y"))
