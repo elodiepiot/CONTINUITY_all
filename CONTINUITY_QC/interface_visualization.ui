@@ -679,7 +679,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>false</bool>
@@ -860,6 +860,14 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="0" column="1">
         <widget class="QComboBox" name="type_of_normalization_comboBox">
+         <property name="currentText">
+          <string>Row region normalization</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Row region normalization</string>
+          </property>
+         </item>
          <item>
           <property name="text">
            <string>No normalization</string>
@@ -868,11 +876,6 @@ p, li { white-space: pre-wrap; }
          <item>
           <property name="text">
            <string>Whole normalization</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Row region normalization</string>
           </property>
          </item>
          <item>
@@ -1364,7 +1367,7 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_21">
        <attribute name="title">
@@ -1454,6 +1457,14 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QComboBox" name="type_of_normalization_circle_comboBox">
+           <property name="currentText">
+            <string>Row region normalization</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>Row region normalization</string>
+            </property>
+           </item>
            <item>
             <property name="text">
              <string>No normalization</string>
@@ -1462,11 +1473,6 @@ p, li { white-space: pre-wrap; }
            <item>
             <property name="text">
              <string>Whole normalization</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Row region normalization</string>
             </property>
            </item>
            <item>
@@ -1582,7 +1588,7 @@ p, li { white-space: pre-wrap; }
              <double>100.000000000000000</double>
             </property>
             <property name="value">
-             <double>90.000000000000000</double>
+             <double>10.000000000000000</double>
             </property>
            </widget>
           </item>
@@ -2901,6 +2907,14 @@ p, li { white-space: pre-wrap; }
        </item>
        <item>
         <widget class="QComboBox" name="type_of_normalization_brain_comboBox">
+         <property name="currentText">
+          <string>Row region normalization</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>Row region normalization</string>
+          </property>
+         </item>
          <item>
           <property name="text">
            <string>No normalization</string>
@@ -2909,11 +2923,6 @@ p, li { white-space: pre-wrap; }
          <item>
           <property name="text">
            <string>Whole normalization</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Row region normalization</string>
           </property>
          </item>
          <item>
