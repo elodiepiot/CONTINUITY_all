@@ -3094,22 +3094,6 @@ p, li { white-space: pre-wrap; }
  <resources/>
  <connections>
   <connection>
-   <sender>slicer_path_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>TabWidget</receiver>
-   <slot>slicer_path_button_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>160</x>
-     <y>52</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>565</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>output_file_pushButton</sender>
    <signal>clicked()</signal>
    <receiver>TabWidget</receiver>
@@ -3302,22 +3286,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>fig_file_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>TabWidget</receiver>
-   <slot>fig_file_pushButton_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>233</x>
-     <y>382</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>565</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>display_circle_connectome_pushButton</sender>
    <signal>clicked()</signal>
    <receiver>TabWidget</receiver>
@@ -3478,38 +3446,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>min_colorbar_brain_3D_connectome_doubleSpinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_3D_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>215</x>
-     <y>359</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>565</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>max_colorbar_brain_3D_connectome_doubleSpinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_3D_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>215</x>
-     <y>391</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>565</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>point_size_3D_spinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>TabWidget</receiver>
@@ -3518,22 +3454,6 @@ p, li { white-space: pre-wrap; }
     <hint type="sourcelabel">
      <x>222</x>
      <y>359</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>565</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>linewidth_3D_spinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_lines_size()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>222</x>
-     <y>391</y>
     </hint>
     <hint type="destinationlabel">
      <x>565</x>
@@ -3702,86 +3622,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>linewidth_spinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_cirlcle_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>189</x>
-     <y>390</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>564</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>textwidth_spinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_cirlcle_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>189</x>
-     <y>422</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>564</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>padding_spinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_cirlcle_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>189</x>
-     <y>454</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>564</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nodelinewidth_spinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_cirlcle_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>189</x>
-     <y>486</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>564</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>n_lines_spinBox</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>TabWidget</receiver>
-   <slot>update_cirlcle_connectome()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>228</x>
-     <y>330</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>564</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>TabWidget</receiver>
@@ -3809,6 +3649,86 @@ p, li { white-space: pre-wrap; }
     </hint>
     <hint type="destinationlabel">
      <x>564</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fig_file_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TabWidget</receiver>
+   <slot>fig_file_pushButton_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>233</x>
+     <y>382</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slicer_path_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TabWidget</receiver>
+   <slot>slicer_path_button_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>max_colorbar_brain_3D_connectome_doubleSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>TabWidget</receiver>
+   <slot>update_3D_connectome()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>linewidth_3D_spinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>TabWidget</receiver>
+   <slot>update_lines_size()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>222</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>314</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>min_colorbar_brain_3D_connectome_doubleSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>TabWidget</receiver>
+   <slot>update_3D_connectome()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>215</x>
+     <y>359</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
      <y>314</y>
     </hint>
    </hints>

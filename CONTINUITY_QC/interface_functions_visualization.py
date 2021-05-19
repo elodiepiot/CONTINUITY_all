@@ -97,7 +97,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
         # Setup default path to visualize connectivity matrix and brain/circle connectome:
-        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography", 'new_parcellation_table')#, "new_parcellation_table")
+        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography", 'new_parcellation_table')
         #path = "./input_CONTINUITY/TABLE_AAL_SubCorticals.json"
         self.parcellation_table_textEdit.setText(path)
 
@@ -110,7 +110,8 @@ class Ui_visu(QtWidgets.QTabWidget):
         if json_user_object['Parameters']["loopcheck"]["value"]: 
             loopcheckName = "_loopcheck"
             
-        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography" )#, "Network" + overlapName + loopcheckName)
+        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography" )
+                                                                                                                                #, "Network" + overlapName + loopcheckName)
         #path = "./input_CONTINUITY"
         self.connectivity_matrix_textEdit.setText(path)
 
@@ -390,7 +391,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
     def save_normalize_matrix_pushButton_clicked(self):
         path_name = os.path.join(self.path_normalize_matrix_textEdit.toPlainText(), 'Connectivity_matrix_normalized_' + self.type_of_normalization_comboBox.currentText() 
-                                                                                        + "_symmetrization_by_" + self.type_of_symmetrization_comboBox.currentText()+ '.pdf')
+                                                                                     + "_symmetrization_by_" + self.type_of_symmetrization_comboBox.currentText()+ '.pdf')
         # Save and display:
         self.fig_normalize_matrix.savefig(path_name, format='pdf')
         self.save_normalize_matrix_textEdit.setText("Figure saved here: " + path_name)
@@ -450,8 +451,6 @@ class Ui_visu(QtWidgets.QTabWidget):
     # ***************************************** 
 
     def plot_circle_connectome(self):
-        global display
-        display = 'false'
 
         # *****************************************
         # Extract name of each regions and create a circular layout
@@ -703,7 +702,6 @@ class Ui_visu(QtWidgets.QTabWidget):
             self.wait_label.setText("done again! ")
         
         self.nb_line_label.setText(str(int( (self.n_lines_spinBox.value()/100) * number_total_line)) + " lines displayed")
-        display = 'true'
 
         
         # Remove previous node label: 
@@ -781,36 +779,41 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.all_nodes_listWidget.currentItemChanged.connect(self.get_item)
 
 
+
+    # *****************************************
+    # Get the name of the node selected by the user in the list
+    # *****************************************
        
     def get_item(self, item):
 
         self.all_nodes_listWidget.blockSignals(True)
         
         print("Region clicked (on the list)", item.text())
-        Ui_visu.display_nodes(self, item.text(),update_manually_fig=True, fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
-
+        Ui_visu.display_nodes(self, item.text(),update_manually_fig=True, 
+            fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
         self.all_nodes_listWidget.blockSignals(False)
 
 
 
-
     # *****************************************
-    # Isolate connections around a single node when user left clicks a node.
-    # https://github.com/mne-tools/mne-python/blob/8aeb4ac07c9b2a2694badb33656fa0b510c8bbcd/mne/viz/circle.py#L91
+    # Get the name of the node clicked by the user if left click and display all connections if right click
     # *****************************************
 
     def get_nodes(self, event, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None, ylim=[9, 10]):
-
 
         # Convert to radian  
         node_angles = node_angles * np.pi / 180
         node_angles_copy_event = node_angles
 
 
-        if event.button == 1:  # left click
+        # *****************************************
+        # Left click
+        # *****************************************
 
-            # click must be near node radius
+        if event.button == 1:  
+
+            # Click must be near node radius
             if event.ydata != "None": 
                 if not ylim[0] <= event.ydata <= ylim[1]:
                     return
@@ -820,15 +823,20 @@ class Ui_visu(QtWidgets.QTabWidget):
             node = np.argmin(np.abs(event.xdata - node_angles))
     
 
-            Ui_visu.display_nodes(self, label_names[node], update_manually_fig=False, fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
+            Ui_visu.display_nodes(self, label_names[node], update_manually_fig=False, 
+                    fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
 
-        elif event.button == 3:  # right click
+        # *****************************************
+        # Right click
+        # *****************************************
+
+        elif event.button == 3: 
+
             # Remove previous node label: 
             loop = len(axes.texts)
             for i in range(loop):
                 axes.texts.remove(axes.texts[0])
-
 
             # Draw new node labels: 
             angles_deg2 = 180 * node_angles_copy_event / np.pi
@@ -840,7 +848,6 @@ class Ui_visu(QtWidgets.QTabWidget):
                     angle_deg += 180
                     ha = 'right'
 
-                
                 axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
                       rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='white')
             
@@ -855,7 +862,9 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
+    # *****************************************
+    # Display the label node and the labels of all its connected nodes + lines 
+    # *****************************************
 
     def display_nodes(self, selected_node, update_manually_fig=False, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None):
 
@@ -868,28 +877,24 @@ class Ui_visu(QtWidgets.QTabWidget):
         # Set angles between [0, 2*pi]
         node_angles = node_angles % (np.pi * 2)
 
-        self.clicked_nodes_label.setText('Node selected: <font color="Turquoise">' + str(selected_node) + " </font>")
 
+        # Create a list with only the label of connected regions: 
+        label_names_update, text = ([], "")
 
-        text = "" 
-        label_names_update = []
-
-        my_index = label_names.index(selected_node)
-  
         for target in range(len(con_abs_util[0])):
             
             if label_names[target] == selected_node: 
                 label_names_update.append(str(label_names[target]))
 
-            elif con_abs_util[my_index, target] >= con_thresh:
-                #print('Node associated: ', label_names[target] , '(number ', target, ")")
+            elif con_abs_util[label_names.index(selected_node), target] >= con_thresh:
                 text += '  ' + label_names[target] + '\n' 
                 label_names_update.append(str(label_names[target]))
             else: 
                 label_names_update.append(' ')
 
 
-        # Display list of connected regions:
+        # Display the name of the name and the list of connected regions:
+        self.clicked_nodes_label.setText('Node selected: <font color="Turquoise">' + str(selected_node) + " </font>")
         self.nodes_associated_plainTextEdit.setPlainText(text)
 
 
@@ -905,8 +910,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         for name, angle_rad, angle_deg in zip(label_names_update, node_angles, angles_deg):
             if angle_deg >= 270:
                 ha = 'left'
-            else:
-                # Flip the label, so text is always upright
+            else: # Flip the label, so text is always upright
                 angle_deg += 180
                 ha = 'right'
 
@@ -917,8 +921,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                 axes.text(angle_rad, 10.4, str(name), size=self.textwidth_spinBox.value(),
                       rotation=angle_deg, rotation_mode='anchor', horizontalalignment=ha, verticalalignment='center', color='Turquoise')
                
-
-
+        # Display lines in case of the user select a region in a list (because of no click, this function isn't handle by mne)
         if update_manually_fig: 
             patches = axes.patches
             node = label_names.index(selected_node)
@@ -926,14 +929,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                 patches[ii].set_visible(node in [x, y])
 
         fig.canvas.draw()
-      
         print('end left click')
-
-
-
-
-
-
 
 
 
@@ -954,39 +950,25 @@ class Ui_visu(QtWidgets.QTabWidget):
 
     def save_circle_connectome_pushButton_clicked(self): 
         path_name = os.path.join(self.fig_file_textEdit.toPlainText(), 'Circle_connectome_' + self.type_of_normalization_comboBox.currentText() 
-                                                                                            + "_symmetrization_by_" + self.type_of_symmetrization_comboBox.currentText()+ '.pdf')
+                                                                                     + "_symmetrization_by_" + self.type_of_symmetrization_comboBox.currentText()+ '.pdf')
         # Display and save: 
         self.save_circle_connectome_textEdit.setText("Figure saved here: " + path_name)
         self.fig.savefig(path_name, format='pdf', facecolor='black')
 
 
 
-    # *****************************************
-    # Update the circle connectome
-    # *****************************************
-
-    def update_cirlcle_connectome(self): 
-        
-        print("do to")
-        '''
-        if display == 'true': 
-            # Remove previous circle plot:
-            for i in reversed(range(self.Layoutcircle.count())): 
-                self.Layoutcircle.itemAt(i).widget().setParent(None)
-            
-            # New circle connectome plot: 
-            self.fig = plt.figure(facecolor='black')
-            self.canvas = FigureCanvas(self.fig)
-            self.Layoutcircle.addWidget(self.canvas)
-
-            plot_connectivity_circle(... )
-
-            self.nb_line_label.setText(str(int((self.n_lines_spinBox.value() / 100) * number_total_line)) + " lines displayed")
-        
-        '''
 
         
-        
+
+
+
+
+
+
+
+
+
+
 
 
 
