@@ -1202,11 +1202,11 @@ p, li { white-space: pre-wrap; }
           </rect>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab_12">
           <attribute name="title">
-           <string>Input subcortical files</string>
+           <string>Input</string>
           </attribute>
           <widget class="QTextEdit" name="question_SALT_textEdit_3">
            <property name="geometry">
@@ -1341,7 +1341,7 @@ p, li { white-space: pre-wrap; }
          </widget>
          <widget class="QWidget" name="tab_name_sc_region_3">
           <attribute name="title">
-           <string>Name and label of subcortical regions</string>
+           <string>Names and labels</string>
           </attribute>
           <widget class="QTextEdit" name="color_sc_textEdit_3">
            <property name="geometry">
@@ -1416,6 +1416,50 @@ p, li { white-space: pre-wrap; }
           <zorder>label_4</zorder>
           <zorder>sc_regions_labels_listWidget</zorder>
           <zorder>error_label</zorder>
+         </widget>
+         <widget class="QWidget" name="tab_18">
+          <attribute name="title">
+           <string>Parameters SALT </string>
+          </attribute>
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>10</y>
+             <width>481</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="title">
+            <string>SegPostProcessCLP</string>
+           </property>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_16">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>130</y>
+             <width>481</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="title">
+            <string>GenParaMeshCLP</string>
+           </property>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_17">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>260</y>
+             <width>481</width>
+             <height>111</height>
+            </rect>
+           </property>
+           <property name="title">
+            <string>ParaToSPHARMMeshCLP</string>
+           </property>
+          </widget>
          </widget>
         </widget>
        </widget>
