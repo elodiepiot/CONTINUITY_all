@@ -34,7 +34,7 @@ testUtility= slicer.app.testingUtility()
 success = testUtility.playTests("./CONTINUITY_QC/test_macro4.xml")
 '''
 
-NAME_PARCELLATION_TABLE = json_user_object['Parameters']['labelSetName']['value']
+NAME_PARCELLATION_TABLE = json_user_object['Arguments']['labelSetName']['value']
 
 
 
@@ -42,7 +42,7 @@ NAME_PARCELLATION_TABLE = json_user_object['Parameters']['labelSetName']['value'
 # DATA
 # *****************************************
 
-ID = json_user_object['Parameters']['ID']['value']
+ID = json_user_object['Arguments']['ID']['value']
 input_path = os.path.join( json_user_object['Parameters']['OUT_PATH']['value'], ID, "InputDataForSlicer")
 
 #find datas for B0_BiasCorrect
