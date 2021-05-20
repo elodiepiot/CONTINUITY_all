@@ -649,9 +649,6 @@ with Tee(log_file):
 
 
 
-
-
-
 		subcorticals = subcorticals_region_names
 
 		# Copy to have only regions with good KWM and SALT files
@@ -999,7 +996,7 @@ with Tee(log_file):
 								  	    	 "--labelNumberInfo", labelListNumberPath, 
 								  	    	 "--useTranslationTable", "--labelTranslationTable", new_parcellation_table, 
 								  	    	 "-a", labelSetName, 
-								  	    	 "--vtkLabelFile", EXTRA_SURFACE_COLOR, 
+								  	    	 "--vtkLabelFile", str(EXTRA_SURFACE_COLOR), 
 								  	    	 "--createSurfaceLabelFiles", 
 								  	    	 "--vtkFile", SURFACE,
 								  	    	 overlapFlag]
@@ -1069,7 +1066,7 @@ with Tee(log_file):
 			now = datetime.datetime.now()
 			print (now.strftime("Script running bedpostx command since: %H:%M %m-%d-%Y"))
 			start = time.time() #                , INPUT directory           
-			run_command("bedpostx", [FSLPath + '/bedpostx', OUT_DIFFUSION, "-n", nb_fibers])
+			run_command("bedpostx", [FSLPath + '/bedpostx', OUT_DIFFUSION, "-n", str(nb_fibers)])
 			print("bedpostx command: ",time.strftime("%H h: %M min: %S s",time.gmtime(time.time() - start)))
 
 		# Name define by probtrackx2 tool:
@@ -1093,9 +1090,9 @@ with Tee(log_file):
 							                             "--forcedir", "--network", "--omatrix1", "-V", "0",
 							                             "--dir="+NETWORK_DIR, 
 							                             "--stop="+os.path.join(OUT_TRACTOGRAPHY, "seeds.txt"), 
-							                             "-P", nb_fiber_per_seed, #-P,--nsamples	Number of samples - default=5000
-							                             "--steplength="+steplength, 
-							                             "--sampvox="+sampvox, loopcheckFlag ])
+							                             "-P", str(nb_fiber_per_seed), #-P,--nsamples	Number of samples - default=5000
+							                             "--steplength="+str(steplength), 
+							                             "--sampvox="+str(sampvox), loopcheckFlag ])
 			print("probtrackx2 command: ", time.strftime("%H h: %M min: %S s",time.gmtime(time.time() - start)))
 
 
@@ -1157,7 +1154,7 @@ with Tee(log_file):
 			command = [MRtrixPath + "/dwi2response",'tournier', DiffusionData, # input
 												   				Response_function_estimation_txt, #output
 												                '-fslgrad', os.path.join(OUT_DIFFUSION, "bvecs"),os.path.join(OUT_DIFFUSION, "bvals"),# input
-												                '-nthreads', nb_threads]
+												                '-nthreads', str(nb_threads)]
 			run_command("Response function estimation", command)
 
 		# *****************************************
@@ -1175,7 +1172,7 @@ with Tee(log_file):
 								    								FOD_nii, # ouput
 								   									'-mask', DiffusionBrainMask, # input
 								    								'-fslgrad', os.path.join(OUT_DIFFUSION, "bvecs"),os.path.join(OUT_DIFFUSION, "bvals"),# input
-								    								'-nthreads', nb_threads ])
+								    								'-nthreads', str(nb_threads) ])
 
 		# *****************************************
 		# Convert nrrd T1 in DWI space file in nifti
@@ -1214,7 +1211,7 @@ with Tee(log_file):
 			run_command("create 5tt", [sys.executable, MRtrixPath + "/5ttgen", 'fsl', 
 																			   T1_DWI_SPACE_nifti, # input
 																			   fivett_img, # output
-																			   '-nthreads', nb_threads ])
+																			   '-nthreads', str(nb_threads) ])
 			print("Create 5tt image: ", time.strftime("%H h: %M min: %S s",time.gmtime(time.time() - start)))
 		
 
@@ -1350,7 +1347,7 @@ with Tee(log_file):
 				command.append('-mask')
 				command.append(DiffusionBrainMask)
 				command.append('-nthreads')
-				command.append( nb_threads)
+				command.append( str(nb_threads))
 
 			    # Run command:
 				run = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -1384,7 +1381,7 @@ with Tee(log_file):
 				    print("Tractography already filtered with tcksift")
 				else:
 					print("Filtering Tractography with tcksift")  
-					run_command("tcksift ", [MRtrixPath + "/tcksift", output_track_tckgen_tck, FOD_nii, output_tcksift_tck, '-nthreads', nb_threads])	
+					run_command("tcksift ", [MRtrixPath + "/tcksift", output_track_tckgen_tck, FOD_nii, output_tcksift_tck, '-nthreads', str(nb_threads)])	
 
 				  
 				# *****************************************
@@ -1481,7 +1478,7 @@ with Tee(log_file):
 							# *****************************************
 
 							print("Do optimization algorithm tcksift2: ")		
-							run_command("tcksift2", [MRtrixPath + "/tcksift2", output_tckEdit_tracks_tck, FOD_nii, output_tcksift2_txt, '-nthreads', nb_threads])	
+							run_command("tcksift2", [MRtrixPath + "/tcksift2", output_tckEdit_tracks_tck, FOD_nii, output_tcksift2_txt, '-nthreads', str(nb_threads)])	
 
 						# Open output file: 
 						weight_file = open(output_tcksift2_txt, 'r')
