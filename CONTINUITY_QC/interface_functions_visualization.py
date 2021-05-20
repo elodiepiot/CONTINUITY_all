@@ -182,6 +182,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
+
     # *****************************************
     # Write the path of output folder (i.e output of tractography) in user json file
     # ****************************************
