@@ -95,7 +95,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
         # Setup default path to visualize connectivity matrix and brain/circle connectome:
-        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography", 'new_parcellation_table')
+        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Arguments']["ID"]["value"], "Tractography", 'new_parcellation_table')
         self.parcellation_table_textEdit.setText(path)
 
         overlapName = ""
@@ -107,7 +107,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         if json_user_object['Parameters']["loopcheck"]["value"]: 
             loopcheckName = "_loopcheck"
             
-        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography" )
+        path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Arguments']["ID"]["value"], "Tractography" )
                                                                                                                                 #, "Network" + overlapName + loopcheckName)
         self.connectivity_matrix_textEdit.setText(path)
 
@@ -262,7 +262,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.parcellation_table_textEdit.setText(fileName)
-            json_user_object['Parameters']["PARCELLATION_TABLE"]["value"] = fileName
+            json_user_object['Arguments']["PARCELLATION_TABLE"]["value"] = fileName
             Ui_visu.update_user_json_file()
 
 
@@ -280,9 +280,9 @@ class Ui_visu(QtWidgets.QTabWidget):
             overlapName = "_overlapping"
 
         end_name = ' without Loopcheck and without Overlapping'
-        if   len(overlapName)>3 and len(json_user_object['Parameters']["loopcheck"]["value"])>3: end_name = ' with Loopcheck and with Overlapping'
-        elif len(overlapName)<3 and len(json_user_object['Parameters']["loopcheck"]["value"])>3: end_name = ' without Loopcheck and with Overlapping'
-        elif len(overlapName)>3 and len(json_user_object['Parameters']["loopcheck"]["value"])<3: end_name = ' with Loopcheck and without Overlapping'
+        if   len(overlapName)>3 and len(loopcheckName)>3: end_name = ' with Loopcheck and with Overlapping'
+        elif len(overlapName)<3 and len(loopcheckName)>3: end_name = ' without Loopcheck and with Overlapping'
+        elif len(overlapName)>3 and len(loopcheckName)<3: end_name = ' with Loopcheck and without Overlapping'
 
         # Remove previous plot:
         for i in reversed(range(self.Layout_normalize_matrix.count())): 
@@ -299,7 +299,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         ax.set_ylabel('Targets')
 
         # Title:
-        start = 'Connectivity matrix for ' + json_user_object['Parameters']["ID"]["value"] + "\n  "
+        start = 'Connectivity matrix for ' + json_user_object['Arguments']["ID"]["value"] + "\n  "
         self.fig_normalize_matrix.suptitle(start + self.type_of_normalization_comboBox.currentText() + "  and symmetrization by " 
                                                  + self.type_of_symmetrization_comboBox.currentText() +'\n' +end_name, fontsize=10)
 
@@ -965,7 +965,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.Layout_brain_connectome.addWidget(self.canvas)
         
         # Set title:
-        outputfilename = 'Brain connectome of subject ' + json_user_object['Parameters']["ID"]["value"] + ' (connectivity matrix normalized (row-region))'
+        outputfilename = 'Brain connectome of subject ' + json_user_object['Arguments']["ID"]["value"] + ' (connectivity matrix normalized (row-region))'
         self.fig_brain_connectome.suptitle(outputfilename, fontsize=10)
 
         self.ax1 = self.fig_brain_connectome.add_subplot(1,3,1) #axial
