@@ -99,30 +99,24 @@ class Ui(QtWidgets.QTabWidget):
 
 
         # ID: text and help 
-        self.job_name_lineEdit.setText( json_setup_object['Parameters']["ID"]["default"] )
+        self.job_name_lineEdit.setText( json_setup_object['Arguments']["ID"]["default"] )
         self.question_job_name_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")
 
         # Parcellation table for registration and non registration:
-        self.PARCELLATION_TABLE_textEdit.setText(json_setup_object['Parameters']["PARCELLATION_TABLE"]["default"])
-        self.no_registration_parcellation_table_textEdit.setText(json_setup_object['Parameters']["PARCELLATION_TABLE"]["default"])
+        self.PARCELLATION_TABLE_textEdit.setText(json_setup_object['Arguments']["PARCELLATION_TABLE"]["default"])
+        self.no_registration_parcellation_table_textEdit.setText(json_setup_object['Arguments']["PARCELLATION_TABLE"]["default"])
 
         # Labelset name: text and help: 
-        self.labelset_lineEdit.setText( json_setup_object['Parameters']["labelSetName"]["default"] ) 
+        self.labelset_lineEdit.setText( json_setup_object['Arguments']["labelSetName"]["default"] ) 
         self.question_labelset_name_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")
 
         # Label cortical surfaces for registration and not registration:
         self.question_cortical_labeled_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")
         self.NO_registration_question_cortical_labeled_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")
 
-        # Surface_already_labeled:
-        self.surface_already_labeled_groupBox.setChecked(True)
-        if json_setup_object['Parameters']["surface_already_labeled"]["default"]:
-            self.surface_already_labeled_groupBox.setChecked(False)
-
-        # NO_registration_surface_already_labeled:
-        self.NO_registration_surface_already_labeled_groupBox.setChecked(True)
-        if json_setup_object['Parameters']["surface_already_labeled"]["default"]:
-            self.NO_registration_surface_already_labeled_groupBox.setChecked(False)
+        # Surface_already_labeled and NO_registration_surface_already_labeled:
+        self.surface_already_labeled_groupBox.setChecked(json_setup_object['Parameters']["surface_already_labeled"]["default"])
+        self.NO_registration_surface_already_labeled_groupBox.setChecked(json_setup_object['Parameters']["surface_already_labeled"]["default"])
 
         # Cortical_label left and right: do and do not registration:
         self.cortical_label_left_textEdit.setText(json_setup_object['Parameters']["cortical_label_left"]["default"])
@@ -131,25 +125,22 @@ class Ui(QtWidgets.QTabWidget):
         self.NO_registration_cortical_label_right_textEdit.setText(json_setup_object['Parameters']["cortical_label_right"]["default"])
 
         # Subcortical tab: color code explanation
-        self.SALTDir_textEdit.setText(json_setup_object['Parameters']["SALTDir"]["default"])
-        self.KWMDir_textEdit.setText(json_setup_object['Parameters']["KWMDir"]["default"])
+        self.SALTDir_textEdit.setText(json_setup_object['Arguments']["SALTDir"]["default"])
+        self.KWMDir_textEdit.setText(json_setup_object['Arguments']["KWMDir"]["default"])
         self.color_sc_textEdit.setStyleSheet("background-color: transparent")
         self.question_SALT_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")        
         self.question_KWM_textEdit.setStyleSheet("color: transparent;"  "background-color: transparent")
 
         # Subcortical tab: helps buttons and help texts
-        self.integrate_sc_data_groupBox.setChecked(False)
+        self.integrate_sc_data_groupBox.setChecked(json_setup_object['Parameters']["INTEGRATE_SC_DATA"]["default"])
         color = "background-color: white"
         if json_setup_object['Parameters']["INTEGRATE_SC_DATA"]["default"]:
-            self.integrate_sc_data_groupBox.setChecked(True)
             color = "background-color: blue"
         self.question_SALT_pushButton.setStyleSheet(color)
         self.question_KWM_pushButton.setStyleSheet(color)
 
         # Registration tab: upsampling
-        self.upsampling_checkBox.setChecked(False)
-        if json_setup_object['Parameters']["UPSAMPLING_DWI"]["default"]:
-            self.upsampling_checkBox.setChecked(True)
+        self.upsampling_checkBox.setChecked(json_setup_object['Parameters']["UPSAMPLING_DWI"]["default"])
    
         # Initialization ANTS param: images for cross correlation
         list_param_setCurrentText = ["first_fixed_img", "first_moving_img", "second_fixed_img", "second_moving_img" ]
@@ -180,36 +171,20 @@ class Ui(QtWidgets.QTabWidget):
                     eval("self." + key + "_textEdit.setText(json_user_object[categories][key]['value'])")
 
         # Ignore label:
-        self.ignore_label_checkBox.setChecked(False)
+        self.ignore_label_checkBox.setChecked(json_setup_object['Parameters']["ignoreLabel"]["default"])
         self.value_ignore_label_label.setStyleSheet("color: lightGray")
         self.ignore_label_lineEdit.setStyleSheet("background-color: transparent")
-        if json_setup_object['Parameters']["ignoreLabel"]["default"]:
-            self.ignore_label_checkBox.setChecked(True)
 
-        # Overlapping:
-        self.overlapping_checkBox.setChecked(False)
-        if json_setup_object['Parameters']["overlapping"]["default"]:
-            self.overlapping_checkBox.setChecked(True)
+        # Overlapping and Loopcheck: 
+        self.overlapping_checkBox.setChecked(json_setup_object['Parameters']["overlapping"]["default"])
+        self.loopcheck_checkBox.setChecked(json_setup_object['Parameters']["loopcheck"]["default"])
 
-        # Loopcheck:
-        self.loopcheck_checkBox.setChecked(False)
-        if json_setup_object['Parameters']["loopcheck"]["default"]:
-            self.loopcheck_checkBox.setChecked(True)  
-
-        # Filtering_with_tcksift:
-        self.filtering_with_tcksift_checkBox.setChecked(False)
-        if json_setup_object['Parameters']["filtering_with_tcksift"]["default"]:
-            self.filtering_with_tcksift_checkBox.setChecked(True)  
-
-        # Optimisation_with_tcksift2:
-        self.optimisation_with_tcksift2_checkBox.setChecked(False)
-        if json_setup_object['Parameters']["optimisation_with_tcksift2"]["default"]:
-            self.optimisation_with_tcksift2_checkBox.setChecked(True)  
-
+        # Filtering_with_tcksift and Optimisation_with_tcksift2
+        self.filtering_with_tcksift_checkBox.setChecked(json_setup_object['Parameters']["filtering_with_tcksift"]["default"])
+        self.optimisation_with_tcksift2_checkBox.setChecked(json_setup_object['Parameters']["optimisation_with_tcksift2"]["default"])
+    
         # Inner surface:
-        self.inner_surface_checkBox.setChecked(False)
-        if json_setup_object['Parameters']["EXTRA_SURFACE_COLOR"]["default"]:
-            self.inner_surface_checkBox.setChecked(True) 
+        self.inner_surface_checkBox.setChecked(json_setup_object['Parameters']["EXTRA_SURFACE_COLOR"]["default"])
               
         # Combined or non combined surfaces:
         self.left_right_not_combined_groupBox.setChecked(True)
@@ -244,10 +219,7 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def convert_metric_parameter_json_to_QT(json_param):
-        dict_param = {"FA_NRRD":"FA in nrrd space",
-                      "T1_DATA":"T1",
-                      "T2_DATA":"T2",
-                      "B0_BiasCorrect_NRRD":"BO bias correct in nrrd space"}
+        dict_param = {"FA_NRRD":"FA in nrrd space", "T1_DATA":"T1", "T2_DATA":"T2", "B0_BiasCorrect_NRRD":"BO bias correct in nrrd space"}
         return dict_param[json_param]
 
 
@@ -260,6 +232,7 @@ class Ui(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             eval("self." + button_name + "_textEdit.setText(fileName)")
+            print(json_user_object['Parameters'][button_name]["value"] )
             json_user_object['Parameters'][button_name]["value"] = fileName
             Ui.update_user_json_file()
 
@@ -275,25 +248,16 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # *************************************************************************************
-    # Interface data tab
-    # *************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # ***********************************************  Interface data tab  *****************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # User choose if this tool do the registration or not
@@ -301,11 +265,11 @@ class Ui(QtWidgets.QTabWidget):
 
     def registration_tab1_groupBox_valueChanged(self): 
         self.registration_tab2_groupBox.setChecked(True)
-        json_user_object['Parameters']["DO_REGISTRATION"]["value"] = "False"
+        json_user_object['Parameters']["DO_REGISTRATION"]["value"] = False
 
         if self.registration_tab1_groupBox.isChecked():
             self.registration_tab2_groupBox.setChecked(False)
-            json_user_object['Parameters']["DO_REGISTRATION"]["value"] = "True" 
+            json_user_object['Parameters']["DO_REGISTRATION"]["value"] = True 
         Ui.update_user_json_file()
 
 
@@ -315,7 +279,7 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def job_name_textChanged(self):
-        json_user_object['Parameters']["ID"]["value"] = self.job_name_lineEdit.text()
+        json_user_object['Arguments']["ID"]["value"] = self.job_name_lineEdit.text()
         Ui.update_user_json_file()
 
 
@@ -343,10 +307,10 @@ class Ui(QtWidgets.QTabWidget):
         color = "color: black"
         if fileName:
             self.T2_textEdit.setText(fileName)
-            json_user_object['Parameters']["T2_DATA"]["value"] = fileName
+            json_user_object['Arguments']["T2_DATA"]["value"] = fileName
             Ui.update_user_json_file() 
         else:   
-            if self.modify_ANTs_groupBox.isChecked() == "False":    
+            if not self.modify_ANTs_groupBox.isChecked():    
                 color = "color: lightGray"
 
         self.second_metric_groupBox.setStyleSheet(color)
@@ -370,9 +334,8 @@ class Ui(QtWidgets.QTabWidget):
 
     def T2_remove_pushButton_clicked(self):
         self.T2_DATA_textEdit.setText("No file selected.")
-        json_user_object['Parameters']["T2_DATA"]["value"] = " "
+        json_user_object['Arguments']["T2_DATA"]["value"] = " "
         Ui.update_user_json_file()
-
 
 
 
@@ -390,7 +353,6 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-
     # *****************************************
     # Button help which display explanations
     # *****************************************
@@ -405,13 +367,12 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-
     # *****************************************
     # Open file system and write the white matter right surface path in user information json file
     # *****************************************
 
     def labelsetname_valuechanged(self):
-        json_user_object['Parameters']["labelSetName"]["value"] = self.labelset_lineEdit.text()
+        json_user_object['Arguments']["labelSetName"]["value"] = self.labelset_lineEdit.text()
         Ui.update_user_json_file()
 
 
@@ -435,22 +396,19 @@ class Ui(QtWidgets.QTabWidget):
     # GroupBox to known if surface is already labeled or not
     # *****************************************  
     def surface_already_labeled_groupBox_clicked(self):
-        json_user_object['Parameters']["surface_already_labeled"]["value"] = "true"
+        json_user_object['Parameters']["surface_already_labeled"]["value"] = True
         if self.surface_already_labeled_groupBox.isChecked():
-            json_user_object['Parameters']["surface_already_labeled"]["value"] = "false"
+            json_user_object['Parameters']["surface_already_labeled"]["value"] = False
            
  
-
-
-
 
     # *****************************************
     # NO registration: GroupBox to known if surface is already labeled or not
     # *****************************************  
     def NO_registration_surface_already_labeled_groupBox_clicked(self):
-        json_user_object['Parameters']["surface_already_labeled"]["value"] = "true"
+        json_user_object['Parameters']["surface_already_labeled"]["value"] = True
         if self.NO_registration_surface_already_labeled_groupBox.isChecked():
-            json_user_object['Parameters']["surface_already_labeled"]["value"] = "false"
+            json_user_object['Parameters']["surface_already_labeled"]["value"] = False
 
 
     # *****************************************
@@ -479,38 +437,28 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # *************************************************************************************
-    # Interface subcortical tab
-    # *************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **********************************************************  Interface subcortical tab  ***********************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Integrate subcortical data or not: write bool in json user file and change interface 
     # *****************************************
 
     def integrate_sc_data_groupBox_valueChanged(self):
-        json_user_object['Parameters']["INTEGRATE_SC_DATA"]["value"] = "False"
+        json_user_object['Parameters']["INTEGRATE_SC_DATA"]["value"] = False
         self.question_SALT_pushButton.setStyleSheet( "background-color: white")
         self.question_KWM_pushButton.setStyleSheet( "background-color: white")
 
         if self.integrate_sc_data_groupBox.isChecked():
-            json_user_object['Parameters']["INTEGRATE_SC_DATA"]["value"] = "True"
+            json_user_object['Parameters']["INTEGRATE_SC_DATA"]["value"] = True
             self.question_SALT_pushButton.setStyleSheet( "background-color: blue")
             self.question_KWM_pushButton.setStyleSheet( "background-color: blue")
         Ui.update_user_json_file()
@@ -526,7 +474,7 @@ class Ui(QtWidgets.QTabWidget):
         self.question_KWM_pushButton.setStyleSheet( "background-color: white")
 
         if self.own_sc_groupBox.isChecked():
-            json_user_object['Parameters']["INTEGRATE_SC_DATA_by_generated_sc_surf"]["value"] = "False"
+            json_user_object['Parameters']["INTEGRATE_SC_DATA_by_generated_sc_surf"]["value"] = False
             Ui.update_user_json_file()
             self.question_SALT_pushButton.setStyleSheet( "background-color: blue")
             self.question_KWM_pushButton.setStyleSheet( "background-color: blue")
@@ -546,7 +494,7 @@ class Ui(QtWidgets.QTabWidget):
         if self.INTEGRATE_SC_DATA_by_generated_sc_surf_groupBox.isChecked():
             self.own_sc_groupBox.setChecked(False)
 
-            json_user_object['Parameters']["INTEGRATE_SC_DATA_by_generated_sc_surf"]["value"] = "True"
+            json_user_object['Parameters']["INTEGRATE_SC_DATA_by_generated_sc_surf"]["value"] = True
             Ui.update_user_json_file()
 
             self.question_SALT_pushButton.setStyleSheet( "background-color: white")
@@ -567,7 +515,7 @@ class Ui(QtWidgets.QTabWidget):
         DirName= QtWidgets.QFileDialog.getExistingDirectory(self)
         if DirName:
             self.SALTDir_textEdit.setText(DirName) 
-            json_user_object['Parameters']["SALTDir"]["value"] = DirName
+            json_user_object['Arguments']["SALTDir"]["value"] = DirName
             Ui.update_user_json_file() 
 
 
@@ -583,7 +531,7 @@ class Ui(QtWidgets.QTabWidget):
             self.KWMDir_textEdit.setText(DirName) 
 
             # Modify .json
-            json_user_object['Parameters']["KWMDir"]["value"] = DirName
+            json_user_object['Arguments']["KWMDir"]["value"] = DirName
             Ui.update_user_json_file() 
 
 
@@ -595,28 +543,24 @@ class Ui(QtWidgets.QTabWidget):
     def tab_name_sc_region_clicked(self):
         if self.SALTDir_textEdit.toPlainText() != "No file selected." and self.KWMDir_textEdit.toPlainText() != "No file selected.":
 
-            # Initiate subcorticals_region_names parameter                        
-            list_sc = []
-            Ui.update_user_json_file()
-
-            list_sc_region_SALT, list_sc_region_KWM = extract_name_sc_region(json_user_object['Parameters']["SALTDir"]["value"], 
-                                                                             json_user_object['Parameters']["KWMDir"]["value"],
-                                                                             json_user_object['Parameters']["ID"]["value"] )
+            # Extract name of the subcortical regions: 
+            list_sc_region_SALT, list_sc_region_KWM = extract_name_sc_region(json_user_object['Arguments']["SALTDir"]["value"], 
+                                                                             json_user_object['Arguments']["KWMDir"]["value"],
+                                                                             json_user_object['Arguments']["ID"]["value"] )
         
 
             region_only_SALTDir, region_only_KWMDir = ([], [])
 
             # Compare lists to extract common regions: 
             for region_SALT in list_sc_region_SALT:
-                if not(region_SALT in list_sc_region_KWM): #a of list_sc_region_SALT isn't in list_sc_region_KWM
+                if not(region_SALT in list_sc_region_KWM): 
                     region_only_SALTDir.append(region_SALT)
          
             for region_KWM in list_sc_region_KWM:
-                if not(region_KWM in list_sc_region_SALT): #b of list_sc_region_KWM isn't in list_sc_region_SALT
+                if not(region_KWM in list_sc_region_SALT): 
                     region_only_KWMDir.append(region_KWM)
 
-            # Concatenate all regions without copie
-           
+            # Concatenate all regions without copie: 
             all_sc_region = sorted(list_sc_region_SALT + region_only_KWMDir)
 
 
@@ -624,14 +568,16 @@ class Ui(QtWidgets.QTabWidget):
             self.color_sc_textEdit.setText('<font color="green">Checkbox in green</font>: file for this region in the SALT and KWM directory \n' + 
                                            '<font color="red">Checkbox in red</font>: file for this region only in the KWM directory \n' + '\n'
                                            '<font color="purple">Checkbox in purple</font>: file for this region only in the SALT directory') 
-
+            # Clear the list: 
             self.list_sc_listWidget.clear()
 
+            # Add all names: 
             self.list_sc_listWidget.addItems(all_sc_region)
 
+            # Set parameters: 
+            list_sc = []
             for i in range(self.list_sc_listWidget.count()):
                 item = self.list_sc_listWidget.item(i) 
-
 
                 if item.text() not in region_only_SALTDir and item.text() not in region_only_KWMDir:
                     item.setForeground(QtGui.QColor("green"))
@@ -640,16 +586,16 @@ class Ui(QtWidgets.QTabWidget):
                     list_sc.append(str(item.text()) )
 
                 elif item.text() in region_only_SALTDir:
-                    item.setForeground(QtGui.QColor("purple"))#'purple')
+                    item.setForeground(QtGui.QColor("purple"))
 
                 else:
-                    item.setForeground(QtGui.QColor("red"))#'red')
+                    item.setForeground(QtGui.QColor("red"))
                 
 
             json_user_object['Parameters']["subcorticals_region_names"]["value"] = list_sc
             Ui.update_user_json_file() 
 
-
+            # Set a signal to do something if the user click on a region: 
             self.list_sc_listWidget.itemChanged.connect(self.subcortical_region_checkbox)
 
 
@@ -665,8 +611,7 @@ class Ui(QtWidgets.QTabWidget):
        
         if item.checkState() == Qt.Unchecked: 
             if item.text() in sc: 
-                index = sc.index(item.text())
-                del sc[index]
+                del sc[sc.index(item.text())]
 
         if item.checkState() == Qt.Checked:             
             if item.text() not in sc:
@@ -675,13 +620,10 @@ class Ui(QtWidgets.QTabWidget):
         json_user_object['Parameters']["subcorticals_region_names"]["value"] = sc 
         Ui.update_user_json_file() 
 
-
         self.list_sc_listWidget.blockSignals(False) 
-        print(json_user_object['Parameters']["subcorticals_region_names"]["value"])
 
 
                 
-
     # *****************************************
     # Button help which display explanations
     # *****************************************       
@@ -717,42 +659,18 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-
-
-
-
-
     # *****************************************
     # Complete table with labels and names
     # *****************************************  
 
     def complete_table_label_name_sc_region(self): 
-        global table_created
-        table_created = 'false'
-        
-        global list_subcortical_regions
-        list_subcortical_regions = [ 'Amy', 'Caud', 'Hippo', 'Thal', 'GP','Put']
+        print("to do ")
+        #list_subcortical_regions = [ 'Amy', 'Caud', 'Hippo', 'Thal', 'GP','Put']
     
-        self.table_sc_regions_tableWidget.setVerticalHeaderLabels(list_subcortical_regions)
-        self.table_sc_regions_tableWidget.setRowCount(len(list_subcortical_regions))
-        self.table_sc_regions_tableWidget.setColumnCount(4)
+ 
 
-        Labels = list(json_user_object['Parameters']["subcorticals_region_labels"]["value"].split(" "))
-        
-        cpt = 0
-        for the_region in range(len(list_subcortical_regions)): 
-            Label_names_left = list_subcortical_regions[the_region] + 'L'
-            Label_names_right = list_subcortical_regions[the_region] + 'R'
-            
-            self.table_sc_regions_tableWidget.setItem(the_region, 0, QTableWidgetItem(str(Label_names_left)))  #0: name/ID left 
-            self.table_sc_regions_tableWidget.setItem(the_region, 1, QTableWidgetItem(str(Labels[cpt])))  #1: label/number left
 
-            self.table_sc_regions_tableWidget.setItem(the_region, 2, QTableWidgetItem(str(Label_names_right)))  #2: name/ID right 
-            self.table_sc_regions_tableWidget.setItem(the_region, 3, QTableWidgetItem(str(Labels[cpt + 1])))  #3: label/number right
 
-            cpt += 2
-
-        table_created = 'true'
 
 
 
@@ -764,7 +682,7 @@ class Ui(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.labeled_image_textEdit.setText(fileName)
-            json_user_object['Parameters']["labeled_image"]["value"] = fileName
+            json_user_object['Arguments']["labeled_image"]["value"] = fileName
             Ui.update_user_json_file()
 
 
@@ -772,72 +690,33 @@ class Ui(QtWidgets.QTabWidget):
     # Update labels
     # *****************************************
 
-    def update_label_number(self): 
-        if table_created == 'true': 
-            new_label = []
-            new_number = []
-            error = 'False'
-            for row in range(self.table_sc_regions_tableWidget.rowCount()):
-              for column in range(self.table_sc_regions_tableWidget.columnCount()):
+    def update_label_number(self):
+        print("to do ") 
+   
 
-                item = self.table_sc_regions_tableWidget.item(row, column).text()
-                
-                #print(f'row: {row}, column: {column}, item={item}')
-                #row: 0, column: 0, item=AmyL    row: 0, column: 1, item=1   row: 0, column: 2, item=AmyR   row: 0, column: 3, item=2   row: 1, column: 0, item=CaudL
-                
-                if column % 2 == 0: #column 0, 2 : label/name
-                    new_label.append(item)
-                else: 
-                    if item.isdigit(): 
-                        new_number.append(int(item))
-                    else: 
-                        error = 'True'
-                        if column == 1: 
-                            help = "LEFT"
-                        else: 
-                            help = 'RIGHT'
-                        self.check_table.setText('<font color="red"> Row \'' + str(list_subcortical_regions[row]) 
-                                                + '\' , column \'label/number ' + help + '\' '   + ' : write an integrer please </font> ')
 
-                     
-            if error != 'True': 
-                self.check_table.setText(" ")
-            else: 
-                json_user_object['Parameters']["subcorticals_region_names"]["value"] = " ".join(new_label)
-                print( " ".join(new_label))
-                Ui.update_user_json_file()
 
-            print(new_label)
-            print(new_number)
+
 
             
 
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **********************************************  Interface registration (ANTs) tab  ***************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # *************************************************************************************
-    # Interface registration (ANTs) tab
-    # *************************************************************************************
     # *****************************************
     # To change default value: Qt interface information write in json file with user information
     # *****************************************
 
     def convert_metric_parameter_Qt_to_json(Qt_param):
-        dict_param = {"FA in nrrd space ":"FA_NRRD",
-                      "T1":"T1_DATA",
-                      "T2":"T2_DATA",
-                      "BO bias correct in nrrd space":"B0_BiasCorrect_NRRD"}
+        dict_param = {"FA in nrrd space ":"FA_NRRD", "T1":"T1_DATA", "T2":"T2_DATA", "BO bias correct in nrrd space":"B0_BiasCorrect_NRRD"}
         return dict_param[Qt_param]
 
 
@@ -853,11 +732,14 @@ class Ui(QtWidgets.QTabWidget):
 
         self.second_metric_groupBox.setStyleSheet(color)
         self.second_fixed_img_comboBox.setStyleSheet(color)
-        self.second_fixed_img_label.setStyleSheet(color)
+        self.second_fixed_img_label.setStyleSheet(color) 
+
         self.second_moving_img_comboBox.setStyleSheet(color)
         self.second_moving_img_label.setStyleSheet(color)
+
         self.second_metric_weight_label.setStyleSheet(color)
         self.second_metric_weight_spinBox.setStyleSheet(color)
+
         self.second_radius_label.setStyleSheet(color)
         self.second_radius_spinBox.setStyleSheet(color)
 
@@ -868,9 +750,9 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************         
 
     def upsampling_checkbox_stateChanged(self):
-        json_user_object['Parameters']["UPSAMPLING_DWI"]["value"] = "false"
+        json_user_object['Parameters']["UPSAMPLING_DWI"]["value"] = False
         if self.upsampling_checkBox.isChecked():
-            json_user_object['Parameters']["UPSAMPLING_DWI"]["value"] = "true"        
+            json_user_object['Parameters']["UPSAMPLING_DWI"]["value"] = True       
         Ui.update_user_json_file()                  
 
 
@@ -961,24 +843,16 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # *************************************************************************************
-    # Interface NOT registration tab
-    # *************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # *******************************************  Interface NOT registration tab  *********************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Do registration or not: write bool in json user file
@@ -988,13 +862,13 @@ class Ui(QtWidgets.QTabWidget):
         self.registration_tab1_groupBox.setChecked(True)
         Ui.no_registration_surface_data_clicked(self)
         Ui.no_registration_surface_data_clicked2(self)
-        json_user_object['Parameters']["DO_REGISTRATION"]["value"] = "True" 
+        json_user_object['Parameters']["DO_REGISTRATION"]["value"] = True 
 
         if self.registration_tab2_groupBox.isChecked():
             self.registration_tab1_groupBox.setChecked(False)
             Ui.no_registration_surface_data_clicked(self)
             Ui.no_registration_surface_data_clicked2(self)
-            json_user_object['Parameters']["DO_REGISTRATION"]["value"] = "False" 
+            json_user_object['Parameters']["DO_REGISTRATION"]["value"] = False 
         Ui.update_user_json_file()
 
 
@@ -1007,6 +881,7 @@ class Ui(QtWidgets.QTabWidget):
         color = "color: lightGray"  
         self.WML_surface_diffusion_label.setText("White Matter Left surface data in diffusion space (.vtk):")
         self.WMR_surface_diffusion_label.setText("White Matter Right surface data in diffusion space (.vtk):")
+        
         self.no_registration_surface_diffusion_label.setText('Surface data labeled in diffusion space (.vtk):')     
         self.no_registration_surface_diffusion_label.setStyleSheet(color) 
 
@@ -1018,7 +893,7 @@ class Ui(QtWidgets.QTabWidget):
                 self.WML_surface_diffusion_label.setText('White Matter Left surface data <font color="red">in diffusion space</font> (.vtk):')
                 self.WMR_surface_diffusion_label.setText('White Matter Right surface data <font color="red">in diffusion space</font> (.vtk):')
    
-                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = "True" 
+                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = True 
 
             else:
                 self.left_right_combined_groupBox.setChecked(True)
@@ -1026,7 +901,7 @@ class Ui(QtWidgets.QTabWidget):
                 self.no_registration_surface_diffusion_label.setStyleSheet("color: black")
                 self.no_registration_surface_diffusion_label.setText('Surface data labeled <font color="red">in diffusion space</font> (.vtk):')
 
-                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = "False"                    
+                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = False                   
 
         self.WML_surface_diffusion_label.setStyleSheet(color)
         self.WMR_surface_diffusion_label.setStyleSheet(color)         
@@ -1041,6 +916,7 @@ class Ui(QtWidgets.QTabWidget):
         color = "color: lightGray"
         self.WML_surface_diffusion_label.setText("White Matter Left surface data in diffusion space (.vtk):")
         self.WMR_surface_diffusion_label.setText("White Matter Right surface data in diffusion space (.vtk):")
+        
         self.no_registration_surface_diffusion_label.setText('Surface data labeled in diffusion space (.vtk):')
         self.no_registration_surface_diffusion_label.setStyleSheet(color)
 
@@ -1052,7 +928,7 @@ class Ui(QtWidgets.QTabWidget):
                 self.no_registration_surface_diffusion_label.setStyleSheet("color: black")
                 self.no_registration_surface_diffusion_label.setText('Surface data labeled <font color="red">in diffusion space</font> (.vtk):')
 
-                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = "False" 
+                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = False 
               
             else:
                 self.left_right_not_combined_groupBox.setChecked(True)
@@ -1060,7 +936,7 @@ class Ui(QtWidgets.QTabWidget):
                 self.WML_surface_diffusion_label.setText('White Matter Left surface data <font color="red">in diffusion space</font> (.vtk):')
                 self.WMR_surface_diffusion_label.setText('White Matter Right surface data <font color="red">in diffusion space</font> (.vtk):')
                 
-                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = "True"    
+                json_user_object['Parameters']["left_right_surface_need_to_be_combining"]["value"] = True    
         
         self.WML_surface_diffusion_label.setStyleSheet(color)
         self.WMR_surface_diffusion_label.setStyleSheet(color)        
@@ -1075,7 +951,7 @@ class Ui(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.no_registration_DWI_textEdit.setText(fileName)
-            json_user_object['Parameters']["DWI_DATA"]["value"] = fileName
+            json_user_object['Arguments']["DWI_DATA"]["value"] = fileName
             Ui.update_user_json_file()
 
 
@@ -1088,7 +964,7 @@ class Ui(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.no_registration_DWI_DATA_bvecs_textEdit.setText(fileName)
-            json_user_object['Parameters']["DWI_DATA_bvecs"]["value"] = fileName
+            json_user_object['Arguments']["DWI_DATA_bvecs"]["value"] = fileName
             Ui.update_user_json_file()
 
 
@@ -1101,11 +977,8 @@ class Ui(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.no_registration_DWI_DATA_bvals_textEdit.setText(fileName)
-            json_user_object['Parameters']["DWI_DATA_bvals"]["value"] = fileName
+            json_user_object['Arguments']["DWI_DATA_bvals"]["value"] = fileName
             Ui.update_user_json_file()
-
-
-
 
 
 
@@ -1117,7 +990,7 @@ class Ui(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.no_registration_parcellation_table_textEdit.setText(fileName) 
-            json_user_object['Parameters']["PARCELLATION_TABLE"]["value"] = fileName
+            json_user_object['Arguments']["PARCELLATION_TABLE"]["value"] = fileName
             Ui.update_user_json_file()
 
 
@@ -1127,32 +1000,23 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def inner_surface_checkBox_checked(self): 
-        json_user_object['Parameters']["EXTRA_SURFACE_COLOR"]["value"] = "false"
+        json_user_object['Parameters']["EXTRA_SURFACE_COLOR"]["value"] = False
         if self.inner_surface_checkBox.isChecked(): 
-            json_user_object['Parameters']["EXTRA_SURFACE_COLOR"]["value"] = "true"
+            json_user_object['Parameters']["EXTRA_SURFACE_COLOR"]["value"] = True
         Ui.update_user_json_file()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # *************************************************************************************
-    # Interface diffusion and tractography model tab
-    # *************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **********************************************  Interface diffusion and tractography model tab  **************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Write the number of fibers (bedpostx parameter) in user information json file  
@@ -1165,28 +1029,16 @@ class Ui(QtWidgets.QTabWidget):
 
 
     # *****************************************
-    # Write the number of fibers per seed (probtrackx2 parameter) in user information json file  
+    # Write the number of fibers per seed, steplength value and sampvox value (probtrackx2 parameter) in user information json file  
     # *****************************************
 
     def nb_fibers_per_seed_spinBox_valueChanged(self):
         json_user_object['Parameters']["nb_fiber_per_seed"]["value"] = self.nb_fiber_per_seed_spinBox.value()
         Ui.update_user_json_file()
 
-
-
-    # *****************************************
-    # Write the steplength value (probtrackx2 parameter) in user information json file  
-    # *****************************************
-
     def step_length_doubleSpinBox_valueChanged(self):
         json_user_object['Parameters']["steplength"]["value"] = self.steplength_doubleSpinBox.value()
         Ui.update_user_json_file()
-
-
-
-    # *****************************************
-    # Write the sampvox value (probtrackx2 parameter) in user information json file  
-    # *****************************************
 
     def sample_doubleSpinBox_valueChanged(self):
         json_user_object['Parameters']["sampvox"]["value"] = self.sampvox_doubleSpinBox.value()
@@ -1201,12 +1053,12 @@ class Ui(QtWidgets.QTabWidget):
     def ignore_label_checkBox_checked(self): 
         self.value_ignore_label_label.setStyleSheet("color: lightGray")
         self.ignore_label_lineEdit.setStyleSheet("background-color: transparent")
-        json_user_object['Parameters']["ignoreLabel"]["value"] = "false"
+        json_user_object['Parameters']["ignoreLabel"]["value"] = False
 
         if self.ignore_label_checkBox.isChecked(): 
             self.value_ignore_label_label.setStyleSheet("color: black")
             self.ignore_label_lineEdit.setStyleSheet("background-color: white")
-            json_user_object['Parameters']["ignoreLabel"]["value"] = "true"
+            json_user_object['Parameters']["ignoreLabel"]["value"] = True
         Ui.update_user_json_file()
 
 
@@ -1218,31 +1070,26 @@ class Ui(QtWidgets.QTabWidget):
     def ignore_label_lineEdit_valueChanged(self):
         if self.ignore_label_checkBox.isChecked():
             json_user_object['Parameters']["ignoreLabel"]["value"] = self.ignore_label_lineEdit.text()
-        Ui.update_user_json_file()
+            Ui.update_user_json_file()
      
 
 
     # *****************************************
-    # Write the boolean value of overlapping parameters (probtrackx2 parameter) in user information json file  
+    # Write the boolean value of overlapping and loopcheck parameters (probtrackx2 parameter) in user information json file  
     # *****************************************
 
     def overlapping_checkBox_checked(self): 
-        json_user_object['Parameters']["overlapping"]["value"] = "false"
+        json_user_object['Parameters']["overlapping"]["value"] = False
         if self.overlapping_checkBox.isChecked(): 
-            json_user_object['Parameters']["overlapping"]["value"] = "true"
-        Ui.update_user_json_file()
+            json_user_object['Parameters']["overlapping"]["value"] = True
+            Ui.update_user_json_file()
        
 
-
-    # *****************************************
-    # Write the boolean value of loopcheck parameters (probtrackx2 parameter) in user information json file 
-    # *****************************************
-
     def loopcheck_checkBox_checked(self): 
-        json_user_object['Parameters']["loopcheck"]["value"] = "false"
+        json_user_object['Parameters']["loopcheck"]["value"] = False
         if self.loopcheck_checkBox.isChecked(): 
-            json_user_object['Parameters']["loopcheck"]["value"] = "true"            
-        Ui.update_user_json_file()
+            json_user_object['Parameters']["loopcheck"]["value"] = True           
+            Ui.update_user_json_file()
 
 
 
@@ -1251,14 +1098,14 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def filtering_with_tcksift_checkBox_checked(self): 
-        json_user_object['Parameters']["filtering_with_tcksift"]["value"] = "false"
+        json_user_object['Parameters']["filtering_with_tcksift"]["value"] = False
         if self.filtering_with_tcksift_checkBox.isChecked():
 
-            json_user_object['Parameters']["filtering_with_tcksift"]["value"] = "true"  
+            json_user_object['Parameters']["filtering_with_tcksift"]["value"] = True  
 
             if self.optimisation_with_tcksift2_checkBox.isChecked():
                 self.optimisation_with_tcksift2_checkBox.isChecked(False)
-                json_user_object['Parameters']["optimisation_with_tcksift2"]["value"] = "false"
+                json_user_object['Parameters']["optimisation_with_tcksift2"]["value"] = False
 
         Ui.update_user_json_file()
 
@@ -1268,13 +1115,13 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def optimisation_with_tcksift2_checkBox_checked(self): 
-        json_user_object['Parameters']["optimisation_with_tcksift2"]["value"] = "false"
+        json_user_object['Parameters']["optimisation_with_tcksift2"]["value"] = False
         if self.optimisation_with_tcksift2_checkBox.isChecked(): 
-            json_user_object['Parameters']["optimisation_with_tcksift2"]["value"] = "true"    
+            json_user_object['Parameters']["optimisation_with_tcksift2"]["value"] = True   
 
             if self.filtering_with_tcksift_checkBox.isChecked():
                 self.filtering_with_tcksift_checkBox.isChecked(False)
-                json_user_object['Parameters']["filtering_with_tcksift"]["value"] = "false"
+                json_user_object['Parameters']["filtering_with_tcksift"]["value"] = False
 
 
         Ui.update_user_json_file()
@@ -1285,33 +1132,23 @@ class Ui(QtWidgets.QTabWidget):
     # ***************************************** 
 
     def act_checkBox_checked(sefl): 
-        json_user_object['Parameters']["act_option"]["value"] = "false"
+        json_user_object['Parameters']["act_option"]["value"] = False
         if act_checkBox.isChecked(): 
-            json_user_object['Parameters']["act_option"]["value"] = "true"
+            json_user_object['Parameters']["act_option"]["value"] = True
         Ui_visu.update_user_json_file()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # *************************************************************************************
-    # Interface submit job tab
-    # *************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **********************************************  Interface submit job tab  ************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Open file system and write the output path in user information json file
@@ -1370,29 +1207,24 @@ class Ui(QtWidgets.QTabWidget):
 
 
     # *****************************************
-    # Groupbox to run the script localy
+    # Groupbox to run the script localy and remotly 
     # *****************************************
 
     def local_run_checkBox_clicked(self):
-        json_user_object['Parameters']["cluster"]["value"] = "True"            
+        json_user_object['Arguments']["cluster"]["value"] = True         
         self.remote_run_groupBox.setChecked(True)
 
         if self.local_run_groupBox.isChecked():
-            json_user_object['Parameters']["cluster"]["value"] = "False"            
+            json_user_object['Arguments']["cluster"]["value"] = False            
             self.remote_run_groupBox.setChecked(False)
         
-            
-
-    # *****************************************
-    # GroupBox to run the script remotely
-    # *****************************************
 
     def remote_run_checkBox_clicked(self):
-        json_user_object['Parameters']["cluster"]["value"] = "True"            
+        json_user_object['Arguments']["cluster"]["value"] = True            
         self.local_run_groupBox.setChecked(True)
 
         if self.remote_run_groupBox.isChecked():
-            json_user_object['Parameters']["cluster"]["value"] = "False"            
+            json_user_object['Arguments']["cluster"]["value"] = False           
             self.local_run_groupBox.setChecked(False)          
 
 
@@ -1434,23 +1266,17 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************
 
     def open_log_file_pushButton_clicked(self):
-        log_file = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"],"log.txt") 
+        log_file = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Arguments']["ID"]["value"],"log.txt") 
         Ui.run_command("Open log file", ['xdg-open', log_file]) 
 
 
 
     # *****************************************
-    # Open visualisation interface 
+    # Open visualisation interface or open Slicer 
     # *****************************************
 
     def open_visualisation_button_clicked(self):
         Ui.run_command("Open visualization interface", [sys.executable, "./CONTINUITY_QC/main_interface_visualization.py"])
-     
-
-
-    # *****************************************
-    # Open Slicer
-    # *****************************************
 
     def open_slicer_first_interface_button_clicked(self):
         Ui.run_command("Open slicer with the first interface", [sys.executable, "./CONTINUITY_QC/slicer_QC.py", user_json_filename])
@@ -1470,9 +1296,9 @@ class Ui(QtWidgets.QTabWidget):
 
 
 
-        # *****************************************
-        # Activated if an executables buttons is clicked
-        # *****************************************  
+    # *****************************************
+    # Activated if an executables buttons is clicked
+    # *****************************************  
 
     def button_exec_path_clicked(self):
         button_name = self.sender().objectName()[:-11]

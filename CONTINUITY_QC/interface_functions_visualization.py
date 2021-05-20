@@ -6,20 +6,22 @@ import subprocess
 from termcolor import colored
 import time
 import datetime
+
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QCheckBox, QGridLayout, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtCore import Qt
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+
 import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib as mpl
+
 import mne
 from mne.viz import circular_layout, plot_connectivity_circle
 import nrrd
-
 
 from functools import partial
 
@@ -50,8 +52,6 @@ class Ui_visu(QtWidgets.QTabWidget):
             uic.loadUi('./CONTINUITY_QC/interface_visualization.ui', self)
         else:                                                                   # if you open the second interface alone
             uic.loadUi('./interface_visualization.ui', self)
-
-
 
         # Write default values on interface    
         self.setup_default_values()
@@ -89,16 +89,13 @@ class Ui_visu(QtWidgets.QTabWidget):
             global json_setup_object
             json_setup_object = json.load(default_Qt_file)
 
-        # Setup default path to access of created files for Slicer:
+        # Setup default path to access of created files for Slicer and Slicer:
         self.OUTPUT_path_textEdit.setText(json_user_object['Parameters']["OUT_PATH"]["value"])
-
-        # Setup default path to access to Slicer:
         self.slicer_textEdit.setText(json_user_object['Executables']["slicer"]["value"])
 
 
         # Setup default path to visualize connectivity matrix and brain/circle connectome:
         path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography", 'new_parcellation_table')
-        #path = "./input_CONTINUITY/TABLE_AAL_SubCorticals.json"
         self.parcellation_table_textEdit.setText(path)
 
         overlapName = ""
@@ -112,7 +109,6 @@ class Ui_visu(QtWidgets.QTabWidget):
             
         path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Parameters']["ID"]["value"], "Tractography" )
                                                                                                                                 #, "Network" + overlapName + loopcheckName)
-        #path = "./input_CONTINUITY"
         self.connectivity_matrix_textEdit.setText(path)
 
         # Colormap circle connectome: strength of each node
@@ -122,13 +118,11 @@ class Ui_visu(QtWidgets.QTabWidget):
         # Circle connectome
         self.Layoutcircle = QGridLayout()
         self.circle_connectome_groupBox.setLayout(self.Layoutcircle)
-
         self.fig_file_textEdit.setText(json_user_object['Parameters']["OUT_PATH"]["value"])   
 
         # Normalize matrix
         self.Layout_normalize_matrix = QGridLayout()
         self.normalize_matrix_groupBox.setLayout(self.Layout_normalize_matrix)
-
         self.path_normalize_matrix_textEdit.setText(json_user_object['Parameters']["OUT_PATH"]["value"])
 
         # 2D brain connectome
@@ -147,7 +141,6 @@ class Ui_visu(QtWidgets.QTabWidget):
         # VTK fiber
         self.Layout_vtk_fiber = QGridLayout()
         self.Layout_vtk_fiber_groupBox.setLayout(self.Layout_vtk_fiber)
-
 
 
 
@@ -203,7 +196,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
     # *****************************************
-    # Open a script to open Slicer with specific parameters
+    # Open a script to open Slicer with specific parameters and without: 
     # *****************************************
 
     def open_slicer_clicked(self): 
@@ -212,10 +205,6 @@ class Ui_visu(QtWidgets.QTabWidget):
         else: 
             Ui_visu.run_command("Open slicer with specific parameters", [sys.executable, "./slicer_QC.py", user_json_filename])
 
-
-    # *****************************************
-    # Open a script to open Slicer without specific parameters
-    # *****************************************
 
     def open_slicer_only(self):
         Ui_visu.run_command("Open Slicer without configuration", [json_user_object['Executables']["slicer"]["value"]])
@@ -227,11 +216,7 @@ class Ui_visu(QtWidgets.QTabWidget):
     # *****************************************
 
     def convert_name_data(Qt_param):
-        dict_param = {"B0":"B0",
-                      "T1 registered":"T1_registered",
-                      "T2 registered":"T2_registered",
-                      "FA":"FA",
-                      "AD":"AD"}
+        dict_param = {"B0":"B0", "T1 registered":"T1_registered", "T2 registered":"T2_registered", "FA":"FA", "AD":"AD"}
         return dict_param[Qt_param]
 
 
@@ -256,13 +241,16 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
-
-
-
-
-
-
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # *************************************  Connectivity matrix visualization  ************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
         
     # *****************************************
@@ -274,6 +262,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         if fileName:
             self.parcellation_table_textEdit.setText(fileName)
             json_user_object['Parameters']["PARCELLATION_TABLE"]["value"] = fileName
+            Ui_visu.update_user_json_file()
 
 
 
@@ -290,12 +279,9 @@ class Ui_visu(QtWidgets.QTabWidget):
             overlapName = "_overlapping"
 
         end_name = ' without Loopcheck and without Overlapping'
-        if len(overlapName)>3 and len(json_user_object['Parameters']["loopcheck"]["value"])>3:
-            end_name = ' with Loopcheck and with Overlapping'
-        elif len(overlapName)<3 and len(json_user_object['Parameters']["loopcheck"]["value"])>3:
-            end_name = ' without Loopcheck and with Overlapping'
-        elif len(overlapName)>3 and len(json_user_object['Parameters']["loopcheck"]["value"])<3:
-            end_name = ' with Loopcheck and without Overlapping'
+        if   len(overlapName)>3 and len(json_user_object['Parameters']["loopcheck"]["value"])>3: end_name = ' with Loopcheck and with Overlapping'
+        elif len(overlapName)<3 and len(json_user_object['Parameters']["loopcheck"]["value"])>3: end_name = ' without Loopcheck and with Overlapping'
+        elif len(overlapName)>3 and len(json_user_object['Parameters']["loopcheck"]["value"])<3: end_name = ' with Loopcheck and without Overlapping'
 
         # Remove previous plot:
         for i in reversed(range(self.Layout_normalize_matrix.count())): 
@@ -317,22 +303,15 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                  + self.type_of_symmetrization_comboBox.currentText() +'\n' +end_name, fontsize=10)
 
         # Specific normalization: 
-        if self.type_of_normalization_comboBox.currentText()   == "No normalization":
-            a = no_normalization(matrix)
-        elif self.type_of_normalization_comboBox.currentText() == "Whole normalization":
-            a = whole_normalization(matrix)
-        elif self.type_of_normalization_comboBox.currentText() == "Row region normalization":
-            a = row_region_normalization(matrix)
-        elif self.type_of_normalization_comboBox.currentText() == "Row column normalization":
-            a = row_column_normalization(matrix)
+        if self.type_of_normalization_comboBox.currentText()   == "No normalization":         a = no_normalization(matrix)
+        elif self.type_of_normalization_comboBox.currentText() == "Whole normalization":      a = whole_normalization(matrix)
+        elif self.type_of_normalization_comboBox.currentText() == "Row region normalization": a = row_region_normalization(matrix)
+        elif self.type_of_normalization_comboBox.currentText() == "Row column normalization": a = row_column_normalization(matrix)
 
         # Specific symmetrization: 
-        if self.type_of_symmetrization_comboBox.currentText() == "Average":
-            a = average_symmetrization(a)
-        elif self.type_of_symmetrization_comboBox.currentText() == "Maximum":
-            a = maximum_symmetrization(a)
-        elif self.type_of_symmetrization_comboBox.currentText() == "Minimum":
-            a = minimum_symmetrization(a)
+        if self.type_of_symmetrization_comboBox.currentText()   == "Average": a = average_symmetrization(a)
+        elif self.type_of_symmetrization_comboBox.currentText() == "Maximum": a = maximum_symmetrization(a)
+        elif self.type_of_symmetrization_comboBox.currentText() == "Minimum": a = minimum_symmetrization(a)
 
         min_a, max_a  = (np.min(a), np.max(a))
 
@@ -341,19 +320,18 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         # Plotting the correlation matrix:
         vmin, vmax = (0,0)
-        check_before_display = 'True'
+        check_before_display = True
         
         if self.vmin_vmax_percentage_checkBox.isChecked(): 
             if not(self.vmax_normalize_matrix_spinBox.value() <=  100 and self.vmin_normalize_matrix_spinBox.value() >= 0):
                 self.error_label.setText('<font color="red">Please select 2 values between 0 to 100</font> ')
-                check_before_display = 'False'
+                check_before_display = False
         
         elif self.vmin_vmax_real_values_checkBox.isChecked(): 
             max_a = float(max_a)
             if not(self.vmax_normalize_matrix_spinBox.value() <=  float(max_a) and self.vmin_normalize_matrix_spinBox.value() >= min_a):
                 self.error_label.setText( '<font color="red">Please select 2 values between ' + str(min_a) + ' to ' + str("%.7f" % (max_a))+ '</font>'  )
-                check_before_display = 'False'
-
+                check_before_display = False
 
         elif self.vmin_vmax_regions_checkBox.isChecked():
             nb = np.shape(a)[0] #number of regions
@@ -361,13 +339,13 @@ class Ui_visu(QtWidgets.QTabWidget):
              
             if not(self.vmax_normalize_matrix_spinBox.value() <=  max_region_display and self.vmin_normalize_matrix_spinBox.value() >= min_a):
                 self.error_label.setText('<font color="red">Please select 2 values between ' + str(min_a) + ' to ' + str("%.7f" % (max_region_display)) + '</font>')
-                check_before_display = 'False'
+                check_before_display = False
 
         else:
             self.error_label.setText( '<font color="red">Please select a type of range </font>'  )
 
 
-        if check_before_display == "True":
+        if check_before_display:
             self.error_label.setText(' ')
             cax = ax.imshow(a, interpolation='nearest', vmin = self.vmin_normalize_matrix_spinBox.value(), vmax = self.vmax_normalize_matrix_spinBox.value())
             self.fig_normalize_matrix.colorbar(cax)
@@ -425,26 +403,16 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         
 
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # ********************************************************  Circle connectome  ********************************************************************* 
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Plot circle connectome
@@ -513,8 +481,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         # Build 'list_boundaries' and 'list_name_boundaries': 
         global name_boundaries
-        list_boundaries, name_boundaries, list_name_boundaries  = ([0], [], [])
-        i = 0
+        list_boundaries, name_boundaries, list_name_boundaries, i  = ([0], [], [], 0)
 
         while i < len(VisuHierarchy_order)-1:   
             current_elem = VisuHierarchy_order[i]
@@ -558,22 +525,15 @@ class Ui_visu(QtWidgets.QTabWidget):
         matrix = os.path.join(self.connectivity_matrix_textEdit.toPlainText(), "fdt_network_matrix")
 
         # Specific normalization: 
-        if self.type_of_normalization_circle_comboBox.currentText()   == "No normalization":
-            connectivity_score = no_normalization(matrix)
-        elif self.type_of_normalization_circle_comboBox.currentText() == "Whole normalization":
-            connectivity_score = whole_normalization(matrix)
-        elif self.type_of_normalization_circle_comboBox.currentText() == "Row region normalization":
-            connectivity_score = row_region_normalization(matrix)
-        elif self.type_of_normalization_circle_comboBox.currentText() == "Row column normalization":
-            connectivity_score = row_column_normalization(matrix)
+        if self.type_of_normalization_circle_comboBox.currentText()   == "No normalization":         connectivity_score = no_normalization(matrix)
+        elif self.type_of_normalization_circle_comboBox.currentText() == "Whole normalization":      connectivity_score = whole_normalization(matrix)
+        elif self.type_of_normalization_circle_comboBox.currentText() == "Row region normalization": connectivity_score = row_region_normalization(matrix)
+        elif self.type_of_normalization_circle_comboBox.currentText() == "Row column normalization": connectivity_score = row_column_normalization(matrix)
 
         # Specific symmetrization: 
-        if self.type_of_symmetrization_circle_comboBox.currentText() == "Average":
-            connectivity_score = average_symmetrization(connectivity_score)
-        elif self.type_of_symmetrization_circle_comboBox.currentText() == "Maximum":
-            connectivity_score = maximum_symmetrization(connectivity_score)
-        elif self.type_of_symmetrization_circle_comboBox.currentText() == "Minimum":
-            connectivity_score = minimum_symmetrization(connectivity_score)
+        if self.type_of_symmetrization_circle_comboBox.currentText()   == "Average": connectivity_score = average_symmetrization(connectivity_score)
+        elif self.type_of_symmetrization_circle_comboBox.currentText() == "Maximum": connectivity_score = maximum_symmetrization(connectivity_score)
+        elif self.type_of_symmetrization_circle_comboBox.currentText() == "Minimum": connectivity_score = minimum_symmetrization(connectivity_score)
         
         # Transform a list of list into a numpy array:
         global connectivity_matrix
@@ -599,7 +559,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         
         # Set information for the colormap associated to node features: 
         ax = self.fig2.add_axes([0.1, 0.4, 0.8, 0.4]) # add_axes([xmin,ymin,dx,dy]) 
-        vmax = self.vmax_colorbar_spinBox.value() / 100
+        vmax, vmin = self.vmax_colorbar_spinBox.value() / 100
         vmin = self.vmin_colorbar_spinBox.value() / 100
     
         # Display colorbar: 
@@ -623,7 +583,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                 for val in line:
                     instrength = waytotal_column[j]      #is = sum(CIJ,1);    % instrength = column sum of CIJ: the instrength is the sum of inward link weights 
                     outstrength = waytotal_line[i]       #os = sum(CIJ,2);    % outstrength = row sum of CIJ:   the outstrength is the sum of outward link weights
-                    list_val.append(instrength + outstrength) #str = is+os;        % strength = instrength+outstrength
+                    list_val.append(instrength + outstrength) #str = is+os;   % strength = instrength+outstrength
                     j=j+1
                 i=i+1
 
@@ -642,7 +602,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                 for val in line:
                     indegree = waytotal_column[j]   # id = sum(CIJ,1);    % indegree = column sum of CIJ: the indegree is the number of inward links
                     outdegree = waytotal_line[i]    # od = sum(CIJ,2);    % outdegree = row sum of CIJ:   the outdegree is the number of outward links.  
-                    list_val.append(indegree + outdegree)  # deg = id+od;        % degree = indegree+outdegree
+                    list_val.append(indegree + outdegree)  # deg = id+od; % degree = indegree+outdegree
                     j=j+1
                 i=i+1
 
@@ -766,11 +726,8 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         while i < len(VisuHierarchy_order):   
             current_elem = VisuHierarchy_order[i]
-          
-            #print('region',current_elem)
-            #print(list_of_list_VisuHierarchy[list_VisuHierarchy.index(current_elem)])
-            #print('*************************************')
-
+       
+            #print('region',current_elem, list_of_list_VisuHierarchy[list_VisuHierarchy.index(current_elem)])
             self.all_nodes_listWidget.addItems(list_of_list_VisuHierarchy[list_VisuHierarchy.index(current_elem)])
 
             for i in range(self.all_nodes_listWidget.count()):
@@ -790,7 +747,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         self.all_nodes_listWidget.blockSignals(True)
         
-        print("Region clicked (on the list)", item.text())
         Ui_visu.display_nodes(self, item.text(),update_manually_fig=True, 
             fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
@@ -824,7 +780,6 @@ class Ui_visu(QtWidgets.QTabWidget):
             node_angles = node_angles % (np.pi * 2)
             node = np.argmin(np.abs(event.xdata - node_angles))
     
-
             Ui_visu.display_nodes(self, label_names[node], update_manually_fig=False, 
                     fig=my_fig, axes=axes, indices=indices, n_nodes=len(label_names), node_angles=node_angles_copy)
 
@@ -862,23 +817,18 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
-
     # *****************************************
     # Display the label node and the labels of all its connected nodes + lines 
     # *****************************************
 
     def display_nodes(self, selected_node, update_manually_fig=False, fig=None, axes=None, indices=None, n_nodes=0, node_angles=None):
 
-
         # Convert to radian  
         node_angles = node_angles * np.pi / 180
         node_angles_copy_event = node_angles
 
-
         # Set angles between [0, 2*pi]
         node_angles = node_angles % (np.pi * 2)
-
 
         # Create a list with only the label of connected regions: 
         label_names_update, text = ([], "")
@@ -894,17 +844,14 @@ class Ui_visu(QtWidgets.QTabWidget):
             else: 
                 label_names_update.append(' ')
 
-
         # Display the name of the name and the list of connected regions:
         self.clicked_nodes_label.setText('Node selected: <font color="Turquoise">' + str(selected_node) + " </font>")
         self.nodes_associated_plainTextEdit.setPlainText(text)
-
 
         # Remove previous node label: 
         loop = len(axes.texts)
         for i in range(loop):
             axes.texts.remove(axes.texts[0])
-
 
         # Draw new node labels: 
         angles_deg = 180 * node_angles_copy_event / np.pi
@@ -959,22 +906,16 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # ***********************************************  Brain connectome  *******************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Display the axial/sagittal/coronal background of the brain connectome
@@ -1136,22 +1077,15 @@ class Ui_visu(QtWidgets.QTabWidget):
         matrix = os.path.join(self.connectivity_matrix_textEdit.toPlainText(), "fdt_network_matrix")
 
         # Specific normalization: 
-        if self.type_of_normalization_brain_comboBox.currentText() == "No normalization":
-            a = no_normalization(matrix)
-        elif self.type_of_normalization_brain_comboBox.currentText() == "Whole normalization":
-            a = whole_normalization(matrix)
-        elif self.type_of_normalization_brain_comboBox.currentText() == "Row region normalization":
-            a = row_region_normalization(matrix)
-        elif self.type_of_normalization_brain_comboBox.currentText() == "Row column normalization":
-            a = row_column_normalization(matrix)
+        if self.type_of_normalization_brain_comboBox.currentText()   == "No normalization":         a = no_normalization(matrix)
+        elif self.type_of_normalization_brain_comboBox.currentText() == "Whole normalization":      a = whole_normalization(matrix)
+        elif self.type_of_normalization_brain_comboBox.currentText() == "Row region normalization": a = row_region_normalization(matrix)
+        elif self.type_of_normalization_brain_comboBox.currentText() == "Row column normalization": a = row_column_normalization(matrix)
 
         # Specific symmetrization: 
-        if self.type_of_symmetrization_brain_comboBox.currentText() == "Average":
-            a = average_symmetrization(a)
-        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Maximum":
-            a = maximum_symmetrization(a)
-        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Minimum":
-            a = minimum_symmetrization(a)
+        if self.type_of_symmetrization_brain_comboBox.currentText()   == "Average": a = average_symmetrization(a)
+        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Maximum": a = maximum_symmetrization(a)
+        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Minimum": a = minimum_symmetrization(a)
             
         # Transform in a numpy array:
         a = np.array(a)
@@ -1263,25 +1197,24 @@ class Ui_visu(QtWidgets.QTabWidget):
         ax3_cbar = self.fig_brain_connectome.add_axes([p2[0], 0.07, p2[2]-p2[0]-0.03, 0.03]) 
 
         # Display colorbar
-        plt.colorbar(mpl.cm.ScalarMappable(norm=norm_axial,    cmap=plt.cm.RdBu),  cax=ax1_cbar, orientation='horizontal')
-        plt.colorbar(mpl.cm.ScalarMappable(norm=norm_sagittal, cmap=plt.cm.RdBu),  cax=ax2_cbar, orientation='horizontal')
-        plt.colorbar(mpl.cm.ScalarMappable(norm=norm_coronal,  cmap=plt.cm.RdBu),  cax=ax3_cbar, orientation='horizontal')
+        plt.colorbar(mpl.cm.ScalarMappable(norm=norm_axial,    cmap=plt.cm.RdBu), cax=ax1_cbar, orientation='horizontal')
+        plt.colorbar(mpl.cm.ScalarMappable(norm=norm_sagittal, cmap=plt.cm.RdBu), cax=ax2_cbar, orientation='horizontal')
+        plt.colorbar(mpl.cm.ScalarMappable(norm=norm_coronal,  cmap=plt.cm.RdBu), cax=ax3_cbar, orientation='horizontal')
 
         print("End display brain connectome: ",time.strftime("%H h: %M min: %S s",time.gmtime( time.time() - start )))
 
      
 
-
-
-
-
-
-
-    
-       
-    
-
-
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # *****************************************  Brain connectome 3D  **********************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Display the 3D brain connectome THE FIRST TIME
@@ -1300,22 +1233,15 @@ class Ui_visu(QtWidgets.QTabWidget):
       
         # Specific normalization: 
         global a 
-        if self.type_of_normalization_brain_comboBox.currentText() == "No normalization":
-            a = no_normalization(matrix)
-        elif self.type_of_normalization_brain_comboBox.currentText() == "Whole normalization":
-            a = whole_normalization(matrix)
-        elif self.type_of_normalization_brain_comboBox.currentText() == "Row region normalization":
-            a = row_region_normalization(matrix)
-        elif self.type_of_normalization_brain_comboBox.currentText() == "Row column normalization":
-            a = row_column_normalization(matrix)
+        if self.type_of_normalization_brain_comboBox.currentText()   == "No normalization":         a = no_normalization(matrix)
+        elif self.type_of_normalization_brain_comboBox.currentText() == "Whole normalization":      a = whole_normalization(matrix)
+        elif self.type_of_normalization_brain_comboBox.currentText() == "Row region normalization": a = row_region_normalization(matrix)
+        elif self.type_of_normalization_brain_comboBox.currentText() == "Row column normalization": a = row_column_normalization(matrix)
 
         # Specific symmetrization: 
-        if self.type_of_symmetrization_brain_comboBox.currentText() == "Average":
-            a = average_symmetrization(a)
-        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Maximum":
-            a = maximum_symmetrization(a)
-        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Minimum":
-            a = minimum_symmetrization(a)
+        if self.type_of_symmetrization_brain_comboBox.currentText()   == "Average": a = average_symmetrization(a)
+        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Maximum": a = maximum_symmetrization(a)
+        elif self.type_of_symmetrization_brain_comboBox.currentText() == "Minimum": a = minimum_symmetrization(a)
       
         # Transform in a numpy array: 
         a = np.array(a)
@@ -1413,7 +1339,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         if not self.plot_unconnected_points_3D_CheckBox.isChecked(): 
             for i in range(np.shape(a)[0]):
-                is_connected = "False"
+                is_connected = False
 
                 for j in range(np.shape(a)[1]):
                     # Normalize the value in connectivity matrix: 
@@ -1421,9 +1347,9 @@ class Ui_visu(QtWidgets.QTabWidget):
 
                     # To be coherent with the range of colorbar: 
                     if my_norm > vmin_3D and my_norm < vmax_3D: 
-                        is_connected = "True"
+                        is_connected = True
                 
-                if is_connected == "False":  
+                if not is_connected:  
                     list_visibility_point.append(0)
                 else: 
                     list_visibility_point.append(1)
@@ -1611,23 +1537,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
-
-        #callback =  partial(self.get_nodes, fig=self.fig, axes=axes ,indices=indices, n_nodes=len(label_names),  node_angles=node_angles)
-        #self.fig.canvas.mpl_connect('button_press_event', callback)
-
-
-
-
-
-
-    
-
-
-
-
-
-
     # *****************************************
     # Update the 3D brain connectome if the user change the range: min/max
     # ***************************************** 
@@ -1655,7 +1564,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         if not self.plot_unconnected_points_3D_CheckBox.isChecked(): 
             for i in range(np.shape(a)[0]):
-                is_connected = "False"
+                is_connected = False
 
                 for j in range(np.shape(a)[1]):
                     # Normalize the value in connectivity matrix: 
@@ -1663,9 +1572,9 @@ class Ui_visu(QtWidgets.QTabWidget):
 
                     # To be coherent with the range of colorbar: 
                     if my_norm > vmin_3D and my_norm < vmax_3D: 
-                        is_connected = "True"
+                        is_connected = True
                 
-                if is_connected == "False":  
+                if not is_connected:  
                     list_visibility_point.append(0)
                 else: 
                     list_visibility_point.append(1)
@@ -1846,24 +1755,16 @@ class Ui_visu(QtWidgets.QTabWidget):
         
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # ****************************************  Display vtk file  **************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
+    # **************************************************************************************************************************************************
 
     # *****************************************
     # Display a vtk file given by the user

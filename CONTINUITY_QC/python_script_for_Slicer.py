@@ -44,8 +44,6 @@ NAME_PARCELLATION_TABLE = json_user_object['Parameters']['labelSetName']['value'
 
 ID = json_user_object['Parameters']['ID']['value']
 input_path = os.path.join( json_user_object['Parameters']['OUT_PATH']['value'], ID, "InputDataForSlicer")
-print(input_path)
-
 
 #find datas for B0_BiasCorrect
 B0 = os.path.join( input_path, ID +"_DTI_B0_BiasCorrect_resample.nrrd")
@@ -74,22 +72,18 @@ if not os.path.exists(FA):
 	FA = os.path.join( input_path, ID +"_DTI_FA_original.nrrd")
 
 
-# Find data for DWI: 
-
-
 # Find data for surface: 
-
 registered_combine_surface         = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID + "_T1_CombinedSurface_white_" + NAME_PARCELLATION_TABLE + ".vtk")
 registered_combine_surface_with_sc = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID + "_T1_CombinedSurface_white_" + NAME_PARCELLATION_TABLE + "_WithSubcorticals.vtk")
 
-surface_left          = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
+surface_left  = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
 							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace.vtk")
+surface_right = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
+							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace.vtk")
+
 
 surface_left_labeled  = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
 							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_left_327680_native_DWIspace_labeled_" + NAME_PARCELLATION_TABLE + ".vtk")
-
-surface_right         = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
-							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace.vtk")
 
 surface_right_labeled = os.path.join( '/home/elodie/Desktop/CONTINUITY/output_CONTINUITY/', ID, "InputDataForSlicer", "stx_" + ID 
 							+ "-T1_SkullStripped_scaled_BiasCorr_corrected_multi_atlas_white_surface_rsl_right_327680_native_DWIspace_labeled_" + NAME_PARCELLATION_TABLE + ".vtk")
@@ -113,6 +107,8 @@ if os.path.exists(AD):
 
 if os.path.exists(FA):
 	loadedVolumeNode_FA            = slicer.util.loadVolume(FA, properties={'name': 'FA' , 'show': False} )
+
+
 
 if os.path.exists(registered_combine_surface):
 	loadedVolumeNode_registered_combine_surface         = slicer.util.loadModel(registered_combine_surface)
@@ -148,11 +144,7 @@ sliceNodes.append(slicer.mrmlScene.GetDefaultNodeByClass('vtkMRMLSliceNode'))
 
 cpt = 0 
 
-#node_background = slicer.util.getNode(str(registered_combine_surface_with_sc))
-
 for sliceNode in sliceNodes:
-	#print(sliceNode)
-
 	if cpt <= len(list_view)-1:
 		place = list_view[cpt]
 
@@ -165,14 +157,9 @@ for sliceNode in sliceNodes:
 	  	#https://framagit.org/OpenAtWork/Slicer/blob/1eeef1a211589c809f624ff5ca7615605dc4541c/Libs/MRML/vtkMRMLSliceNode.cxx
 	  	#https://www.slicer.org/wiki/Documentation/4.10/ScriptRepository#Iterate_over_current_visible_slice_views.2C_and_set_foreground_and_background_images
 
-		if place == 'Red' or place == "Slice4" or place == "Slice7": #set to axial
-			sliceNode.SetOrientation("Axial")
-
-		elif place =='Green' or place == "Slice5" or place == "Slice8": #set to sagittal
-			sliceNode.SetOrientation("Sagittal")
-
-		elif place == 'Sagittal' or place == "Slice6" or place == "Slice9": #set to coronal
-			sliceNode.SetOrientation("Coronal")
+		if place   == 'Red'      or place == "Slice4" or place == "Slice7": sliceNode.SetOrientation("Axial")
+		elif place == 'Green'    or place == "Slice5" or place == "Slice8": sliceNode.SetOrientation("Sagittal")
+		elif place == 'Sagittal' or place == "Slice6" or place == "Slice9": sliceNode.SetOrientation("Coronal")
 
 	cpt += 1
 		

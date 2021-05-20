@@ -1,5 +1,5 @@
 {
-    "Parameters": {
+    "Arguments": {
         "noGUI": {
             "type": "bool",
             "help": "Use CONTINUITY script without interface and json user file",
@@ -7,32 +7,7 @@
         },
         "cluster": {
             "type": "bool",
-            "help": "run script in a cluster",
-            "value": false
-        },
-        "cluster_command_line": {
-            "type": "str",
-            "help": "run script in a cluster with this specific command line",
-            "value": "#!/bin/zsh \n #SBATCH -p general \n #SBATCH -N 1 \n #SBATCH --mem 5120 \n #SBATCH -n 1 \n #SBATCH -t 20-00:00:00 \n #SBATCH --mail-type=end \n #SBATCH --mail-user=elodie@email.unc.edu \n module add python \n python3 CONTINUITY_completed_script.py './CONTINUITY_ARGS/args_main_CONTINUITY.json'"
-        },
-        "tractography_model": {
-            "type": "str",
-            "help": "Tractography model: FSL, MRtrix or DIPY",
-            "value": "FSL"
-        },
-        "filtering_with_tcksift": {
-            "type": "bool",
-            "help": "filtering_with_tcksift if Tractography model == MRtrix ",
-            "value": false
-        },
-        "optimisation_with_tcksift2": {
-            "type": "bool",
-            "help": "optimisation_with_tcksift2 if Tractography model == MRtrix",
-            "value": "true"
-        },
-        "act_option": {
-            "type": "bool",
-            "help": "use the Anatomically-Constrained Tractography framework during tracking",
+            "help": "Run script in a cluster",
             "value": false
         },
         "ID": {
@@ -75,45 +50,10 @@
             "help": "Parcellation table (.json)",
             "value": "./input_CONTINUITY/TABLE_Destrieux_SubCorticals_BrainStem.json"
         },
-        "DO_REGISTRATION": {
-            "type": "bool",
-            "help": "Do registration with this tool",
-            "value": true
-        },
-        "INTEGRATE_SC_DATA": {
-            "type": "bool",
-            "help": "Integrate subcortical data",
-            "value": true
-        },
-        "INTEGRATE_SC_DATA_by_generated_sc_surf": {
-            "type": "bool",
-            "help": "Integrate subcortical data by generating subcortical surfaces",
-            "value": true
-        },
-        "EXTRA_SURFACE_COLOR": {
-            "type": "bool",
-            "help": "Inner surface contains color labels",
-            "value": true
-        },
         "labelSetName": {
             "type": "str",
             "help": "Labelset name in vtk surface file",
             "value": "Destrieux"
-        },
-        "ignoreLabel": {
-            "type": "bool",
-            "help": "Ignore a label",
-            "value": false
-        },
-        "left_right_surface_need_to_be_combining": {
-            "type": "bool",
-            "help": "Boolean: left and right white surface provided separatly",
-            "value": false
-        },
-        "surface_already_labeled": {
-            "type": "bool",
-            "help": "Surfaces already labeled",
-            "value": false
         },
         "WM_L_Surf": {
             "type": "str",
@@ -144,6 +84,78 @@
             "type": "str",
             "help": "Path to SALT directory",
             "value": "./input_CONTINUITY/SALT"
+        },
+        "labeled_image": {
+            "type": "str",
+            "help": "labeled_image",
+            "value": "./input_CONTINUITY/T0054-1-1-6yr-T1_SkullStripped_scaled_label.nrrd"
+        },
+        "KWMDir": {
+            "type": "str",
+            "help": "Set where the labels are stored with specific parcellation",
+            "value": "./input_CONTINUITY/TxtLabels_Destrieux"
+        }
+    },
+    "Parameters": {
+        "cluster_command_line": {
+            "type": "str",
+            "help": "Run script in a cluster with this specific command line",
+            "value": "#!/bin/zsh \n #SBATCH -p general \n #SBATCH -N 1 \n #SBATCH --mem 5120 \n #SBATCH -n 1 \n #SBATCH -t 20-00:00:00 \n #SBATCH --mail-type=end \n #SBATCH --mail-user=elodie@email.unc.edu \n module add python \n python3 CONTINUITY_completed_script.py './CONTINUITY_ARGS/args_main_CONTINUITY.json'"
+        },
+        "tractography_model": {
+            "type": "str",
+            "help": "Tractography model: FSL, MRtrix or DIPY",
+            "value": "FSL"
+        },
+        "filtering_with_tcksift": {
+            "type": "bool",
+            "help": "Filtering_with_tcksift if Tractography model == MRtrix ",
+            "value": false
+        },
+        "optimisation_with_tcksift2": {
+            "type": "bool",
+            "help": "Optimisation_with_tcksift2 if Tractography model == MRtrix",
+            "value": true
+        },
+        "act_option": {
+            "type": "bool",
+            "help": "Use the Anatomically-Constrained Tractography framework during tracking",
+            "value": false
+        },
+        "DO_REGISTRATION": {
+            "type": "bool",
+            "help": "Do registration with this tool",
+            "value": false
+        },
+        "INTEGRATE_SC_DATA": {
+            "type": "bool",
+            "help": "Integrate subcortical data",
+            "value": true
+        },
+        "INTEGRATE_SC_DATA_by_generated_sc_surf": {
+            "type": "bool",
+            "help": "Integrate subcortical data by generating subcortical surfaces",
+            "value": true
+        },
+        "EXTRA_SURFACE_COLOR": {
+            "type": "bool",
+            "help": "Inner surface contains color labels",
+            "value": true
+        },
+        "ignoreLabel": {
+            "type": "bool",
+            "help": "Ignore a label",
+            "value": false
+        },
+        "left_right_surface_need_to_be_combining": {
+            "type": "bool",
+            "help": "Boolean: left and right white surface provided separatly",
+            "value": true
+        },
+        "surface_already_labeled": {
+            "type": "bool",
+            "help": "Surfaces already labeled",
+            "value": false
         },
         "subcorticals_region_names": {
             "type": "list",
@@ -187,16 +199,6 @@
                 10
             ]
         },
-        "labeled_image": {
-            "type": "str",
-            "help": "labeled_image",
-            "value": "./input_CONTINUITY/T0054-1-1-6yr-T1_SkullStripped_scaled_label.nrrd"
-        },
-        "KWMDir": {
-            "type": "str",
-            "help": "Set where the labels are stored with specific parcellation",
-            "value": "./input_CONTINUITY/TxtLabels_Destrieux"
-        },
         "cortical_label_left": {
             "type": "str",
             "help": "cortical_label_left",
@@ -235,7 +237,7 @@
         "first_metric_weight": {
             "type": "float",
             "help": "ANTs: The metric weight(s) for each stage",
-            "value": 1
+            "value": 3
         },
         "first_radius": {
             "type": "float",

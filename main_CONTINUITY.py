@@ -20,15 +20,6 @@ from CONTINUITY_functions import *
 if __name__ == '__main__':
    
     # *****************************************
-    # Modify structure of SALT directory
-    # *****************************************
-
-    #organize_SALT_dir("T0054-1-1-6yr", "./input_CONTINUITY/SALT","./input_CONTINUITY/SALT_new" "./input_CONTINUITY/TABLE_Destrieux_SubCorticals_BrainStem.json" )
-    #organize_KWM_dir("T0054-1-1-6yr", "./input_CONTINUITY/TxtLabels_Destrieux","./input_CONTINUITY/TxtLabels_Destrieux_new" "./input_CONTINUITY/TABLE_Destrieux_SubCorticals_BrainStem.json" )
-
-
-
-    # *****************************************
     # Argparse
     # *****************************************
 
@@ -43,11 +34,12 @@ if __name__ == '__main__':
 
     # Add other arguments to allow command line modification:
     for categories, infos in data_default.items():
-        for key in infos:
-            if key == "noGUI" or key == "cluster":
-                parser.add_argument('-%s' % key, help=infos[key]['help'], action='store_true') # --> default value = False
-            else:
-                parser.add_argument('-%s' % key, type=eval(infos[key]['type']), help=infos[key]['help'], default=infos[key]['default'], metavar='')
+        if categories == "Arguments": 
+            for key in infos:
+                if key == "noGUI" or key == "cluster":
+                    parser.add_argument('-%s' % key, help=infos[key]['help'], action='store_true') # --> default value = False
+                else:
+                    parser.add_argument('-%s' % key, type=eval(infos[key]['type']), help=infos[key]['help'], default=infos[key]['default'], metavar='')
 
     args = vars( parser.parse_args() )
 
@@ -68,7 +60,7 @@ if __name__ == '__main__':
 
     # 'Real' default configuration file: default configuration given by the user (not intern default configuration file)
     if args['default_config_filename'] != None :
-        default_config_filename = args['default_config_filename']
+        default_config_filename = args["default_config_filename"]
    
     with open(default_config_filename) as default_file: #args_setup.json"
         data_default = json.load(default_file)    
@@ -76,7 +68,9 @@ if __name__ == '__main__':
     # User file
     user_filename = "./CONTINUITY_ARGS/args_main_CONTINUITY.json" 
     with open(user_filename) as user_file:
+        global data_user
         data_user = json.load(user_file)
+
 
     # Initialization of user file with default values in json default file provide by the user 
     for categories, infos in data_default.items():
@@ -87,14 +81,9 @@ if __name__ == '__main__':
                 user_file.write(json.dumps(data_user, indent=4)) 
 
 
-
-    # *****************************************
-    # Write a csv file (just for testing)
-    # *****************************************
-   
+    # Write a csv file (just for testing)  
     #write_csv_file("./csv_CONTINUITY.csv", default_config_filename)
     
-
 
     # *****************************************
     # Run CONTINUITY thanks to a command line: -noGUI / -cvs_file / -cluster
@@ -107,12 +96,13 @@ if __name__ == '__main__':
 
         # Write values provide by user (thanks to the command line)in json user file 
         for categories, infos in data_default.items():
-            for key in infos: 
-                if str(args[key]) != " ":
-                    data_user[categories][key]['value'] = args[key]
+            if categories == "Arguments": 
+                for key in infos: 
+                    if str(args[key]) != " ":
+                        data_user[categories][key]['value'] = args[key]
 
-                with open(user_filename, "w+") as user_file: 
-                    user_file.write(json.dumps(data_user, indent=4)) 
+                    with open(user_filename, "w+") as user_file: 
+                        user_file.write(json.dumps(data_user, indent=4)) 
 
 
         # Find and write localisation of executables            
@@ -131,9 +121,10 @@ if __name__ == '__main__':
                 data_user = json.load(user_file)
 
             for categories, infos in data_default.items():
-                for key in infos: 
-                    if data_user[categories][key]['value'] == "required":
-                        list_of_args_required.append('-%s' % key) 
+                if categories == "Arguments": 
+                    for key in infos: 
+                        if data_user[categories][key]['value'] == "required":
+                            list_of_args_required.append('-%s' % key) 
 
             if len(list_of_args_required) != 0:  
                 print(str(list_of_args_required)[1:-1] ,"required for CONTINUITY script")
@@ -144,7 +135,7 @@ if __name__ == '__main__':
             if not args["cluster"]:  # Run localy: -noGUI  
                 CONTINUITY(user_filename)
             else: # run in longleaf: -noGUI -cluster 
-                cluster("./slurm-job", args["cluster_command_line"])
+                cluster("./slurm-job", data_user['Parameters']["cluster_command_line"]["value"])
 
 
 
@@ -166,7 +157,7 @@ if __name__ == '__main__':
                 for row in csv_dict_reader:
                     print("info subject:",row)
                     for element in header: 
-                        data_user['Parameters'][element]['value'] = row[element]
+                        data_user['Arguments'][element]['value'] = row[element]
 
                         with open(user_filename, "w+") as user_file: 
                             user_file.write(json.dumps(data_user, indent=4)) 
@@ -176,7 +167,7 @@ if __name__ == '__main__':
                         print("SUBJECT: ", row['ID'] )
                         CONTINUITY(user_filename)
                     else: # Run localy: -noGUI -csv_file
-                        cluster("./slurm-job", args["cluster_command_line"])
+                        cluster("./slurm-job", data_user['Parameters']["cluster_command_line"]["value"])
 
         
 

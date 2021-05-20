@@ -59,84 +59,87 @@ for categories, infos in json_user_object.items():
         print(key, ": ", json_user_object[categories][key]["value"])
 '''
 
-# Parameters
-noGUI                                   = str(json_user_object["Parameters"]["noGUI"]['value'])
-cluster                                 = str(json_user_object["Parameters"]["cluster"]['value'])
-cluster_command_line                    = str(json_user_object["Parameters"]["cluster_command_line"]['value'])
-tractography_model                      = str(json_user_object["Parameters"]["tractography_model"]['value'])
-filtering_with_tcksift					= str(json_user_object["Parameters"]["filtering_with_tcksift"]['value'])
-optimisation_with_tcksift2				= str(json_user_object["Parameters"]["optimisation_with_tcksift2"]['value'])
-act_option				                = str(json_user_object["Parameters"]["act_option"]['value'])
-ID                                      = str(json_user_object["Parameters"]["ID"]['value'])
-DWI_DATA                                = str(json_user_object["Parameters"]["DWI_DATA"]['value'])
-DWI_DATA_bvecs                          = str(json_user_object["Parameters"]["DWI_DATA_bvecs"]['value'])
-DWI_DATA_bvals                          = str(json_user_object["Parameters"]["DWI_DATA_bvecs"]['value'])
-T1_DATA                                 = str(json_user_object["Parameters"]["T1_DATA"]['value'])
-T2_DATA                                 = str(json_user_object["Parameters"]["T2_DATA"]['value'])
-BRAINMASK                               = str(json_user_object["Parameters"]["BRAINMASK"]['value'])
-PARCELLATION_TABLE                      = str(json_user_object["Parameters"]["PARCELLATION_TABLE"]['value'])
-UPSAMPLING_DWI                          = str(json_user_object["Parameters"]["UPSAMPLING_DWI"]['value'])
-DO_REGISTRATION                         = str(json_user_object["Parameters"]["DO_REGISTRATION"]['value'])
-INTEGRATE_SC_DATA                       = str(json_user_object["Parameters"]["INTEGRATE_SC_DATA"]['value'])
-INTEGRATE_SC_DATA_by_generated_sc_surf  = str(json_user_object["Parameters"]["INTEGRATE_SC_DATA_by_generated_sc_surf"]['value'])
-EXTRA_SURFACE_COLOR                     = str(json_user_object["Parameters"]["EXTRA_SURFACE_COLOR"]['value'])
-labelSetName                            = str(json_user_object["Parameters"]["labelSetName"]['value'])
-ignoreLabel                             = str(json_user_object["Parameters"]["ignoreLabel"]['value'])
-WM_L_Surf                               = str(json_user_object["Parameters"]["WM_L_Surf"]['value'])
-WM_R_Surf                               = str(json_user_object["Parameters"]["WM_R_Surf"]['value'])
-left_right_surface_need_to_be_combining = str(json_user_object["Parameters"]["left_right_surface_need_to_be_combining"]['value'])
-SURFACE_USER                            = str(json_user_object["Parameters"]["SURFACE_USER"]['value']),
-WM_L_Surf_NON_REGISTRATION              = str(json_user_object["Parameters"]["WM_L_Surf_NON_REGISTRATION"]['value'])
-WM_R_Surf_NON_REGISTRATION              = str(json_user_object["Parameters"]["WM_R_Surf_NON_REGISTRATION"]['value'])
-SALTDir                                 = str(json_user_object["Parameters"]["SALTDir"]['value'])
-subcorticals_region_names               = str(json_user_object["Parameters"]["subcorticals_region_names"]['value'])
-subcorticals_region_SALT_KWM_names      = str(json_user_object["Parameters"]["subcorticals_region_SALT_KWM_names"]['value'])
-subcorticals_region_labels              = str(json_user_object["Parameters"]["subcorticals_region_labels"]['value'])
-labeled_image                           = str(json_user_object["Parameters"]["labeled_image"]['value'])
-KWMDir                                  = str(json_user_object["Parameters"]["KWMDir"]['value'])
-surface_already_labeled                 = str(json_user_object["Parameters"]["surface_already_labeled"]['value'])
-cortical_label_left                     = str(json_user_object["Parameters"]["cortical_label_left"]['value'])
-cortical_label_right                    = str(json_user_object["Parameters"]["cortical_label_right"]['value'])
-first_fixed_img                         = str(json_user_object["Parameters"]["first_fixed_img"]['value'])
-first_moving_img                        = str(json_user_object["Parameters"]["first_moving_img"]['value'])
-second_fixed_img                        = str(json_user_object["Parameters"]["second_fixed_img"]['value'])
-second_moving_img                       = str(json_user_object["Parameters"]["second_moving_img"]['value'])
-first_metric_weight                     = str(json_user_object["Parameters"]["first_metric_weight"]['value'])
-first_radius                            = str(json_user_object["Parameters"]["first_radius"]['value'])
-second_metric_weight                    = str(json_user_object["Parameters"]["second_metric_weight"]['value'])
-second_radius                           = str(json_user_object["Parameters"]["second_radius"]['value'])
-deformation_field_sigma                 = str(json_user_object["Parameters"]["deformation_field_sigma"]['value'])
-gradient_field_sigma                    = str(json_user_object["Parameters"]["gradient_field_sigma"]['value'])
-SyN_param                               = str(json_user_object["Parameters"]["SyN_param"]['value'])
-iteration1                              = str(json_user_object["Parameters"]["iteration1"]['value'])
-iteration2                              = str(json_user_object["Parameters"]["iteration2"]['value'])
-iteration3                              = str(json_user_object["Parameters"]["iteration3"]['value'])
-nb_threads                              = str(json_user_object["Parameters"]["nb_threads"]['value'])
-overlapping                             = str(json_user_object["Parameters"]["overlapping"]['value'])
-nb_fibers                               = str(json_user_object["Parameters"]["nb_fibers"]['value'])
-nb_fiber_per_seed                       = str(json_user_object["Parameters"]["nb_fiber_per_seed"]['value'])
-steplength                              = str(json_user_object["Parameters"]["steplength"]['value'])
-sampvox                                 = str(json_user_object["Parameters"]["sampvox"]['value'])
-loopcheck                               = str(json_user_object["Parameters"]["loopcheck"]['value'])
-OUT_PATH                                = str(json_user_object["Parameters"]["OUT_PATH"]['value'])
+# Arguments: argparse
+noGUI                      = json_user_object["Arguments"]["noGUI"]['value']
+cluster                    = json_user_object["Arguments"]["cluster"]['value']
+ID                         = json_user_object["Arguments"]["ID"]['value']
+DWI_DATA                   = json_user_object["Arguments"]["DWI_DATA"]['value']
+DWI_DATA_bvecs             = json_user_object["Arguments"]["DWI_DATA_bvecs"]['value']
+DWI_DATA_bvals             = json_user_object["Arguments"]["DWI_DATA_bvecs"]['value']
+T1_DATA                    = json_user_object["Arguments"]["T1_DATA"]['value']
+T2_DATA                    = json_user_object["Arguments"]["T2_DATA"]['value']
+BRAINMASK                  = json_user_object["Arguments"]["BRAINMASK"]['value']
+PARCELLATION_TABLE         = json_user_object["Arguments"]["PARCELLATION_TABLE"]['value']
+labelSetName               = json_user_object["Arguments"]["labelSetName"]['value']
+WM_L_Surf                  = json_user_object["Arguments"]["WM_L_Surf"]['value']
+WM_R_Surf                  = json_user_object["Arguments"]["WM_R_Surf"]['value']
+SURFACE_USER               = json_user_object["Arguments"]["SURFACE_USER"]['value']
+WM_L_Surf_NON_REGISTRATION = json_user_object["Arguments"]["WM_L_Surf_NON_REGISTRATION"]['value']
+WM_R_Surf_NON_REGISTRATION = json_user_object["Arguments"]["WM_R_Surf_NON_REGISTRATION"]['value']
+SALTDir                    = json_user_object["Arguments"]["SALTDir"]['value']
+labeled_image              = json_user_object["Arguments"]["labeled_image"]['value']
+KWMDir                     = json_user_object["Arguments"]["KWMDir"]['value']
+
+# Parameters: 
+cluster_command_line                    = json_user_object["Parameters"]["cluster_command_line"]['value']
+tractography_model                      = json_user_object["Parameters"]["tractography_model"]['value']
+filtering_with_tcksift					= json_user_object["Parameters"]["filtering_with_tcksift"]['value']
+optimisation_with_tcksift2				= json_user_object["Parameters"]["optimisation_with_tcksift2"]['value']
+act_option				                = json_user_object["Parameters"]["act_option"]['value']
+UPSAMPLING_DWI                          = json_user_object["Parameters"]["UPSAMPLING_DWI"]['value']
+DO_REGISTRATION                         = json_user_object["Parameters"]["DO_REGISTRATION"]['value']
+INTEGRATE_SC_DATA                       = json_user_object["Parameters"]["INTEGRATE_SC_DATA"]['value']
+INTEGRATE_SC_DATA_by_generated_sc_surf  = json_user_object["Parameters"]["INTEGRATE_SC_DATA_by_generated_sc_surf"]['value']
+EXTRA_SURFACE_COLOR                     = json_user_object["Parameters"]["EXTRA_SURFACE_COLOR"]['value']
+ignoreLabel                             = json_user_object["Parameters"]["ignoreLabel"]['value']
+left_right_surface_need_to_be_combining = json_user_object["Parameters"]["left_right_surface_need_to_be_combining"]['value']
+subcorticals_region_names               = json_user_object["Parameters"]["subcorticals_region_names"]['value']
+subcorticals_region_SALT_KWM_names      = json_user_object["Parameters"]["subcorticals_region_SALT_KWM_names"]['value']
+subcorticals_region_labels              = json_user_object["Parameters"]["subcorticals_region_labels"]['value']
+surface_already_labeled                 = json_user_object["Parameters"]["surface_already_labeled"]['value']
+cortical_label_left                     = json_user_object["Parameters"]["cortical_label_left"]['value']
+cortical_label_right                    = json_user_object["Parameters"]["cortical_label_right"]['value']
+first_fixed_img                         = json_user_object["Parameters"]["first_fixed_img"]['value']
+first_moving_img                        = json_user_object["Parameters"]["first_moving_img"]['value']
+second_fixed_img                        = json_user_object["Parameters"]["second_fixed_img"]['value']
+second_moving_img                       = json_user_object["Parameters"]["second_moving_img"]['value']
+first_metric_weight                     = json_user_object["Parameters"]["first_metric_weight"]['value']
+first_radius                            = json_user_object["Parameters"]["first_radius"]['value']
+second_metric_weight                    = json_user_object["Parameters"]["second_metric_weight"]['value']
+second_radius                           = json_user_object["Parameters"]["second_radius"]['value']
+deformation_field_sigma                 = json_user_object["Parameters"]["deformation_field_sigma"]['value']
+gradient_field_sigma                    = json_user_object["Parameters"]["gradient_field_sigma"]['value']
+SyN_param                               = json_user_object["Parameters"]["SyN_param"]['value']
+iteration1                              = json_user_object["Parameters"]["iteration1"]['value']
+iteration2                              = json_user_object["Parameters"]["iteration2"]['value']
+iteration3                              = json_user_object["Parameters"]["iteration3"]['value']
+nb_threads                              = json_user_object["Parameters"]["nb_threads"]['value']
+overlapping                             = json_user_object["Parameters"]["overlapping"]['value']
+nb_fibers                               = json_user_object["Parameters"]["nb_fibers"]['value']
+nb_fiber_per_seed                       = json_user_object["Parameters"]["nb_fiber_per_seed"]['value']
+steplength                              = json_user_object["Parameters"]["steplength"]['value']
+sampvox                                 = json_user_object["Parameters"]["sampvox"]['value']
+loopcheck                               = json_user_object["Parameters"]["loopcheck"]['value']
+OUT_PATH                                = json_user_object["Parameters"]["OUT_PATH"]['value']
 
 # Executables
-pathUnu                   = str(json_user_object["Executables"]["unu"]['value'])
-pathN4BiasFieldCorrection = str(json_user_object["Executables"]["N4BiasFieldCorrection"]['value'])
-pathBRAINSFit_CMD         = str(json_user_object["Executables"]["BRAINSFit"]['value'])
-pathdtiprocess            = str(json_user_object["Executables"]["dtiprocess"]['value'])
-pathDtiestim              = str(json_user_object["Executables"]["dtiestim"]['value'])
-pathANTS_CMD              = str(json_user_object["Executables"]["ANTS"]['value'])
-pathITK_TRANSTOOL_EXE     = str(json_user_object["Executables"]["ITKTransformTools_v1"]['value'])
-pathPOLY_TRANSTOOL_EXE    = str(json_user_object["Executables"]["polydatatransform_v1"]['value'])
-pathWARP_TRANSFORM        = str(json_user_object["Executables"]["WarpImageMultiTransform"]['value'])
-DWIConvertPath            = str(json_user_object["Executables"]["DWIConvert"]['value'])
-FSLPath                   = str(json_user_object["Executables"]["fsl"]['value']) 
-ExtractLabelSurfaces      = str(json_user_object["Executables"]["ExtractLabelSurfaces"]['value']) 
-MRtrixPath                = str(json_user_object["Executables"]["MRtrix"]['value']) 
-SegPostProcessCLPPath     = str(json_user_object["Executables"]["SegPostProcessCLP"]['value'])
-GenParaMeshCLPPath        = str(json_user_object["Executables"]["GenParaMeshCLP"]['value']) 
-ParaToSPHARMMeshCLPPath   = str(json_user_object["Executables"]["ParaToSPHARMMeshCLP"]['value']) 
+pathUnu                   = json_user_object["Executables"]["unu"]['value']
+pathN4BiasFieldCorrection = json_user_object["Executables"]["N4BiasFieldCorrection"]['value']
+pathBRAINSFit_CMD         = json_user_object["Executables"]["BRAINSFit"]['value']
+pathdtiprocess            = json_user_object["Executables"]["dtiprocess"]['value']
+pathDtiestim              = json_user_object["Executables"]["dtiestim"]['value']
+pathANTS_CMD              = json_user_object["Executables"]["ANTS"]['value']
+pathITK_TRANSTOOL_EXE     = json_user_object["Executables"]["ITKTransformTools_v1"]['value']
+pathPOLY_TRANSTOOL_EXE    = json_user_object["Executables"]["polydatatransform_v1"]['value']
+pathWARP_TRANSFORM        = json_user_object["Executables"]["WarpImageMultiTransform"]['value']
+DWIConvertPath            = json_user_object["Executables"]["DWIConvert"]['value']
+FSLPath                   = json_user_object["Executables"]["fsl"]['value'] 
+ExtractLabelSurfaces      = json_user_object["Executables"]["ExtractLabelSurfaces"]['value']
+MRtrixPath                = json_user_object["Executables"]["MRtrix"]['value'] 
+SegPostProcessCLPPath     = json_user_object["Executables"]["SegPostProcessCLP"]['value']
+GenParaMeshCLPPath        = json_user_object["Executables"]["GenParaMeshCLP"]['value']
+ParaToSPHARMMeshCLPPath   = json_user_object["Executables"]["ParaToSPHARMMeshCLP"]['value'] 
+
 writeSeedListScript       = "./writeSeedList.py" 
 
 
@@ -300,9 +303,9 @@ with Tee(log_file):
 		    for i in out.splitlines():
 		        section = i.split()
 		        if "b'kinds:" in str(section):
-		            grad_first = 'False'               # Case: [b'kinds:', b'domain', b'domain', b'domain', b'vector'] --> gradient in last position
+		            grad_first = False                 # Case: [b'kinds:', b'domain', b'domain', b'domain', b'vector'] --> gradient in last position
 		            if "b'vector" in str(section[1]):  # Case: [b'kinds:', b'vector', b'domain', b'domain', b'domain'] --> gradient in first position
-		                grad_first = 'True'                
+		                grad_first = True               
 		else:
 		    DWI_NRRD = os.path.join(OUT_INPUT_CONTINUITY_DWISPACE, ID + "_DWI_original.nrrd")
 		    DWI_MASK = os.path.join(OUT_INPUT_CONTINUITY_DWISPACE, ID + "_Original_DWI_BrainMask_original.nrrd")
@@ -510,7 +513,7 @@ with Tee(log_file):
 			                              "--initial-affine", outRigidReg, 
 			                              "--use-all-metrics-for-convergence",
 			                              "num_threads", nb_threads, 
-			                              "--verbose", "true"] 
+			                              "--verbose", True] 
 			if T2_DATA == "": # just T1 data
 				command = [pathANTS_CMD, "3", "-m", "CC[", eval(first_fixed_img),",",eval(first_moving_img),",",first_metric_weight,",",first_radius,"]",
 				                              "-r", "Gauss[",gradient_field_sigma,",",deformation_field_sigma,"]", 
@@ -520,7 +523,7 @@ with Tee(log_file):
 				                              "--initial-affine", outRigidReg, 
 				                              "--use-all-metrics-for-convergence",
 				                              "num_threads", nb_threads, 
-				                              "--verbose", "true"]
+				                              "--verbose", True]
 			run_command("ANTs command", command)
 			print("ANTs command: ",time.strftime("%H h: %M min: %S s",time.gmtime( time.time() - start )))
 
@@ -670,14 +673,14 @@ with Tee(log_file):
 			with open(new_parcellation_table) as data_file:    
 				data = json.load(data_file)
 
-			data_region_find = 'False' 
+			data_region_find = False
 			for seed in data:
 				if seed['name'] == region: 
-					data_region_find = 'True'
+					data_region_find = True
 
 
 			# After check all the json file: 
-			if data_region_find == 'False':
+			if data_region_find == False:
 				print(" NO information about ", region, "in your parcellation table with subcortical data")
 				print(" The name of the region in your region in the name of your SALT file has to be the same as in your parcellation table " +
 						"or you can provide a matched list ")

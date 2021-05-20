@@ -8,7 +8,7 @@ from interface_functions_visualization import *
 ##########################################################################################################################################
 '''  
      CONTINUITY QC interface : 
-Check registration and tractography results and display circle and brain connectome
+     Check registration and tractography results and display circle and brain connectome
 '''  
 ##########################################################################################################################################
 
