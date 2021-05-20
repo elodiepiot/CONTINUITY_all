@@ -163,17 +163,16 @@
             "value": [
                 "AmyL",
                 "AmyR",
-                "Brainstem",
                 "CaudL",
                 "CaudR",
-                "GPL",
-                "GPR",
                 "HippoL",
                 "HippoR",
-                "PutL",
-                "PutR",
                 "ThalL",
-                "ThalR"
+                "ThalR",
+                "GPL",
+                "GPR",
+                "PutL",
+                "PutR"
             ]
         },
         "subcorticals_region_SALT_KWM_names": {

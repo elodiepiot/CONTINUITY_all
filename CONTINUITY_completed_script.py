@@ -504,26 +504,27 @@ with Tee(log_file):
 			# Perform the Deformable Registration using ANTS
 			# The T1 to DWI Space WARP(displacement field).nrrd is the output of the ANTS registration of the T1 Image to the DWI
 			# Radius of the region = number of layers around a voxel/pixel
-			command = [pathANTS_CMD, "3", "-m", "CC[", eval(first_fixed_img), ",", eval(first_moving_img), ",", first_metric_weight, ",", first_radius,"]",
-			                              "-m", "CC[", eval(second_fixed_img),",", eval(second_moving_img),",", second_metric_weight,",", second_radius,"]",
-			                              "-r", "Gauss[",gradient_field_sigma,",",deformation_field_sigma,"]", 
-			                              "-i", iteration1, "x", iteration2, "x", iteration3, 
-			                              "-t", "SyN[",SyN_param,"]",
+			command = [pathANTS_CMD, "3", "-m", "CC[", eval(first_fixed_img), ",", eval(first_moving_img), ",", str(first_metric_weight), ",", str(first_radius),"]",
+			                              "-m", "CC[", eval(second_fixed_img),",", eval(second_moving_img),",", str(second_metric_weight),",", str(second_radius),"]",
+			                              "-r", "Gauss[",str(gradient_field_sigma),",",str(deformation_field_sigma),"]", 
+			                              "-i", str(iteration1), "x", str(iteration2), "x", str(iteration3), 
+			                              "-t", "SyN[",str(SyN_param),"]",
 			                              "-o", outWarpPrefix, 
 			                              "--initial-affine", outRigidReg, 
 			                              "--use-all-metrics-for-convergence",
-			                              "num_threads", nb_threads, 
-			                              "--verbose", True] 
+			                              "num_threads", str(nb_threads), 
+			                              "--verbose", 'True'] 
 			if T2_DATA == "": # just T1 data
-				command = [pathANTS_CMD, "3", "-m", "CC[", eval(first_fixed_img),",",eval(first_moving_img),",",first_metric_weight,",",first_radius,"]",
-				                              "-r", "Gauss[",gradient_field_sigma,",",deformation_field_sigma,"]", 
-				                              "-i", iteration1, "x", iteration2, "x", iteration3, 
-				                              "-t", "SyN[",SyN_param,"]",
+				command = [pathANTS_CMD, "3", "-m", "CC[", eval(first_fixed_img),",",eval(first_moving_img),",",str(first_metric_weight),",",str(first_radius),"]",
+				                              "-r", "Gauss[", str(gradient_field_sigma),",", str(deformation_field_sigma),"]", 
+				                              "-i", str(iteration1), "x", str(iteration2), "x", str(iteration3), 
+				                              "-t", "SyN[",str(SyN_param),"]",
 				                              "-o", outWarpPrefix, 
 				                              "--initial-affine", outRigidReg, 
 				                              "--use-all-metrics-for-convergence",
-				                              "num_threads", nb_threads, 
-				                              "--verbose", True]
+				                              "num_threads", str(nb_threads), 
+				                              "--verbose", 'True']
+
 			run_command("ANTs command", command)
 			print("ANTs command: ",time.strftime("%H h: %M min: %S s",time.gmtime( time.time() - start )))
 
