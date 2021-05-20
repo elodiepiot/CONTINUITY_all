@@ -8,7 +8,7 @@ from termcolor import colored
 import time
 import datetime
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QCheckBox, QGridLayout, QLabel, QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QCheckBox, QGridLayout, QLabel, QTableWidgetItem, QMessageBox, QInputDialog, QLineEdit
 from PyQt5.QtCore import Qt
 
 from PyQt5 import QtGui
@@ -663,13 +663,68 @@ class Ui(QtWidgets.QTabWidget):
     # Complete table with labels and names
     # *****************************************  
 
-    def complete_table_label_name_sc_region(self): 
-        print("to do ")
+    def complete_label_name_sc_region(self): 
         #list_subcortical_regions = [ 'Amy', 'Caud', 'Hippo', 'Thal', 'GP','Put']
+
+        # Clear the list: 
+        self.sc_regions_labels_listWidget.clear()
+
+        all_labels = []
+        for i in range(len(json_user_object['Parameters']["subcorticals_region_labels"]["value"])):
+            all_labels.append('Region ' + json_user_object['Parameters']["subcorticals_region_names"]["value"][i] + ":   " 
+                                    + str(json_user_object['Parameters']["subcorticals_region_labels"]["value"][i]))
+
+        # Add all names: 
+        self.sc_regions_labels_listWidget.addItems(all_labels)
+
+        # Set parameters: 
+        for i in range(self.sc_regions_labels_listWidget.count()):
+            item = self.sc_regions_labels_listWidget.item(i) 
+
+        # Set a signal to do something if the user click on a region: 
+
+     
+        self.sc_regions_labels_listWidget.itemDoubleClicked.connect(self.subcortical_label_changed , type= Qt.UniqueConnection)
+      
+
     
  
+    # *****************************************
+    # Update subcorticals_region_names list if the user checked or unchecked region
+    # *****************************************  
+
+    def subcortical_label_changed(self, item):
+        print('subcortical_label_changed')
+        
+
+        #self.sc_regions_labels_listWidget.blockSignals(True)
+
+        index = self.sc_regions_labels_listWidget.row(item)
+
+        text, okPressed = QInputDialog.getText(self, "Region selected" + item.text(), "Label of " 
+                              + json_user_object['Parameters']["subcorticals_region_names"]["value"][index] +" : ",QLineEdit.Normal, "")
+
+        try:
+            # test if text is a number
+            text_int = int(text)
+
+            self.error_label.setText('')
 
 
+            if okPressed:
+                print('OK clicked')
+
+                json_user_object['Parameters']["subcorticals_region_labels"]["value"][index] = text_int
+                Ui.update_user_json_file() 
+                
+                item.setText('Region ' + json_user_object['Parameters']["subcorticals_region_names"]["value"][index] + ":   " + str(text))
+
+        except:
+            self.error_label.setText('<font color="red">Please write a number</font>')
+
+
+        #self.sc_regions_labels_listWidget.blockSignals(False) 
+        
 
 
 
@@ -684,19 +739,6 @@ class Ui(QtWidgets.QTabWidget):
             self.labeled_image_textEdit.setText(fileName)
             json_user_object['Arguments']["labeled_image"]["value"] = fileName
             Ui.update_user_json_file()
-
-
-    # *****************************************
-    # Update labels
-    # *****************************************
-
-    def update_label_number(self):
-        print("to do ") 
-   
-
-
-
-
 
             
 

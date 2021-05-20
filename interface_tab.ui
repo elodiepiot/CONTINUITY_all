@@ -1346,10 +1346,10 @@ p, li { white-space: pre-wrap; }
           <widget class="QTextEdit" name="color_sc_textEdit_3">
            <property name="geometry">
             <rect>
-             <x>10</x>
-             <y>320</y>
-             <width>481</width>
-             <height>51</height>
+             <x>260</x>
+             <y>90</y>
+             <width>231</width>
+             <height>131</height>
             </rect>
            </property>
            <property name="autoFillBackground">
@@ -1368,82 +1368,54 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Put '0' as label/number if this region is not present&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-          <widget class="QTextEdit" name="check_table">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>240</y>
-             <width>471</width>
-             <height>61</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QTextEdit {
-	background-color : transparent
-}</string>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="html">
-            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Put '0' as label/number &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;if this region is not present&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click on a line to modify its label&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
-          <widget class="QListWidget" name="region_name_listWidget">
+          <widget class="QListWidget" name="sc_regions_labels_listWidget">
            <property name="geometry">
             <rect>
              <x>20</x>
              <y>70</y>
              <width>231</width>
-             <height>231</height>
-            </rect>
-           </property>
-          </widget>
-          <widget class="QListWidget" name="listWidget_2">
-           <property name="geometry">
-            <rect>
-             <x>260</x>
-             <y>70</y>
-             <width>231</width>
-             <height>231</height>
+             <height>301</height>
             </rect>
            </property>
           </widget>
           <widget class="QLabel" name="label_4">
            <property name="geometry">
             <rect>
-             <x>30</x>
+             <x>20</x>
              <y>10</y>
-             <width>221</width>
+             <width>371</width>
              <height>41</height>
             </rect>
            </property>
            <property name="text">
-            <string>Name of the subcortical regions 
- (in the parcellation table)</string>
+            <string>Name and associated label of the subcortical regions 
+ (name in the parcellation table): </string>
            </property>
           </widget>
-          <widget class="QLabel" name="label_24">
+          <widget class="QLabel" name="error_label">
            <property name="geometry">
             <rect>
-             <x>260</x>
-             <y>10</y>
-             <width>221</width>
-             <height>41</height>
+             <x>300</x>
+             <y>240</y>
+             <width>171</width>
+             <height>71</height>
             </rect>
            </property>
            <property name="text">
-            <string>Labels of the subcortical regions 
- (in the labeled image)</string>
+            <string/>
            </property>
           </widget>
+          <zorder>color_sc_textEdit_3</zorder>
+          <zorder>label_4</zorder>
+          <zorder>sc_regions_labels_listWidget</zorder>
+          <zorder>error_label</zorder>
          </widget>
         </widget>
        </widget>
@@ -6484,7 +6456,7 @@ p, li { white-space: pre-wrap; }
    <sender>tab_name_label_tabWidget</sender>
    <signal>currentChanged(int)</signal>
    <receiver>TabWidget</receiver>
-   <slot>complete_table_label_name_sc_region()</slot>
+   <slot>complete_label_name_sc_region()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>834</x>
@@ -6976,11 +6948,10 @@ p, li { white-space: pre-wrap; }
   <slot>tractography_model_comboBox_valueChanged()</slot>
   <slot>filtering_with_tcksift_checkBox_checked()</slot>
   <slot>optimisation_with_tcksift2_checkBox_checked()</slot>
-  <slot>complete_table_label_name_sc_region()</slot>
+  <slot>complete_label_name_sc_region()</slot>
   <slot>INTEGRATE_SC_DATA_by_generated_sc_surf_groupBox_clicked()</slot>
   <slot>INTEGRATE_SC_DATA_clicked()</slot>
   <slot>select_labeled_image()</slot>
-  <slot>update_label_number()</slot>
   <slot>act_checkBox_checked()</slot>
   <slot>no_registration_DWI_bvecs_pushButton()</slot>
   <slot>no_registration_DWI_bvals_pushButton()</slot>

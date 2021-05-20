@@ -98,11 +98,13 @@ class Ui_visu(QtWidgets.QTabWidget):
         path = os.path.join(json_user_object['Parameters']["OUT_PATH"]["value"], json_user_object['Arguments']["ID"]["value"], "Tractography", 'new_parcellation_table')
         self.parcellation_table_textEdit.setText(path)
 
+        global overlapName
         overlapName = ""
         if json_user_object['Parameters']["overlapping"]["value"]: 
             overlapName = "_overlapping" 
 
         # Setup default path to save the connectivity matrix with a specific name:
+        global loopcheckName
         loopcheckName = ""
         if json_user_object['Parameters']["loopcheck"]["value"]: 
             loopcheckName = "_loopcheck"
@@ -354,13 +356,23 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
     # *****************************************
-    # Select the path to save the connectivity matrix
+    # Select the path to GET the connectivity matrix
+    # ***************************************** 
+
+    def get_connectivity_matrix_pushButton_clicked(self):
+        DirName= QtWidgets.QFileDialog.getExistingDirectory(self)
+        if DirName:
+            self.connectivity_matrix_textEdit.setText(DirName)
+
+
+    # *****************************************
+    # Select the path to SAVE the connectivity matrix
     # ***************************************** 
 
     def connectivity_matrix_pushButton_clicked(self):
         DirName= QtWidgets.QFileDialog.getExistingDirectory(self)
         if DirName:
-            self.connectivity_matrix_textEdit.setText(DirName)
+            self.path_normalize_matrix_textEdit.setText(DirName)
 
 
 
@@ -560,7 +572,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         
         # Set information for the colormap associated to node features: 
         ax = self.fig2.add_axes([0.1, 0.4, 0.8, 0.4]) # add_axes([xmin,ymin,dx,dy]) 
-        vmax, vmin = self.vmax_colorbar_spinBox.value() / 100
+        vmax = self.vmax_colorbar_spinBox.value() / 100
         vmin = self.vmin_colorbar_spinBox.value() / 100
     
         # Display colorbar: 

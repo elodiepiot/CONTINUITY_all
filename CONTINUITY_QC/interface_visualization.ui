@@ -679,7 +679,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>0</number>
     </property>
     <property name="tabBarAutoHide">
      <bool>false</bool>
@@ -3430,22 +3430,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>connectivity_matrix_pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>TabWidget</receiver>
-   <slot>connectivity_matrix_pushButton_clicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>398</x>
-     <y>123</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>565</x>
-     <y>314</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>point_size_3D_spinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>TabWidget</receiver>
@@ -3749,6 +3733,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>normalize_matrix_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TabWidget</receiver>
+   <slot>connectivity_matrix_pushButton_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>234</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>315</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>connectivity_matrix_pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TabWidget</receiver>
+   <slot>get_connectivity_matrix_pushButton_clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>398</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>565</x>
+     <y>315</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>slicer_path_button_clicked()</slot>
@@ -3794,5 +3810,6 @@ p, li { white-space: pre-wrap; }
   <slot>update_cirlcle_connectome()</slot>
   <slot>updata_opacity()</slot>
   <slot>track_click()</slot>
+  <slot>get_connectivity_matrix_pushButton_clicked()</slot>
  </slots>
 </ui>
