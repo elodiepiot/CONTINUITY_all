@@ -654,11 +654,12 @@ with Tee(log_file):
 		# Copy to have only regions with good KWM and SALT files
 		subcorticals_list_checked = subcorticals_region_names
 	
-		'''
+		
 		# Copy the original parcellation table to be able to build an other specific with only good subcortical regions ( = with good KWM and SALT files)
 		new_parcellation_table = os.path.join(OUT_TRACTOGRAPHY, 'new_parcellation_table' )
 		shutil.copy(PARCELLATION_TABLE, new_parcellation_table)
 
+		'''
 		# Check if all elements in subcorticals_region_names are referenced in the parcellation table with subcortical data:
 		for region in subcorticals:  # "AmyL AmyR CaudL CaudR GPL GPR HippoL HippoR PutL PutR ThalL ThalR Brainstem"  
 			
