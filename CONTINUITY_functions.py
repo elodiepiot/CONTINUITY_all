@@ -903,19 +903,6 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                                                   '--space ' + str(sx) +',' + str(sy) + ',' + str(sz)  ] #x,y and z directions
                 run_command("SegPostProcessCLP", command) 
 
-                '''
-
-SegPostProcessCLP labeled_image --label label_of_this_region --rescale --space 0.5,0.5,0.5
-
-GenParaMeshCLP --EulerFile --outEulerName Euler_txt_file Output_of_SegPostProcessCLP Output_Para_Mesh Output_Surface Mesh --iter 500 
-
-
-ParaToSPHARMMeshCLP Intput_Para_Mesh Intput_Surface Mesh Surftarget_prefix --flipTemplateOn --spharmDegree 10 --subdivLevel 15
-
-
-
-
-                '''
 
 
             # *****************************************
