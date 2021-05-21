@@ -947,7 +947,6 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                     print('Do ParaToSPHARMMeshCLP ')
 
                     Surftarget_prefix = os.path.join(OutputDir, ID + '-T1_SkullStripped_scaled_label_' + LabelNames[index] +'_pp_surf')
-                    TemplateCoef      = os.path.join(TemplateDir, LabelNames[index], 'Template_101247_V06_ellalign.coef')
 
                     # Compute SPHARM coefs and associated Mesh : The output is a series of SPHARM coefficients and SPHARM-PDM meshes, 
                     #one set in the original coordinate system, one in the first order ellipsoid aligned coordinate system and one in the Procrustes aligned coordinate system.
@@ -956,22 +955,10 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                                                         Surftarget_prefix, #Output Directory and base filename
                                                         '--subdivLevel', '10', 
                                                         '--spharmDegree', '15',
-                                                        '--flipTemplate', TemplateCoef,  
-                                                        '--flipTemplateOn', '--regTemplateFileOn',  
-                                                        '--phiIteration', '100', '--thetaIteration', '100', 
-                                                        '--medialMesh',
+                                                        '--flipTemplateOn', 
                                                         '--spharmDegree', str(spharmDegree) , #set the maximal degree for the SPHARM computation
                                                         '--subdivLevel', str(subdivLevel)] #set the subdivision level for the icosahedron subdivision
                     run_command("ParaToSPHARMMeshCLP", command)
-
-
-                    # KWMtoPolyData:
-                    ParaPhiFile   = os.path.join(ProcessDir, 'paraPhi_l10.txt')
-                    ParaThetaFile = os.path.join(ProcessDir, 'paraTheta_l10.txt')
-
-                    KWMtoPolyData(SurfVTKtarget, SurfVTKtarget, ParaThetaFile, 'Theta')
-                    KWMtoPolyData(SurfVTKtarget, SurfVTKtarget,  ParaPhiFile, 'Phi')
-
 
                 # Check if successful
                 if os.path.exists(SurfVTKtarget):
