@@ -651,6 +651,11 @@ with Tee(log_file):
 				                                                                sx,sy,sz, nb_iteration_GenParaMeshCLP,spharmDegree, subdivLevel)
 			print("Generation of subcortical surfaces: ",time.strftime("%H h: %M min: %S s",time.gmtime(time.time() - start)))
 
+
+			number_of_points = 1002 # new input param ? 
+			create_kwm_files(OUT_FOLDER, subcorticals_region_labels, subcorticals_region_names, number_of_points)
+
+
 			# Update the localization of subcortical surfaces: 
 			SALTDir = os.path.join(OUT_FOLDER, 'my_SALT') 
 
@@ -1094,7 +1099,7 @@ with Tee(log_file):
 			start = time.time()
 			run_command("probtrackx2", [FSLPath + '/probtrackx2', "-s", os.path.join(OUT_TRACTOGRAPHY, "Diffusion.bedpostX", "merged"), #-s,--samples	
 							                             "-m", os.path.join(OUT_TRACTOGRAPHY, "Diffusion.bedpostX", "nodif_brain_mask"), #-m,--mask
-							                             "-x", os.path.join(OUT_TRACTOGRAPHY, "seeds.txt"), #-x,--seed
+							                             "-x", os.path.join(OutSurfaceName, "seeds.txt"), #-x,--seed
 							                             "--forcedir", "--network", "--omatrix1", "-V", "0",
 							                             "--dir="+NETWORK_DIR, 
 							                             "--stop="+os.path.join(OUT_TRACTOGRAPHY, "seeds.txt"), 

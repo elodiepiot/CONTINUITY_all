@@ -900,8 +900,19 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                                                   PPtarget, # Output filtered
                                                   '--label', str(Labels[index]), # Extract this label before processing
                                                   '--rescale', #Enforced spacing in x,y and z direction before any processing
-                                                  '--space', str(sx),str(sy),str(sz)  ] #x,y and z directions
-                run_command("SegPostProcessCLP", command)
+                                                  '--space ' + str(sx) +',' + str(sy) + ',' + str(sz)  ] #x,y and z directions
+                run_command("SegPostProcessCLP", command) 
+
+                '''
+/tools/bin_linux64/SegPostProcessCLP ./input_CONTINUITY/T0054-1-1-6yr-T1_SkullStripped_scaled_label.nrrd ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp.nrrd --label 1 --rescale --space 0.5,0.5,0.5
+
+
+/tools/bin_linux64/GenParaMeshCLP --EulerFile --outEulerName ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_Euler.txt ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp.nrrd ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_para.vtk ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_surf.vtk --iter 500 --outLogName ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_genparamesh.txt
+
+
+/tools/bin_linux64/ParaToSPHARMMeshCLP ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_para.vtk ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_surf.vtk ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_surf --flipTemplateOn --spharmDegree 10 --subdivLevel 15
+
+                '''
 
 
             # *****************************************
@@ -953,8 +964,6 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                     command = [ParaToSPHARMMeshCLPPath, Paratarget, #input para mesh dataset
                                                         Surftarget, #input surface mesh dataset
                                                         Surftarget_prefix, #Output Directory and base filename
-                                                        '--subdivLevel', '10', 
-                                                        '--spharmDegree', '15',
                                                         '--flipTemplateOn', 
                                                         '--spharmDegree', str(spharmDegree) , #set the maximal degree for the SPHARM computation
                                                         '--subdivLevel', str(subdivLevel)] #set the subdivision level for the icosahedron subdivision
@@ -974,3 +983,41 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
 
         index +=  + 1
         print('******************************************************')
+
+
+
+
+# *************************************************************************************
+# Create KWM files
+# *************************************************************************************
+
+def create_kwm_files(OUT_FOLDER, Labels, LabelNames, number_of_points): 
+
+    # Output folder of subcortical surfaces: 
+    OutputDir = os.path.join(OUT_FOLDER, 'my_KWM') 
+    if not os.path.exists(OutputDir):
+        os.mkdir(OutputDir) 
+
+    for region in range(len(LabelNames)): 
+
+        # Creation of the file for this region: 
+        Output_file_region = os.path.join(OUT_FOLDER, 'my_KWM', str(LabelNames[region]) + "_" + str(number_of_points) + "_KWM.txt") 
+        if not os.path.exists(Output_file_region):
+            os.mkdir(Output_file_region) 
+
+
+        # Open to 'write and read'
+        file = open(Output_file_region,"w+")
+
+        # First line: 'NUMBER_OF_POINTS=1002'
+        file.write("NUMBER_OF_POINTS=" + number_of_points + "\n" )
+
+        # Second line: 'DIMENSION=1'
+        file.write("DIMENSION=1 \n" )
+
+        # Third line: 'TYPE=Scalar'
+        file.write("TYPE=Scalar \n" )
+
+        # Loop to write the label of this region * the number of point (number_of_point lines)
+        for i in number_of_points:
+            file.write(Labels[region] + "\n" )
