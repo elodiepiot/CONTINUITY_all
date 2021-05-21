@@ -150,12 +150,12 @@ class Ui(QtWidgets.QTabWidget):
         # Initialization of spinBox:
         list_param_setValue_spinBox = ["first_metric_weight", "first_radius", "second_metric_weight", "second_radius", 
                                        "iteration1", "iteration2", "iteration3", 
-                                       "nb_fibers", "nb_fiber_per_seed", "nb_threads"]
+                                       "nb_fibers", "nb_fiber_per_seed", "nb_threads", "spharmDegree", "subdivLevel", "nb_iteration_GenParaMeshCLP" ]
         for item in list_param_setValue_spinBox:
             eval("self." + item + "_spinBox.setValue(int(json_setup_object['Parameters'][item]['default']))")
 
         # Initialization of doubleSpinBox:
-        list_param_setValue_doubleSpinBox = ["gradient_field_sigma", "deformation_field_sigma", "SyN_param", "steplength", "sampvox"]
+        list_param_setValue_doubleSpinBox = ["gradient_field_sigma", "deformation_field_sigma", "SyN_param", "steplength", "sampvox", "sx", "sy", "sz"]
         for item in list_param_setValue_doubleSpinBox:
             eval("self." + item + "_doubleSpinBox.setValue(float(json_setup_object['Parameters'][item]['default']))")
   
@@ -684,8 +684,7 @@ class Ui(QtWidgets.QTabWidget):
         # Set a signal to do something if the user click on a region: 
 
      
-        self.sc_regions_labels_listWidget.itemDoubleClicked.connect(self.subcortical_label_changed , type= Qt.UniqueConnection)
-      
+        self.sc_regions_labels_listWidget.itemDoubleClicked.connect(self.subcortical_label_changed , type= Qt.UniqueConnection)   
 
     
  
@@ -727,8 +726,6 @@ class Ui(QtWidgets.QTabWidget):
         
 
 
-
-
     # *****************************************
     # Select the labeled image
     # *****************************************
@@ -739,6 +736,47 @@ class Ui(QtWidgets.QTabWidget):
             self.labeled_image_textEdit.setText(fileName)
             json_user_object['Arguments']["labeled_image"]["value"] = fileName
             Ui.update_user_json_file()
+
+
+
+    # *****************************************
+    # SegPostProcessCLP function: enforced spacing in x, y and z direction
+    # ***************************************** 
+
+    def sx_valueChanged(self):
+        json_user_object['Parameters']["sx"]["value"] = self.sx_doubleSpinBox.value()
+        Ui.update_user_json_file()
+
+    def sy_valueChanged(self):
+        json_user_object['Parameters']["sy"]["value"] = self.sy_doubleSpinBox.value()
+        Ui.update_user_json_file()
+
+    def sz_valueChanged(self):
+        json_user_object['Parameters']["sz"]["value"] = self.sz_doubleSpinBox.value()
+        Ui.update_user_json_file()
+
+
+
+    # *****************************************
+    # GenParaMeshCLP function: number of iteration
+    # ***************************************** 
+
+    def nb_of_iteration_valueChanged(self):
+        json_user_object['Parameters']["nb_iteration_GenParaMeshCLP"]["value"] = self.nb_iteration_GenParaMeshCLP_spinBox.value()
+        Ui.update_user_json_file()
+
+
+    # *****************************************
+    # ParaToSPHARMMeshCLP function: subdivLevel value and SPHARM Degree value
+    # ***************************************** 
+
+    def subdivLevel_valueChanged(self):
+        json_user_object['Parameters']["subdivLevel"]["value"] = self.subdivLevel_spinBox.value()
+        Ui.update_user_json_file()
+
+    def spharmDegree_valueChanged(self):
+        json_user_object['Parameters']["spharmDegree"]["value"] = self.spharmDegree_spinBox.value()
+        Ui.update_user_json_file()
 
             
 
