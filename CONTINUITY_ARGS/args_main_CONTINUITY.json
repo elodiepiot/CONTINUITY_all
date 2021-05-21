@@ -318,6 +318,36 @@
             "help": "Lookcheck",
             "value": true
         },
+        "sx": { 
+            "type": "float",
+            "help": "SegProcessCLP param (generate SALT files): rescale: enforced spacing in x direction ",
+            "value": 0.5
+        }, 
+        "sy": { 
+            "type": "float",
+            "help": "SegProcessCLP param (generate SALT files): rescale: enforced spacing in y direction ",
+            "value": 0.5
+        }, 
+        "sz": { 
+            "type": "float",
+            "help": "SegProcessCLP param (generate SALT files): rescale: enforced spacing in z direction ",
+            "value": 0.5
+        }, 
+        "nb_iteration_GenParaMeshCLP": {
+            "type": "int",
+            "help": "GenParaMeshCLP parameter: number of iteration",
+            "value": 500
+        },
+        "spharmDegree": {
+            "type": "int",
+            "help": "ParaToSPHARMMeshCLP parameter: set the maximal degree for the SPHARM computation",
+            "value": 10
+        },
+        "subdivLevel": {
+            "type": "int",
+            "help": "ParaToSPHARMMeshCLP parameter: set the subdivision level for the icosahedron subdivision",
+            "value": 15
+        },
         "json_config_file": {
             "type": "str",
             "help": "json config file with user configuration",

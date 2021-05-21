@@ -120,6 +120,12 @@ nb_fiber_per_seed                       = json_user_object["Parameters"]["nb_fib
 steplength                              = json_user_object["Parameters"]["steplength"]['value']
 sampvox                                 = json_user_object["Parameters"]["sampvox"]['value']
 loopcheck                               = json_user_object["Parameters"]["loopcheck"]['value']
+sx  									= json_user_object["Parameters"]["sx"]['value']
+sy  									= json_user_object["Parameters"]["sy"]['value']
+sz  									= json_user_object["Parameters"]["sz"]['value']
+nb_iteration_GenParaMeshCLP  			= json_user_object["Parameters"]["nb_iteration_GenParaMeshCLP"]['value']
+spharmDegree  			                = json_user_object["Parameters"]["spharmDegree"]['value']
+subdivLevel  			                = json_user_object["Parameters"]["subdivLevel"]['value']
 OUT_PATH                                = json_user_object["Parameters"]["OUT_PATH"]['value']
 
 # Executables
@@ -641,7 +647,8 @@ with Tee(log_file):
 
 			# Generate subcortical surfaces: 
 			generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, subcorticals_region_labels, subcorticals_region_names, 
-				                                                                SegPostProcessCLPPath, GenParaMeshCLPPath, ParaToSPHARMMeshCLPPath)
+				                                                                SegPostProcessCLPPath, GenParaMeshCLPPath, ParaToSPHARMMeshCLPPath,
+				                                                                sx,sy,sz, nb_iteration_GenParaMeshCLP,spharmDegree, subdivLevel)
 			print("Generation of subcortical surfaces: ",time.strftime("%H h: %M min: %S s",time.gmtime(time.time() - start)))
 
 			# Update the localization of subcortical surfaces: 

@@ -861,7 +861,10 @@ def compute_point_destrieux(new_parcellation_table, subcorticals_list_checked_wi
 # Generating subcortical surfaces: generate SALT dir ?
 # *************************************************************************************
 
-def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, LabelNames, SegPostProcessCLPPath, GenParaMeshCLPPath, ParaToSPHARMMeshCLPPath): 
+def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, LabelNames, 
+                                    SegPostProcessCLPPath, GenParaMeshCLPPath, ParaToSPHARMMeshCLPPath, 
+                                    sx,sy,sz, nb_iteration_GenParaMeshCLP, spharmDegree, subdivLevel): 
+
     # Script from Maria: RunSPHARM-PDM_8Year.script  
     # Image with labels: labeled_image: id-T1_SkullStripped_scaled_label.nrrd
     # Labels of subcortical: The number of the labels depends on the input label segmentation .nrrd file 
@@ -896,7 +899,8 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                 command = [SegPostProcessCLPPath, labeled_image, # Input image to be filtered (Tissue segmentation file)
                                                   PPtarget, # Output filtered
                                                   '--label', str(Labels[index]), # Extract this label before processing
-                                                  '--rescale']
+                                                  '--rescale', #Enforced spacing in x,y and z direction before any processing
+                                                  '--space', str(sx),str(sy),str(sz)  ] #x,y and z directions
                 run_command("SegPostProcessCLP", command)
 
 
@@ -920,6 +924,7 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                                                PPtarget, #Input volume to be filtered
                                                Paratarget, #Output Para Mesh (default: _para)
                                                Surftarget, #Output Surface Mesh (default: _surf)
+                                               '--iter', str(nb_iteration_GenParaMeshCLP), 
                                                '--outLogName', genparamesh_log]
                 run_command("GenParaMeshCLP", command)
 
@@ -954,7 +959,9 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                                                         '--flipTemplate', TemplateCoef,  
                                                         '--flipTemplateOn', '--regTemplateFileOn',  
                                                         '--phiIteration', '100', '--thetaIteration', '100', 
-                                                        '--medialMesh']
+                                                        '--medialMesh',
+                                                        '--spharmDegree', str(spharmDegree) , #set the maximal degree for the SPHARM computation
+                                                        '--subdivLevel', str(subdivLevel)] #set the subdivision level for the icosahedron subdivision
                     run_command("ParaToSPHARMMeshCLP", command)
 
 
