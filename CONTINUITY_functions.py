@@ -904,13 +904,16 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                 run_command("SegPostProcessCLP", command) 
 
                 '''
-/tools/bin_linux64/SegPostProcessCLP ./input_CONTINUITY/T0054-1-1-6yr-T1_SkullStripped_scaled_label.nrrd ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp.nrrd --label 1 --rescale --space 0.5,0.5,0.5
+
+SegPostProcessCLP labeled_image --label label_of_this_region --rescale --space 0.5,0.5,0.5
+
+GenParaMeshCLP --EulerFile --outEulerName Euler_txt_file Output_of_SegPostProcessCLP Output_Para_Mesh Output_Surface Mesh --iter 500 
 
 
-/tools/bin_linux64/GenParaMeshCLP --EulerFile --outEulerName ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_Euler.txt ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp.nrrd ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_para.vtk ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_surf.vtk --iter 500 --outLogName ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_genparamesh.txt
+ParaToSPHARMMeshCLP Intput_Para_Mesh Intput_Surface Mesh Surftarget_prefix --flipTemplateOn --spharmDegree 10 --subdivLevel 15
 
 
-/tools/bin_linux64/ParaToSPHARMMeshCLP ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_para.vtk ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_surf.vtk ./output_CONTINUITY/T0054-1-1-6yr/my_SALT/T0054-1-1-6yr-T1_SkullStripped_scaled_label_AmyL_pp_surf --flipTemplateOn --spharmDegree 10 --subdivLevel 15
+
 
                 '''
 
