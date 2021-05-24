@@ -1310,11 +1310,8 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         global balloonWidget
         balloonWidget = vtk.vtkBalloonWidget()
-        #balloonWidget.SetInteractor(self.iren)
         balloonWidget.SetRepresentation(balloonRep)
     
-
-
 
         # Setup output view:
         output = reader.GetOutput()
@@ -1335,18 +1332,8 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.ren = vtk.vtkRenderer()
 
         #balloonWidget.AddBalloon(actor, 'This is the brain surface', None)
-
-
-
         self.ren.AddActor(actor) #brain surfaces
 
-
-
-
-
-
-
-        
 
 
         # *****************************************
@@ -1360,7 +1347,6 @@ class Ui_visu(QtWidgets.QTabWidget):
         # Get data points for connected and unconnected points: 
         list_x, list_y, list_z, list_points, list_name_unordered, list_MatrixRow, list_name = ([], [], [], [], [], [], [])
        
-
         for key in table_json_object:    
             list_name_unordered.append(key["name"])
             list_MatrixRow.append(key["MatrixRow"])
@@ -1467,8 +1453,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
             # Add point to renderer
             balloonWidget.AddBalloon(actor_point, 'This is ' + str(list_name[i]) , None)
-
-
             self.ren.AddActor(actor_point) 
 
 
@@ -1542,14 +1526,16 @@ class Ui_visu(QtWidgets.QTabWidget):
                 colorLookupTable.GetColor(my_norm, my_color)
 
                 # Change line to tube: 
+                '''
                 tubes = vtk.vtkTubeFilter()
                 tubes.SetInputData(linesPolyData)
                 tubes.SetRadius(self.linewidth_3D_spinBox.value())
                 tubes.Update()
+                '''
        
                 # Create the mapper per line:
                 mapper_lines = vtk.vtkPolyDataMapper()  
-                mapper_lines.SetInputData(tubes.GetOutput())   
+                mapper_lines.SetInputData(linesPolyData)#tubes.GetOutput())   
              
                 mapper_lines.SetScalarModeToUseCellData()
                 mapper_lines.SetColorModeToMapScalars()
@@ -1564,6 +1550,8 @@ class Ui_visu(QtWidgets.QTabWidget):
                 actor_lines.SetMapper(mapper_lines)
                 actor_lines.GetProperty().SetColor(my_color[0], my_color[1], my_color[2])
 
+                actor_lines.GetProperty().SetLineWidth(self.linewidth_3D_spinBox.value())
+
                 # To be coherent with the range of colorbar: 
                 actor_lines.SetVisibility(0)
                 if my_norm > vmin_3D and my_norm < vmax_3D:
@@ -1571,8 +1559,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
                 # Add to the renderer:
                 balloonWidget.AddBalloon(actor_lines, 'This is the line between ' + str(list_name[i]) + " and " + str(list_name[j]), None)
-
-
                 self.ren.AddActor(actor_lines)    
 
 
@@ -1589,8 +1575,6 @@ class Ui_visu(QtWidgets.QTabWidget):
 
 
 
-
-
         # *****************************************
         # Add a window with an interactor and start visualization
         # *****************************************
@@ -1599,17 +1583,13 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
 
-
          # add the custom style
-    
         style = MouseInteractorHighLightActor()
         style.SetDefaultRenderer(self.ren)
         self.iren.SetInteractorStyle(style)
 
-
         balloonWidget.SetInteractor(self.iren)
         balloonWidget.EnabledOn()
-
 
         # Start visualization
         self.ren.ResetCamera()
@@ -1690,21 +1670,15 @@ class Ui_visu(QtWidgets.QTabWidget):
                     list_color.append(my_color)
 
         # Update actor:
-        actors = vtk.vtkPropCollection() 
-        actors = self.ren.GetViewProps()
+        #actors = vtk.vtkPropCollection() 
+        actors = self.ren.GetActors()#GetViewProps()
         actors.InitTraversal()
 
         iNumberOfActors = actors.GetNumberOfItems()
-        #len(list_visibility_point) = 90 points      iNumberOfActors = 8192 points + lines      len(list_visibility_lines) = 8100 lines     
-
-        print(iNumberOfActors)  
-
+       
         for i in range(iNumberOfActors): 
             if i == 0: 
                 actors.GetNextProp().VisibilityOn() # skip brain surfaces actor which is the first actor
-
-            elif i == iNumberOfActors-1: # update colorbar: last actor: actor for colorbar
-                actors.GetNextProp().SetLookupTable(colorLookupTable1)
 
             elif i != 0 and i < len(list_visibility_point)+1: # actor point
                 if list_visibility_point[i-1] == 0: 
@@ -1723,6 +1697,14 @@ class Ui_visu(QtWidgets.QTabWidget):
                                                     list_color[i-1 - len(list_visibility_point)][1], 
                                                     list_color[i-1 - len(list_visibility_point)][2])
 
+
+        actors_2D = self.ren.GetActors2D()
+        actors_2D.InitTraversal()
+        iNumberOfActors_2D = actors_2D.GetNumberOfItems()
+        for i in range(iNumberOfActors_2D):
+            actors_2D.GetNextProp().SetLookupTable(colorLookupTable1)
+
+
         # Update visualization
         self.ren.ResetCamera()
         self.ren.GetActiveCamera().Zoom(1.3)
@@ -1738,8 +1720,7 @@ class Ui_visu(QtWidgets.QTabWidget):
 
     def update_points_size(self):
         # Update actor:
-        actors = vtk.vtkPropCollection() 
-        actors = self.ren.GetViewProps()
+        actors = self.ren.GetActors()
         actors.InitTraversal()
 
         for i in range(np.shape(a)[0]+1):  
@@ -1762,11 +1743,9 @@ class Ui_visu(QtWidgets.QTabWidget):
     # ***************************************** 
 
     def update_lines_size(self):
-        print('to do ')
-        '''
+
         # Update actor:
-        actors = vtk.vtkPropCollection() 
-        actors = self.ren.GetViewProps()
+        actors = self.ren.GetActors()
         actors.InitTraversal()
 
         iNumberOfActors = actors.GetNumberOfItems()
@@ -1775,7 +1754,18 @@ class Ui_visu(QtWidgets.QTabWidget):
             if i == 0 or i < np.shape(a)[0]+1:  #actor for brain surfaces + point: skip
                 actors.GetNextProp().VisibilityOn()
             else: # actors lines
-                actors.GetNextProp().GetMapper().SetRadius(self.linewidth_3D_spinBox.value())
+                actors.GetNextProp().GetProperty().SetLineWidth(self.linewidth_3D_spinBox.value())
+
+
+                #GetPolys    , GetLines   GetPointData  GetCellData
+                #actors.GetNextProp().GetMapper().GetInput()    --> vtkpolydata
+                #actors.GetNextProp().GetMapper().GetInputAsDataSet() --> vtkpolydata
+                #actors.GetNextProp().GetMapper().GetArrayComponent() --> 0 0 0 0 0 0
+                #actors.GetNextProp().GetMapper().GetScalarMode() --> 2 2 2 2 2 
+                #actors.GetNextProp().GetMapper().GetArrayName() -->             (empty) 
+
+                #actors.GetNextProp().GetMapper().GetInput().GetPointData()  --> vtkPointData
+
 
         # Update visualization
         self.ren.ResetCamera()
@@ -1783,7 +1773,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.iren.Initialize()
 
         print("end size line update")
-        '''
+        
 
 
     # *****************************************

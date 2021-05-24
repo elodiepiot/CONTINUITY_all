@@ -2671,7 +2671,7 @@ p, li { white-space: pre-wrap; }
          </rect>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tab_14">
          <attribute name="title">
@@ -2700,7 +2700,7 @@ p, li { white-space: pre-wrap; }
               <double>0.100000000000000</double>
              </property>
              <property name="value">
-              <double>6.000000000000000</double>
+              <double>7.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -2717,7 +2717,7 @@ p, li { white-space: pre-wrap; }
               <double>0.100000000000000</double>
              </property>
              <property name="value">
-              <double>0.800000000000000</double>
+              <double>2.000000000000000</double>
              </property>
             </widget>
            </item>
