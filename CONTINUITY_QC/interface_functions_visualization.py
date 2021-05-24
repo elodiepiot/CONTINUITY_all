@@ -923,7 +923,7 @@ class Ui_visu(QtWidgets.QTabWidget):
     # **************************************************************************************************************************************************
     # **************************************************************************************************************************************************
     # **************************************************************************************************************************************************
-    # ***********************************************  Brain connectome  *******************************************************************************
+    # ***********************************************  Brain connectome 2D  ****************************************************************************
     # **************************************************************************************************************************************************
     # **************************************************************************************************************************************************
     # **************************************************************************************************************************************************
@@ -1303,6 +1303,19 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.vtkWidget = QVTKRenderWindowInteractor(self)
         self.Layout_brain_connectome_3D.addWidget(self.vtkWidget)
 
+
+        # Create the widget
+        balloonRep = vtk.vtkBalloonRepresentation()
+        balloonRep.SetBalloonLayoutToImageRight()
+
+        global balloonWidget
+        balloonWidget = vtk.vtkBalloonWidget()
+        #balloonWidget.SetInteractor(self.iren)
+        balloonWidget.SetRepresentation(balloonRep)
+    
+
+
+
         # Setup output view:
         output = reader.GetOutput()
         output_port = reader.GetOutputPort()
@@ -1320,7 +1333,20 @@ class Ui_visu(QtWidgets.QTabWidget):
 
         # Create the renderer: 
         self.ren = vtk.vtkRenderer()
+
+        #balloonWidget.AddBalloon(actor, 'This is the brain surface', None)
+
+
+
         self.ren.AddActor(actor) #brain surfaces
+
+
+
+
+
+
+
+        
 
 
         # *****************************************
@@ -1332,20 +1358,37 @@ class Ui_visu(QtWidgets.QTabWidget):
             table_json_object = json.load(table_json_file)
 
         # Get data points for connected and unconnected points: 
-        list_x, list_y, list_z, list_points = ([], [], [],[])
+        list_x, list_y, list_z, list_points, list_name_unordered, list_MatrixRow, list_name = ([], [], [], [], [], [], [])
+       
 
         for key in table_json_object:    
-            list_x.append(key["coord"][0])
-            list_y.append(key["coord"][1])
-            list_z.append(key["coord"][2])
+            list_name_unordered.append(key["name"])
+            list_MatrixRow.append(key["MatrixRow"])
 
-            # for map()
-            point = []
-            point.append(key["coord"][0])
-            point.append(key["coord"][1])
-            point.append(key["coord"][2])
-            list_points.append(point)
+        # Sort regions by VisuHierarchy number: 
+        sorted_indices = np.argsort(list_MatrixRow)
+        
 
+        for i in range(len(list_MatrixRow)):
+            index = sorted_indices[i]
+
+            list_name.append(list_name_unordered[index])
+
+            for key in table_json_object:
+                if key["name"] == list_name_unordered[index]:
+                    list_x.append(key["coord"][0])
+                    list_y.append(key["coord"][1])
+                    list_z.append(key["coord"][2])
+
+                    # for map()
+                    point = []
+                    point.append(key["coord"][0])
+                    point.append(key["coord"][1])
+                    point.append(key["coord"][2])
+
+                    list_points.append(point)
+
+    
 
         # Set 1 if the point is connected and 0 otherwise
         list_visibility_point = []
@@ -1423,7 +1466,14 @@ class Ui_visu(QtWidgets.QTabWidget):
             actor_point.SetVisibility(list_visibility_point[i])                
 
             # Add point to renderer
+            balloonWidget.AddBalloon(actor_point, 'This is ' + str(list_name[i]) , None)
+
+
             self.ren.AddActor(actor_point) 
+
+
+
+
 
 
         # *****************************************
@@ -1520,7 +1570,12 @@ class Ui_visu(QtWidgets.QTabWidget):
                     actor_lines.SetVisibility(1)
 
                 # Add to the renderer:
+                balloonWidget.AddBalloon(actor_lines, 'This is the line between ' + str(list_name[i]) + " and " + str(list_name[j]), None)
+
+
                 self.ren.AddActor(actor_lines)    
+
+
 
         # Add the color map:
         scalarBar = vtk.vtkScalarBarActor()
@@ -1533,6 +1588,9 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.ren.SetBackground(namedColors.GetColor3d("SlateGray")) 
 
 
+
+
+
         # *****************************************
         # Add a window with an interactor and start visualization
         # *****************************************
@@ -1541,12 +1599,26 @@ class Ui_visu(QtWidgets.QTabWidget):
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
 
+
+         # add the custom style
+    
+        style = MouseInteractorHighLightActor()
+        style.SetDefaultRenderer(self.ren)
+        self.iren.SetInteractorStyle(style)
+
+
+        balloonWidget.SetInteractor(self.iren)
+        balloonWidget.EnabledOn()
+
+
         # Start visualization
         self.ren.ResetCamera()
         self.ren.GetActiveCamera().Zoom(1.3)
         self.iren.Initialize()
 
         print("End display 3D brain connectome: ",time.strftime("%H h: %M min: %S s",time.gmtime( time.time() - start )))
+
+
 
 
 
@@ -1835,6 +1907,59 @@ class Ui_visu(QtWidgets.QTabWidget):
         fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()" , "", "ALL Files (*)", options=QFileDialog.Options())
         if fileName:
             self.select_vtk_file_textEdit.setText(fileName) 
+
+
+
+
+
+
+
+
+
+
+
+class MouseInteractorHighLightActor(vtk.vtkInteractorStyleTrackballCamera):
+
+    def __init__(self, parent=None):
+        self.AddObserver("LeftButtonPressEvent", self.leftButtonPressEvent)
+
+        self.LastPickedActor = None
+        self.LastPickedProperty = vtk.vtkProperty()
+
+    def leftButtonPressEvent(self, obj, event):
+        clickPos = self.GetInteractor().GetEventPosition()
+
+        picker = vtk.vtkPropPicker()
+        picker.Pick(clickPos[0], clickPos[1], 0, self.GetDefaultRenderer())
+      
+        # get the new
+        self.NewPickedActor = picker.GetActor()
+
+
+        # If something was selected
+        if self.NewPickedActor:
+
+            # If we picked something before, reset its property
+            if self.LastPickedActor:
+                self.LastPickedActor.GetProperty().DeepCopy(self.LastPickedProperty)
+
+            # Save the property of the picked actor so that we can
+            # restore it next time
+            self.LastPickedProperty.DeepCopy(self.NewPickedActor.GetProperty())
+
+            print(self.NewPickedActor.GetProperty())
+        
+            # save the last picked actor
+            self.LastPickedActor = self.NewPickedActor
+
+        self.OnLeftButtonDown()
+        return
+
+
+
+
+
+
 
 
     '''

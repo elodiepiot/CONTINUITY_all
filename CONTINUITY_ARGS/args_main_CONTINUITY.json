@@ -48,7 +48,7 @@
         "PARCELLATION_TABLE": {
             "type": "str",
             "help": "Parcellation table (.json)",
-            "value": "./input_CONTINUITY/TABLE_Destrieux_SubCorticals_BrainStem.json"
+            "value": "/home/elodie/Desktop/CONTINUITY/input_CONTINUITY/TABLE_AAL_SubCorticals.json"
         },
         "labelSetName": {
             "type": "str",
