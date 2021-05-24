@@ -1756,17 +1756,6 @@ class Ui_visu(QtWidgets.QTabWidget):
             else: # actors lines
                 actors.GetNextProp().GetProperty().SetLineWidth(self.linewidth_3D_spinBox.value())
 
-
-                #GetPolys    , GetLines   GetPointData  GetCellData
-                #actors.GetNextProp().GetMapper().GetInput()    --> vtkpolydata
-                #actors.GetNextProp().GetMapper().GetInputAsDataSet() --> vtkpolydata
-                #actors.GetNextProp().GetMapper().GetArrayComponent() --> 0 0 0 0 0 0
-                #actors.GetNextProp().GetMapper().GetScalarMode() --> 2 2 2 2 2 
-                #actors.GetNextProp().GetMapper().GetArrayName() -->             (empty) 
-
-                #actors.GetNextProp().GetMapper().GetInput().GetPointData()  --> vtkPointData
-
-
         # Update visualization
         self.ren.ResetCamera()
         self.ren.GetActiveCamera().Zoom(1.3)
