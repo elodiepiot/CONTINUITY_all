@@ -954,7 +954,6 @@ def generating_subcortical_surfaces(OUT_FOLDER, ID, labeled_image, Labels, Label
                     command = [ParaToSPHARMMeshCLPPath, Paratarget, #input para mesh dataset
                                                         Surftarget, #input surface mesh dataset
                                                         Surftarget_prefix, #Output Directory and base filename
-                                                        '--flipTemplateOn', 
                                                         '--spharmDegree', str(spharmDegree) , #set the maximal degree for the SPHARM computation
                                                         '--subdivLevel', str(subdivLevel)] #set the subdivision level for the icosahedron subdivision
                     run_command("ParaToSPHARMMeshCLP", command)
@@ -990,17 +989,17 @@ def create_kwm_files(OUT_FOLDER, Labels, LabelNames, number_of_points):
 
     for region in range(len(LabelNames)): 
 
-        # Creation of the file for this region: 
-        Output_file_region = os.path.join(OUT_FOLDER, 'my_KWM', str(LabelNames[region]) + "_" + str(number_of_points) + "_KWM.txt") 
-        if not os.path.exists(Output_file_region):
-            os.mkdir(Output_file_region) 
-
-
         # Open to 'write and read'
-        file = open(Output_file_region,"w+")
+    
+        name_file =  str(LabelNames[region]) + "_" + str(number_of_points) + "_KWM.txt"
+        complete_name = os.path.join(OutputDir, name_file)
+        print(complete_name)
+
+
+        file = open(complete_name,"w")
 
         # First line: 'NUMBER_OF_POINTS=1002'
-        file.write("NUMBER_OF_POINTS=" + number_of_points + "\n" )
+        file.write("NUMBER_OF_POINTS=" + str(number_of_points) + "\n" )
 
         # Second line: 'DIMENSION=1'
         file.write("DIMENSION=1 \n" )
@@ -1009,5 +1008,7 @@ def create_kwm_files(OUT_FOLDER, Labels, LabelNames, number_of_points):
         file.write("TYPE=Scalar \n" )
 
         # Loop to write the label of this region * the number of point (number_of_point lines)
-        for i in number_of_points:
-            file.write(Labels[region] + "\n" )
+        for i in range(number_of_points):
+            file.write(str(Labels[region]) + "\n" )
+
+        print('KWM file compute for region: ', region )

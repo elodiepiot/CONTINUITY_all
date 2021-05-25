@@ -171,7 +171,7 @@ class Ui(QtWidgets.QTabWidget):
                     eval("self." + key + "_textEdit.setText(json_user_object[categories][key]['value'])")
 
         # Ignore label:
-        self.ignore_label_checkBox.setChecked(json_setup_object['Parameters']["ignoreLabel"]["default"])
+        self.ignore_label_checkBox.setChecked(False)
         self.value_ignore_label_label.setStyleSheet("color: lightGray")
         self.ignore_label_lineEdit.setStyleSheet("background-color: transparent")
 
@@ -1133,12 +1133,12 @@ class Ui(QtWidgets.QTabWidget):
     def ignore_label_checkBox_checked(self): 
         self.value_ignore_label_label.setStyleSheet("color: lightGray")
         self.ignore_label_lineEdit.setStyleSheet("background-color: transparent")
-        json_user_object['Parameters']["ignoreLabel"]["value"] = False
+        json_user_object['Parameters']["ignoreLabel"]["value"] = ""
 
         if self.ignore_label_checkBox.isChecked(): 
             self.value_ignore_label_label.setStyleSheet("color: black")
             self.ignore_label_lineEdit.setStyleSheet("background-color: white")
-            json_user_object['Parameters']["ignoreLabel"]["value"] = True
+            json_user_object['Parameters']["ignoreLabel"]["value"] = str(self.ignore_label_lineEdit.text())
         Ui.update_user_json_file()
 
 

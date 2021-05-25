@@ -143,9 +143,9 @@
             "default": true 
         },    
         "ignoreLabel": { 
-            "type": "bool",
+            "type": "str",
             "help": "Ignore a label",
-            "default": false
+            "default": ""
         },      
         "left_right_surface_need_to_be_combining": {
             "type": "bool",

@@ -78,7 +78,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         else:
             default_json_filename = "../CONTINUITY_ARGS/args_main_CONTINUITY_completed_test.json" #./CONTINUITY_ARGS/args_setup.json"
  
-        
+        ll
         # Json file which contains values given by the user: 
         with open(user_json_filename, "r") as user_Qt_file:
             global json_user_object
