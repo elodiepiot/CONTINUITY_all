@@ -78,7 +78,7 @@ class Ui_visu(QtWidgets.QTabWidget):
         else:
             default_json_filename = "../CONTINUITY_ARGS/args_main_CONTINUITY_completed_test.json" #./CONTINUITY_ARGS/args_setup.json"
  
-        ll
+        
         # Json file which contains values given by the user: 
         with open(user_json_filename, "r") as user_Qt_file:
             global json_user_object
@@ -1391,7 +1391,7 @@ class Ui_visu(QtWidgets.QTabWidget):
                     if my_norm > vmin_3D and my_norm < vmax_3D: 
                         is_connected = True
                 
-                if not is_connected:  
+                if not is_connected: 
                     list_visibility_point.append(0)
                 else: 
                     list_visibility_point.append(1)

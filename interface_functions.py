@@ -693,34 +693,26 @@ class Ui(QtWidgets.QTabWidget):
     # *****************************************  
 
     def subcortical_label_changed(self, item):
-        print('subcortical_label_changed')
         
-
         #self.sc_regions_labels_listWidget.blockSignals(True)
-
         index = self.sc_regions_labels_listWidget.row(item)
 
         text, okPressed = QInputDialog.getText(self, "Region selected" + item.text(), "Label of " 
                               + json_user_object['Parameters']["subcorticals_region_names"]["value"][index] +" : ",QLineEdit.Normal, "")
 
-        try:
-            # test if text is a number
-            text_int = int(text)
+        if okPressed: 
+            try: # test if text is a number
+                text_int = int(text)
 
-            self.error_label.setText('')
-
-
-            if okPressed:
-                print('OK clicked')
+                self.error_label.setText('')
 
                 json_user_object['Parameters']["subcorticals_region_labels"]["value"][index] = text_int
                 Ui.update_user_json_file() 
-                
+                    
                 item.setText('Region ' + json_user_object['Parameters']["subcorticals_region_names"]["value"][index] + ":   " + str(text))
 
-        except:
-            self.error_label.setText('<font color="red">Please write a number</font>')
-
+            except:
+                self.error_label.setText('<font color="red">Please write a number</font>')
 
         #self.sc_regions_labels_listWidget.blockSignals(False) 
         
